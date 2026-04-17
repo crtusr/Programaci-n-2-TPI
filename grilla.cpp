@@ -13,6 +13,11 @@ Grilla::Grilla(int ladoCeldaEnPixeles, int xMaximo, int yMaximo)
     maxY = 0;
     return;
   }
+  for(int i = 0; i < maxY * maxX; i++)
+  {
+    celda[i] = nullptr;
+  }
+  return;
 }
 
 
@@ -32,11 +37,31 @@ Celda* Grilla::getCelda(int x, int y)
 {
   if(x >= maxX || y >= maxY)
     return nullptr;
-  return celda[y * maxY + x];
+  return celda[y * maxX + x];
+}
+void Grilla::setCelda(int x, int y, Celda* cel)
+{
+  if(x >= maxX || y >= maxY)
+    return;
+  celda[y * maxX + x] = cel;
+  return;
+}
+void Grilla::render(sf::RenderWindow &window)
+{
+  for(int i = 0; i < (maxX * maxY); i++)
+  {
+    if(celda[i] == nullptr)
+      continue;
+    celda[i]->render(window, tamCeldaPixeles);
+  }
 }
 Grilla::~Grilla()
 {
-  for(int i = 0; i < maxY; i++)
-    delete [] celda[i];
-  delete [] celda;
+  if(celda != nullptr)
+  {
+    for(int i = 0; i < (maxX * maxY); i++)
+      if(celda[i] != nullptr)
+        delete celda[i];
+    delete [] celda;
+  }
 }

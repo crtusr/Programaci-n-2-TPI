@@ -16,6 +16,7 @@
       int getTamCeldaPixeles();
       Celda* getCelda(int x, int y);
       void setCelda(int x, int y, Celda* cel);
+      void render(sf::RenderWindow &window);
       ~Grilla();
   };
 

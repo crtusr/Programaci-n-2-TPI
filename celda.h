@@ -18,7 +18,7 @@
       void setYPos(int posYGrilla);
       void setCostoMov(int costo);
       virtual void render(sf::RenderWindow &window, int LadoCeldaEnPixeles) = 0;
-      virtual ~Celda();
+      virtual ~Celda() = 0;
   };
 
 #endif
