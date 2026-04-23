@@ -3,6 +3,18 @@
 #include <SFML/Window.hpp>
 #include "grilla.h"
 #include "defaultcelda.h"
+#include "celdaterrestre.h"
+
+enum baldosas
+{
+  DEFAULT,
+  PRADO,
+  BOSQUE,
+  MONTANIA,
+  MAR
+};
+
+const int TamanioDeLaBaldosa = 64;
 
 /*
 class AdminTextura
@@ -38,7 +50,19 @@ int cargarMapa(Grilla &grilla, const char* nomArch, sf::Texture *tex)
       case '\r':
         break;
       case '0':
-        grilla.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, tex[0]));
+        grilla.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, tex[DEFAULT]));
+        i++;
+        break;
+      case 'P':
+        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, tex[PRADO]));
+        i++;
+        break;
+      case 'B':
+        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, tex[BOSQUE]));
+        i++;
+        break;
+      case 'M':
+        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, tex[MONTANIA]));
         i++;
         break;
       default:
@@ -54,16 +78,37 @@ int cargarMapa(Grilla &grilla, const char* nomArch, sf::Texture *tex)
   return 0;
 }
 
+int cargarTexturasDeCeldas(sf::Texture *tex, int nTexturas)
+{
+  const char *nomArchivo[10] = 
+  {
+    "Tiles/defaulttile.bmp",
+    "Tiles/prado.bmp",
+    "Tiles/bosque.bmp",
+    "Tiles/montaña.bmp",
+    "Tiles/mar.bmp"
+  };
+  int todoBien;
+  for(int i = 0; i < nTexturas; i++)
+    {
+      todoBien = tex[i].loadFromFile(nomArchivo[i]);
+      if(!todoBien)
+        return -1;
+    }
+  return 0;
+}
+
 int main()
 {
   int err;
   //Esto declara la pantalla
   sf::RenderWindow window(sf::VideoMode({1024, 768}), "SFML 3");
   sf::Texture texCelda[10];
-  err = texCelda[0].loadFromFile("Tiles/defaulttile.bmp");
-  if(!err)
+  sf::Texture texClase[5];
+  err = cargarTexturasDeCeldas(texCelda, 5);
+  if(err)
     return -1;
-  Grilla tablero(64, 4, 4);
+  Grilla tablero(TamanioDeLaBaldosa, 4, 4);
   cargarMapa(tablero, "testmap.txt",texCelda);
   while (window.isOpen())
   {

@@ -1,2 +1,28 @@
-game: main.cpp
-	g++ main.cpp grilla.cpp celda.cpp defaultcelda.cpp -std=c++17 -I"C:/SFML_Built/include" -L"C:/SFML_Built/lib" -lsfml-graphics -lsfml-window -lsfml-system -o game.exe -I.
+CXX = g++
+
+STD = -std=c++17
+
+SFML_INCLUDE = -I"C:/SFML_Built/include" -I.
+SFML_LIB = -L"C:/SFML_Built/lib"
+SFML_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+
+CPP_FILES = main.cpp grilla.cpp celda.cpp defaultcelda.cpp celdaterrestre.cpp
+
+DEBUG_FILE = game_debug.exe
+RELEASE_FILE = game_release.exe
+
+DEBUG_FLAGS = -g -Og -DDEBUG
+RELEASE_FLAGS = -O3 -DNDEBUG
+
+all: $(DEBUG_FILE) $(RELEASE_FILE)
+
+$(DEBUG_FILE): $(CPP_FILES)
+	$(CXX) $(STD) $(DEBUG_FLAGS) $(CPP_FILES) $(SFML_INCLUDE) $(SFML_LIB) $(SFML_FLAGS) -o $(DEBUG_FILE)
+
+$(RELEASE_FILE): $(CPP_FILES)
+	$(CXX) $(STD) $(RELEASE_FLAGS) $(CPP_FILES) $(SFML_INCLUDE) $(SFML_LIB) $(SFML_FLAGS) -o $(RELEASE_FILE)
+
+clean:
+	del $(DEBUG_EXE) $(RELEASE_EXE)
+
+.PHONY: all clean
