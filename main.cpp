@@ -98,6 +98,34 @@ int cargarTexturasDeCeldas(sf::Texture *tex, int nTexturas)
   return 0;
 }
 
+void drawAt(sf::RectangleShape sq, float x, float y, sf::RenderWindow &win)
+{
+  sq.setPosition(sf::Vector2f(x * 64, y * 64));
+  win.draw(sq);
+}
+void movRango(sf::RectangleShape &sq, float x, float y, int mov, sf::RenderWindow &win, Grilla &grid, bool *visitadas)
+{
+  /*
+  if(x < 0 || x >= grid.getMaxX() || y < 0 || y >= grid.getMaxY())
+    return;*/
+  int xx = (int)x;
+  int yy = (int)y;
+  if(!visitadas[xx + (yy * grid.getMaxX())])
+    drawAt(sq, x, y, win);
+  visitadas[xx + (yy * grid.getMaxX())] = true;
+  if(y + 1 < grid.getMaxY() && mov >= grid.getCelda(x, y + 1)->getCostoMov())
+    movRango(sq, x, y + 1, mov - grid.getCelda(x, y + 1)->getCostoMov(), win, grid, visitadas);
+  if(x - 1 >= 0 && mov >= grid.getCelda(x - 1, y)->getCostoMov())
+    movRango(sq, x - 1 , y, mov - grid.getCelda(x - 1 , y)->getCostoMov(), win, grid, visitadas);
+  if(y - 1 >= 0 && mov >= grid.getCelda(x, y - 1)->getCostoMov())
+    movRango(sq, x, y - 1, mov - grid.getCelda(x, y - 1)->getCostoMov(), win, grid, visitadas);
+  if(x + 1 < grid.getMaxX() && mov >= grid.getCelda(x + 1, y)->getCostoMov())
+    movRango(sq, x + 1, y, mov - grid.getCelda(x + 1, y)->getCostoMov(), win, grid, visitadas);
+}
+
+
+
+
 int main()
 {
   int err;
@@ -105,10 +133,16 @@ int main()
   sf::RenderWindow window(sf::VideoMode({1024, 768}), "SFML 3");
   sf::Texture texCelda[10];
   sf::Texture texClase[5];
+
+  sf::RectangleShape square(sf::Vector2f(64,64));
+  square.setFillColor(sf::Color(127, 127, 255, 127));
+  
+
+  bool visitadas[8*8] = {};
   err = cargarTexturasDeCeldas(texCelda, 5);
   if(err)
     return -1;
-  Grilla tablero(TamanioDeLaBaldosa, 4, 4);
+  Grilla tablero(TamanioDeLaBaldosa, 8, 8);
   cargarMapa(tablero, "testmap.txt",texCelda);
   while (window.isOpen())
   {
@@ -142,6 +176,9 @@ int main()
     //Acá le mandas los comandos a la ventana para que dibuje objetos
     window.clear(sf::Color::Blue); 
     tablero.render(window);
+    for(int i = 0; i < 64; i++)
+      visitadas[i] = false;
+    movRango(square, 3,3, 3, window, tablero, visitadas);
     window.display();
   }
 
