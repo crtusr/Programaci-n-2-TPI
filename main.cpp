@@ -28,6 +28,7 @@ class AdminTextura
 };
 */
 
+
 int cargarMapa(Grilla &grilla, const char* nomArch, sf::Texture *tex)
 {
   const int tamFila = grilla.getMaxX();
@@ -162,6 +163,7 @@ int main()
       {
           window.close();
       }
+      //Se supone que hay que hacer esto para que los pixeles no se estiren
       else if(const auto *resized = event->getIf<sf::Event::Resized>())
       {
         sf::FloatRect newSize(sf::Vector2f(0, 0), sf::Vector2f(resized->size.x, resized->size.y));
