@@ -4,6 +4,7 @@
 #include "grilla.h"
 #include "defaultcelda.h"
 #include "celdaterrestre.h"
+#include "sismov.h"
 
 enum baldosas
 {
@@ -105,7 +106,7 @@ void drawAt(sf::RectangleShape &sq, float x, float y, sf::RenderWindow &win)
   win.draw(sq);
 }
 
-void drawMovRango(sf::RectangleShape &sq, Grilla &grid, bool *visitadas, sf::RenderWindow &win)
+void drawMovRango(sf::RectangleShape &sq, Grilla &grid, const bool *visitadas, sf::RenderWindow &win)
 {
   int x, y;
   for(y = 0; y < grid.getMaxY(); y++)
@@ -140,19 +141,24 @@ int main()
 {
   int err;
   //Esto declara la pantalla
-  sf::RenderWindow window(sf::VideoMode({1024, 768}), "SFML 3", sf::Style::Resize);
+  sf::RenderWindow window(sf::VideoMode({1024, 768}), "SFML 3");
+  window.setFramerateLimit(60);
   sf::Texture texCelda[10];
   sf::Texture texClase[5];
+  
+  sf::Texture yo("yo.bmp");
+  sf::Sprite yoyo(yo);
+  sf::Vector2f posicion(0, 0);
 
   sf::RectangleShape square(sf::Vector2f(64,64));
   square.setFillColor(sf::Color(127, 127, 255, 127));
   
-
-  bool visitadas[8*8] = {};
+  //bool visitadas[8*8] = {};
   err = cargarTexturasDeCeldas(texCelda, 5);
   if(err)
     return -1;
   Grilla tablero(TamanioDeLaBaldosa, 8, 8);
+  SisMov movimiento(3, 3, &tablero);
   cargarMapa(tablero, "testmap.txt",texCelda);
   while (window.isOpen())
   {
@@ -169,33 +175,46 @@ int main()
         sf::FloatRect newSize(sf::Vector2f(0, 0), sf::Vector2f(resized->size.x, resized->size.y));
         window.setView(sf::View(newSize));
       }
-      else if (event->is<sf::Event::KeyPressed>())
+      else if (event->getIf<sf::Event::KeyPressed>())
       {
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left))
+        const auto *key = event->getIf<sf::Event::KeyPressed>();
+        if (key->code == sf::Keyboard::Key::Left)
         {
-          
+          if(posicion.x >= TamanioDeLaBaldosa)
+            posicion.x -= TamanioDeLaBaldosa;
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+        else if (key->code == sf::Keyboard::Key::Right)
         {
-         
+          if(posicion.x <= TamanioDeLaBaldosa * 6)
+            posicion.x += TamanioDeLaBaldosa;
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up))
+        else if (key->code == sf::Keyboard::Key::Up)
         {
-        
+          if(posicion.y >= TamanioDeLaBaldosa)
+            posicion.y -= TamanioDeLaBaldosa;
         }
-        else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+        else if (key->code == sf::Keyboard::Key::Down)
         {
-       
+          if(posicion.y <= TamanioDeLaBaldosa * 6)
+            posicion.y += TamanioDeLaBaldosa;
         }
       }
     }
     //Acá le mandas los comandos a la ventana para que dibuje objetos
     window.clear(sf::Color::Blue); 
     tablero.render(window);
+    movimiento.resetValido();
+    movimiento.movRango(3,3, 3);
+    /*
     for(int i = 0; i < 64; i++)
       visitadas[i] = false;
     movRango(3,3, 3, tablero, visitadas);
-    drawMovRango(square, tablero, visitadas, window);
+    */
+    drawMovRango(square, tablero, movimiento.getValido(), window);
+
+    yoyo.setPosition(posicion);
+    window.draw(yoyo);
+    
     window.display();
   }
 
