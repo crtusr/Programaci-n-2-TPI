@@ -19,7 +19,7 @@ void SisMov::movRango(int x, int y, int mov)
 {
   /*estas 4 variables las hice simplemente para facilitar la lectura del algoritmo*/
   int costoCeldaInferior = y+1 < bordeInferior ? grid->getCelda(x, y + 1)->getCostoMov() : 255;
-  int costoCeldaIzquierda = x-1 >= 0 ? grid->getCelda(x - 1, y)->getCostoMov() : 255;
+  int costoCeldaIzquierda = x-1 >= 0 ? grid->getCelda(x - 1 , y)->getCostoMov() : 255;
   int costoCeldaSuperior = y-1 >= 0 ? grid->getCelda(x - 1 , y)->getCostoMov() : 255;
   int costoCeldaDerecha = x+1 < bordeDerecho ? grid->getCelda(x + 1, y)->getCostoMov() : 255;
   if(!valido[x + (y * bordeDerecho)])
