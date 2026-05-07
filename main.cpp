@@ -56,15 +56,15 @@ int cargarMapa(Grilla &grilla, const char* nomArch, sf::Texture *tex)
         i++;
         break;
       case 'P':
-        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, tex[PRADO]));
+        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, tex[PRADO]));
         i++;
         break;
       case 'B':
-        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, tex[BOSQUE]));
+        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, tex[BOSQUE]));
         i++;
         break;
       case 'M':
-        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, tex[MONTANIA]));
+        grilla.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, tex[MONTANIA]));
         i++;
         break;
       default:
