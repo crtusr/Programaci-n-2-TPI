@@ -44,6 +44,11 @@ int Grilla::getTamCeldaPixeles()
 {
   return tamCeldaPixeles;
 }
+
+/*
+ * con este getter podes pedir la celda y simultaneamente usar los metodos de
+ * la celda girlla.getCelda(x, y).metodoDeLaCelda().
+ */
 Celda* Grilla::getCelda(int x, int y)
 {
   if(x >= maxX || y >= maxY)
@@ -51,7 +56,15 @@ Celda* Grilla::getCelda(int x, int y)
   return celda[y * maxX + x];
 }
 
-/* Como cel es ta un puntero a una celda */
+/* Como cel es un puntero a una celda generica se declara dentro de los
+ * parentesis un new (clase polimorfica heredada de celda), new devuelve una
+ * dirección de memoria que va a ser el parametro pasado que tiene el tamaño
+ * de la clase heredada. Celda en grilla se declaro como Celda** debido a eso
+ * celda[x + y * maxX] te da un puntero, que con new se va a setear a la 
+ * dirección del heap donde haya espacio para la clase hija. Por eso use esa
+ * notación para la matriz en vez de la estandar celda[y][x], sino tendria que
+ * haber declarado celda como Celda***.
+ */
 void Grilla::setCelda(Celda* cel)
 {
   int x = cel->getXPos();
@@ -63,6 +76,11 @@ void Grilla::setCelda(Celda* cel)
   celda[y * maxX + x] = cel;
   return;
 }
+
+/*
+ * Esta función manda a window (que entiendo que es el buffer de la ventana que
+ * se renderiza).
+ */
 void Grilla::render(sf::RenderWindow &window)
 {
   for(int i = 0; i < (maxX * maxY); i++)
@@ -72,6 +90,12 @@ void Grilla::render(sf::RenderWindow &window)
     celda[i]->render(window, tamCeldaPixeles);
   }
 }
+
+
+/*
+ * Es el destructor necesario para liberar la memoria dinamica una vez que se 
+ * dejan de usar las celdas (por ej. si se termina la partida)
+ */
 Grilla::~Grilla()
 {
   if(celda != nullptr)

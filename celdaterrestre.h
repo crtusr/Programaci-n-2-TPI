@@ -3,6 +3,11 @@
 
 #include "celda.h"
 
+/*
+ * Esto representaria cualquier celda caminable, no le puse más atributos de
+ * momento poero quizas se expanda.
+ */
+
 class CeldaTerrestre : public Celda
 {
     private:

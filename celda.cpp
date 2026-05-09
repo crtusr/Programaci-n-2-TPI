@@ -1,5 +1,6 @@
 #include "celda.h"
 
+
 Celda::Celda(int x, int y, int costo)
 {
   xPos = x;
