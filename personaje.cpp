@@ -11,8 +11,8 @@ void personaje::cambiarsprt(int nuevox,int nuevoy){
 
     // left, top, width, height
     sprite->setTextureRect(sf::IntRect(
-        sf::Vector2i(64+nuevox, 64*nuevoy),      // posición inicial dentro del spritesheet
-        sf::Vector2i(64, 64)      // tamaño del recorte
+        sf::Vector2i(64+nuevox, 64*nuevoy),      // posiciÃ³n inicial dentro del spritesheet
+        sf::Vector2i(64, 64)      // tamaÃ±o del recorte
     ));
 
 }
@@ -27,8 +27,8 @@ void personaje::moverpers(){
        int x=1;
        int y=1;
     sprite->setTextureRect(sf::IntRect(
-        sf::Vector2i(64/x, 64*y),      // posición inicial dentro del spritesheet
-        sf::Vector2i(64, 64)      // tamaño del recorte
+        sf::Vector2i(64/x, 64*y), 
+        sf::Vector2i(64, 64)     
     ));
 
 
