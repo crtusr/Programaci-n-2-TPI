@@ -16,6 +16,8 @@ private:
     int posy = 0;
     int direccion = 0;
     int accion = 0;
+    bool blokaccion = false;
+    int frame = 0;
 
     sf::Texture textura;
     std::unique_ptr<sf::Sprite> sprite;
@@ -38,8 +40,8 @@ public:
 
 
     sprite->setTextureRect(sf::IntRect(
-        sf::Vector2i(64*0, 65*0),      // posición inicial dentro del spritesheet
-        sf::Vector2i(64, 64)      // tamaño del recorte
+        sf::Vector2i(64*0, 65*0),      // posiciÃ³n inicial dentro del spritesheet
+        sf::Vector2i(64, 64)      // tamaÃ±o del recorte
     ));
 
     }
