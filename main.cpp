@@ -5,6 +5,7 @@
 #include "defaultcelda.h"
 #include "celdaterrestre.h"
 #include "sismov.h"
+#include "personaje.h"
 
 enum baldosas
 {
@@ -145,11 +146,11 @@ int main()
   window.setFramerateLimit(60);
   sf::Texture texCelda[10];
   sf::Texture texClase[5];
-  
+  personaje pers; 
   sf::Texture yo("yo.bmp");
   sf::Sprite yoyo(yo);
   sf::Vector2f posicion(0, 0);
-
+  int x = 0, y = 0, mov = 3;
   sf::RectangleShape square(sf::Vector2f(64,64));
   square.setFillColor(sf::Color(127, 127, 255, 127));
   
@@ -157,7 +158,7 @@ int main()
   err = cargarTexturasDeCeldas(texCelda, 5);
   if(err)
     return -1;
-  Grilla tablero(TamanioDeLaBaldosa, 8, 8);
+  Grilla tablero(TamanioDeLaBaldosa, 11, 11);
   SisMov movimiento(3, 3, &tablero);
   cargarMapa(tablero, "testmap.txt",texCelda);
   while (window.isOpen())
@@ -182,29 +183,41 @@ int main()
         {
           if(posicion.x >= TamanioDeLaBaldosa)
             posicion.x -= TamanioDeLaBaldosa;
+          x--;
         }
         else if (key->code == sf::Keyboard::Key::Right)
         {
-          if(posicion.x <= TamanioDeLaBaldosa * 6)
+          if(posicion.x <= TamanioDeLaBaldosa * 9)
             posicion.x += TamanioDeLaBaldosa;
+          x++;
         }
         else if (key->code == sf::Keyboard::Key::Up)
         {
           if(posicion.y >= TamanioDeLaBaldosa)
             posicion.y -= TamanioDeLaBaldosa;
+          y--;
         }
         else if (key->code == sf::Keyboard::Key::Down)
         {
-          if(posicion.y <= TamanioDeLaBaldosa * 6)
+          if(posicion.y <= TamanioDeLaBaldosa * 9)
             posicion.y += TamanioDeLaBaldosa;
+          y++;
+        }
+        else if(key->code == sf::Keyboard::Key::A)
+        {
+          mov++;
+        }
+        else if(key->code == sf::Keyboard::Key::S)
+        {
+          mov--;
         }
       }
     }
     //Acá le mandas los comandos a la ventana para que dibuje objetos
     window.clear(sf::Color::Blue); 
     tablero.render(window);
-    movimiento.resetValido();
-    movimiento.movRango(3,3, 3);
+    movimiento.calcularMovimiento(x, y, mov);
+    pers.mostrarpersonaje(window);
     /*
     for(int i = 0; i < 64; i++)
       visitadas[i] = false;

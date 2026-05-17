@@ -59,7 +59,7 @@ void SisMov::movRango(int x, int y, int mov)
   /*estas 4 variables las hice simplemente para facilitar la lectura del algoritmo*/
   int costoCeldaInferior = y+1 < bordeInferior ? grid->getCelda(x, y + 1)->getCostoMov() : 255;
   int costoCeldaIzquierda = x-1 >= 0 ? grid->getCelda(x - 1 , y)->getCostoMov() : 255;
-  int costoCeldaSuperior = y-1 >= 0 ? grid->getCelda(x - 1 , y)->getCostoMov() : 255;
+  int costoCeldaSuperior = y-1 >= 0 ? grid->getCelda(x, y - 1)->getCostoMov() : 255;
   int costoCeldaDerecha = x+1 < bordeDerecho ? grid->getCelda(x + 1, y)->getCostoMov() : 255;
   if(!valido[x + (y * bordeDerecho)])
   {
@@ -73,6 +73,13 @@ void SisMov::movRango(int x, int y, int mov)
     movRango(x, y - 1, mov - costoCeldaSuperior);
   if(x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
     movRango(x + 1, y, mov - costoCeldaDerecha);
+}
+
+void SisMov::calcularMovimiento(int x, int y, int mov)
+{
+  resetValido();
+  if(x >= 0 && y >= 0 && x < bordeDerecho && y < bordeInferior)
+    movRango(x, y, mov);
 }
 /*
  *  Lo pensé de manera que pudiera retornar el puntero a la grilla completa y
