@@ -10,6 +10,7 @@ using namespace sf;
 
 
 #endif // PERSONAJE_H_INCLUDED
+
 class personaje {
 private:
     int posx = 0;
