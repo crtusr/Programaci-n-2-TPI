@@ -4,12 +4,11 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include <memory>
 using namespace std;
 using namespace sf;
-#include <memory>
 
 
-#endif // PERSONAJE_H_INCLUDED
 class personaje {
 private:
     int posx = 0;
