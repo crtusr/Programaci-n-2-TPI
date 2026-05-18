@@ -4,6 +4,7 @@
 #include <iostream>
 #include <filesystem>
 #include <string>
+#include "grilla.h"
 using namespace std;
 using namespace sf;
 #include <memory>
@@ -19,33 +20,15 @@ private:
     int accion = 0;
     bool blokaccion = false;
     int frame = 0;
+    int ladoCelda;
+
 
     sf::Texture textura;
     std::unique_ptr<sf::Sprite> sprite;
 
 public:
     // Constructor
-    personaje()
-      {
-        if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
-            std::cerr << "Error al cargar textura\n";
-
-        }
-        // Construir el sprite con la textura
-        sprite = std::make_unique<sf::Sprite>(textura);
-     sprite->setPosition(sf::Vector2f(static_cast<float>(0),
-                                 static_cast<float>(0)));
-
-
-    // left, top, width, height
-
-
-    sprite->setTextureRect(sf::IntRect(
-        sf::Vector2i(64*0, 65*0),      // posición inicial dentro del spritesheet
-        sf::Vector2i(64, 64)      // tamaño del recorte
-    ));
-
-    }
+    personaje(Grilla &g);
 
     // Getters
     int getposx() const { return posx; }

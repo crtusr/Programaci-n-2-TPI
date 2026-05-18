@@ -146,7 +146,6 @@ int main()
   window.setFramerateLimit(60);
   sf::Texture texCelda[10];
   sf::Texture texClase[5];
-  personaje pers; 
   sf::Texture yo("yo.bmp");
   sf::Sprite yoyo(yo);
   sf::Vector2f posicion(0, 0);
@@ -159,6 +158,7 @@ int main()
   if(err)
     return -1;
   Grilla tablero(TamanioDeLaBaldosa, 11, 11);
+  personaje pers(tablero); 
   SisMov movimiento(3, 3, &tablero);
   cargarMapa(tablero, "testmap.txt",texCelda);
   while (window.isOpen())
@@ -218,6 +218,7 @@ int main()
     tablero.render(window);
     movimiento.calcularMovimiento(x, y, mov);
     pers.mostrarpersonaje(window);
+    pers.moverpers();
     /*
     for(int i = 0; i < 64; i++)
       visitadas[i] = false;
