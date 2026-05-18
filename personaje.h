@@ -21,6 +21,7 @@ private:
     bool blokaccion = false;
     int frame = 0;
     int ladoCelda;
+    Grilla *grilla;
 
 
     sf::Texture textura;
@@ -28,7 +29,7 @@ private:
 
 public:
     // Constructor
-    personaje(Grilla &g);
+    personaje(Grilla *g);
 
     // Getters
     int getposx() const { return posx; }

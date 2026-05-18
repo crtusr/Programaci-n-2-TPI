@@ -5,9 +5,10 @@
 using namespace std;
 using namespace sf;
 
-personaje::personaje(Grilla &g)
+personaje::personaje(Grilla *g)
       {
-        ladoCelda = g.getTamCeldaPixeles();
+        grilla = g;
+        ladoCelda = g->getTamCeldaPixeles();
         if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
             std::cerr << "Error al cargar textura\n";
 
