@@ -5,7 +5,7 @@
 using namespace std;
 using namespace sf;
 
-personaje::personaje(Grilla *g)
+personaje::personaje(Grilla *g) : sprite(textura)
       {
         grilla = g;
         ladoCelda = g->getTamCeldaPixeles();
@@ -13,16 +13,15 @@ personaje::personaje(Grilla *g)
             std::cerr << "Error al cargar textura\n";
 
         }
-        // Construir el sprite con la textura
-        sprite = std::make_unique<sf::Sprite>(textura);
-     sprite->setPosition(sf::Vector2f(static_cast<float>(0),
+        sprite.setTexture(textura);
+     sprite.setPosition(sf::Vector2f(static_cast<float>(0),
                                  static_cast<float>(0)));
 
 
     // left, top, width, height
 
 
-    sprite->setTextureRect(sf::IntRect(
+    sprite.setTextureRect(sf::IntRect(
         sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet
         sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
     ));
@@ -33,7 +32,7 @@ void personaje::cambiarsprt(int nuevox,int nuevoy){
 
     // left, top, width, height
     //imagen 13X54
-    sprite->setTextureRect(sf::IntRect(
+    sprite.setTextureRect(sf::IntRect(
         sf::Vector2i(ladoCelda+nuevox, ladoCelda*nuevoy),      // posición inicial dentro del spritesheet
         sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
     ));
@@ -50,12 +49,12 @@ if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!blokaccion))||((blok
   }
   blokaccion=true;
   posx+=1;
-  sprite->setPosition(sf::Vector2f(static_cast<float>(posx),
+  sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
                                   static_cast<float>(posy)));
      // left, top, width, height
   int x=1;
   int y=11;
-  sprite->setTextureRect
+  sprite.setTextureRect
   (
     sf::IntRect
     (
@@ -79,11 +78,11 @@ frame=0;
 accion=1;
                 blokaccion=true;
     posx-=1;
-    sprite->setPosition(sf::Vector2f(static_cast<float>(posx),
+    sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
                                     static_cast<float>(posy)));
        int x=1;
        int y=9;
-  sprite->setTextureRect
+  sprite.setTextureRect
   (
     sf::IntRect
     (
@@ -105,11 +104,11 @@ frame=0;
 accion=1;
                 blokaccion=true;
    posy-=1;
-    sprite->setPosition(sf::Vector2f(static_cast<float>(posx),
+    sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
                                     static_cast<float>(posy)));
        int x=1;
        int y=8;
-  sprite->setTextureRect
+  sprite.setTextureRect
   (
     sf::IntRect
     (
@@ -131,11 +130,11 @@ frame=0;
 accion=1;
                 blokaccion=true;
     posy+=1;
-    sprite->setPosition(sf::Vector2f(static_cast<float>(posx),
+    sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
                                     static_cast<float>(posy)));
        int x=1;
        int y=10;
-  sprite->setTextureRect
+  sprite.setTextureRect
   (
     sf::IntRect
     (
