@@ -7,7 +7,6 @@
 #include "grilla.h"
 using namespace std;
 using namespace sf;
-#include <memory>
 
 
 #endif // PERSONAJE_H_INCLUDED
@@ -22,10 +21,9 @@ private:
     int frame = 0;
     int ladoCelda;
     Grilla *grilla;
-
+    Sprite sprite;
 
     sf::Texture textura;
-    std::unique_ptr<sf::Sprite> sprite;
 
 public:
     // Constructor
@@ -42,7 +40,7 @@ public:
     //---------arreglando---------//
 
         void mostrarpersonaje(sf::RenderWindow& window) {
-        window.draw(*sprite);
+        window.draw(sprite);
     }
 //void setposx(int x) {
 //    posx = x;
