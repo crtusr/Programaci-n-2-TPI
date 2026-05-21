@@ -30,8 +30,8 @@ public:
     personaje(Grilla *g);
 
     // Getters
-    int getposx() const { return posx; }
-    int getposy() const { return posy; }
+    int getposx() const { return posx / ladoCelda; } //posx tiene que devolver la posición en la grilla
+    int getposy() const { return posy / ladoCelda; }
     int getdireccion() const { return direccion; }
     int getaccion() const { return accion; }
 
