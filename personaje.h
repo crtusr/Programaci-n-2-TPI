@@ -10,6 +10,7 @@ using namespace std;
 using namespace sf;
 
 
+#endif // PERSONAJE_H_INCLUDED
 
 class personaje {
 private:
@@ -27,7 +28,27 @@ private:
 
 public:
     // Constructor
-    personaje(Grilla *g);
+    personaje(Grilla *g) : sprite(textura)
+      {
+        grilla = g;
+        ladoCelda = g->getTamCeldaPixeles();
+        if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+        posx=ladoCelda*0;
+        posy=ladoCelda*0;
+        sprite.setTexture(textura);
+     sprite.setPosition(sf::Vector2f(posx,posy));
+
+
+    // left, top, width, height
+    sprite.setTextureRect(sf::IntRect(
+        sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet---Vector2i:pertenece a la libreria de SFLM y contiene 2 vectores
+        sf::Vector2i(ladoCelda, ladoCelda)         // tamaño del recorte
+    ));
+
+    }
+
 
     // Getters
     int getposx() const { return posx / ladoCelda; } //posx tiene que devolver la posición en la grilla
@@ -75,4 +96,3 @@ void moverpers();
 
 
 };
-#endif // PERSONAJE_H_INCLUDED
