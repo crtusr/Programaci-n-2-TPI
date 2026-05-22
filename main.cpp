@@ -6,8 +6,9 @@
 #include "celdaterrestre.h"
 #include "sismov.h"
 #include "personaje.h"
-#include "render_interfaz_mapa.h"
+//#include "render_interfaz_mapa.h"
 
+//#include "managerpersonaje.h" //<----SI LO INCLUYO EL PROGRAMA NO COMPILA 
 enum baldosas
 {
   DEFAULT,

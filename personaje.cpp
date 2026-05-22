@@ -11,19 +11,17 @@ personaje::personaje(Grilla *g) : sprite(textura)
         ladoCelda = g->getTamCeldaPixeles();
         if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
             std::cerr << "Error al cargar textura\n";
-
         }
+        posx=ladoCelda*0;
+        posy=ladoCelda*0;
         sprite.setTexture(textura);
-     sprite.setPosition(sf::Vector2f(static_cast<float>(0),
-                                 static_cast<float>(0)));
+     sprite.setPosition(sf::Vector2f(posx,posy));
 
 
     // left, top, width, height
-
-
     sprite.setTextureRect(sf::IntRect(
-        sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet
-        sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
+        sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet---Vector2i:pertenece a la libreria de SFLM y contiene 2 vectores
+        sf::Vector2i(ladoCelda, ladoCelda)         // tamaño del recorte
     ));
 
     }
@@ -49,8 +47,7 @@ if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!blokaccion))||((blok
   }
   blokaccion=true;
   posx+=1;
-  sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
-                                  static_cast<float>(posy)));
+  sprite.setPosition(sf::Vector2f(posx,posy));
      // left, top, width, height
   int x=1;
   int y=11;
@@ -78,8 +75,7 @@ frame=0;
 accion=1;
                 blokaccion=true;
     posx-=1;
-    sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
-                                    static_cast<float>(posy)));
+    sprite.setPosition(sf::Vector2f(posx,posy));
        int x=1;
        int y=9;
   sprite.setTextureRect
@@ -104,8 +100,7 @@ frame=0;
 accion=1;
                 blokaccion=true;
    posy-=1;
-    sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
-                                    static_cast<float>(posy)));
+    sprite.setPosition(sf::Vector2f(posx,posy));
        int x=1;
        int y=8;
   sprite.setTextureRect
@@ -130,8 +125,7 @@ frame=0;
 accion=1;
                 blokaccion=true;
     posy+=1;
-    sprite.setPosition(sf::Vector2f(static_cast<float>(posx),
-                                    static_cast<float>(posy)));
+    sprite.setPosition(sf::Vector2f(posx,posy));
        int x=1;
        int y=10;
   sprite.setTextureRect
@@ -149,7 +143,7 @@ accion=1;
     accion=0;
     frame=0;}
   }
-  if(accion=0){
+  if(accion==0){
     frame++;
   }
   accion=1;
