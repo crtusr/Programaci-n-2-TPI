@@ -13,6 +13,7 @@
       Grilla(int ladoCeldaEnPixeles = 0, int xMaximo = 0, int yMaximo = 0);
       int getMaxX();
       int getMaxY();
+      int getCantCeldas();
       int getTamCeldaPixeles();
       Celda* getCelda(int x, int y);
       void setCelda(Celda* cel);

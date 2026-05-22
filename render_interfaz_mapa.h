@@ -12,7 +12,7 @@ class RenderInterfazMapa
 
   public:
     RenderInterfazMapa(Grilla *g);
-    void renderRangoMovimiento(bool *valido);
+    void renderRangoMovimiento(bool *valido, sf::RenderWindow &win);
     void renderRangoAtaque();
     void renderCursor();
 };

@@ -6,6 +6,7 @@
 #include "celdaterrestre.h"
 #include "sismov.h"
 #include "personaje.h"
+#include "render_interfaz_mapa.h"
 
 enum baldosas
 {
@@ -158,7 +159,7 @@ int main()
   if(err)
     return -1;
   Grilla tablero(TamanioDeLaBaldosa, 11, 11);
-  personaje pers(tablero); 
+  personaje pers(&tablero); 
   SisMov movimiento(3, 3, &tablero);
   cargarMapa(tablero, "testmap.txt",texCelda);
   while (window.isOpen())

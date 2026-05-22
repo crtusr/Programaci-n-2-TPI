@@ -39,6 +39,11 @@ int Grilla::getMaxY()
   return maxY;
 }
 
+int Grilla::getCantCeldas()
+{
+  return maxX * maxY;
+}
+
 /*se asume que las celdas son cuadradas... */
 int Grilla::getTamCeldaPixeles()
 {
