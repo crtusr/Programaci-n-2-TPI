@@ -143,7 +143,7 @@ accion=1;
     accion=0;
     frame=0;}
   }
-  if(accion=0){
+  if(accion==0){
     frame++;
   }
   accion=1;
