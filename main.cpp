@@ -8,7 +8,7 @@
 #include "personaje.h"
 //#include "render_interfaz_mapa.h"
 
-//#include "managerpersonaje.h" //<----SI LO INCLUYO EL PROGRAMA NO COMPILA 
+#include "managerpersonaje.h" //<----SI LO INCLUYO EL PROGRAMA NO COMPILA 
 enum baldosas
 {
   DEFAULT,
