@@ -6,7 +6,7 @@
 #include "celdaterrestre.h"
 #include "sismov.h"
 #include "personaje.h"
-
+//#include "managerpersonaje.h" //<----SI LO INCLUYO EL PROGRAMA NO COMPILA 
 enum baldosas
 {
   DEFAULT,
