@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <string>
 #include "grilla.h"
+#include "celda.h"
 using namespace std;
 using namespace sf;
 
@@ -34,8 +35,23 @@ public:
     int getposy() const { return posy / ladoCelda; }
     int getdireccion() const { return direccion; }
     int getaccion() const { return accion; }
+    bool getblockaccion() {return blokaccion; }
+    int getframe() {return frame;}
+    int getladocelda(){return ladoCelda;}
+    Sprite getsprite(){return sprite;}
 
 
+    void setaccion(int acc) {accion=acc;}
+    void setdireccion(int drc) {direccion=drc;}
+    void setframe(int fra) {frame=fra;}
+    void setblockaccion(bool block) {blokaccion=block;}
+    void setposx(int px){posx=px;}
+    void setsumresposx(int px){posx+=px;}
+    void setsumresposy(int py){posy+=py;}
+    void sumarframe(){frame++;}
+    void setposy(int py){posy=py;}
+    void setposicionsprite(int x,int y){(sf::Vector2f(x,y));}
+    void setsubrectsprite(int x1,int y1,int x2,int y2){sprite.setTextureRect(IntRect(Vector2i(x1,y1),Vector2i(x2,y2)));}
 
     //---------arreglando---------//
 
