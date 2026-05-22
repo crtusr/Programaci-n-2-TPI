@@ -10,7 +10,7 @@ using namespace std;
 using namespace sf;
 
 
-void managerpersonaje::moverpersonaje(personaje pers){
+void managerpersonaje::moverpersonaje(personaje& pers){
 
 
 if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion()==2)))
@@ -27,13 +27,13 @@ if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!pers.getblockaccion(
      // left, top, width, height
   int x=1;
   int y=11;
-  pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda()*y );
+  pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
  // sprite.setTextureRect
  // (
  //   sf::IntRect
  //   (
- //     sf::Vector2i(ladoCelda* (x + (frame/8) % 9), ladoCelda*y),      // posición inicial dentro del spritesheet
- //     sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
+ //     sf::Vector2i(ladoCelda* (x + (frame/8) % 9), ladoCelda*y),      // posiciÃ³n inicial dentro del spritesheet
+ //     sf::Vector2i(ladoCelda, ladoCelda)      // tamaÃ±o del recorte
  //   )
  // );
   pers.sumarframe();
@@ -59,7 +59,7 @@ pers.setaccion(1);
   pers.setposicionsprite(pers.getposx(),pers.getposy());
        int x=1;
        int y=9;
-pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda()*y );
+pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
     pers.sumarframe();
     pers.setdireccion(3);
    // direccion=3;
@@ -80,7 +80,7 @@ pers.setaccion(1);
    pers.setposicionsprite(pers.getposx(),pers.getposy());
        int x=1;
        int y=8;
-pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda()*y );
+pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
         pers.sumarframe();
     pers.setdireccion(1);
    // direccion=1;
@@ -101,9 +101,9 @@ pers.setaccion(1);
     pers.setposicionsprite(pers.getposx(),pers.getposy());
        int x=1;
        int y=10;
-pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda()*y );
+pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
         pers.sumarframe();
-    pers.setdireccion(3);
+    pers.setdireccion(4);
    // direccion=4;
   if(pers.getframe()>=pers.getladocelda())
   {
