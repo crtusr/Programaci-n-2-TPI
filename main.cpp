@@ -163,10 +163,13 @@ int main()
   RenderInterfazMapa rendUi(&tablero);
   //-------------------------------------------------------------------------------------------------------------------------------------------
   managerpersonaje manager;
-  personaje pers(&tablero);
-  //std::vector<personaje> pers(5, personaje(&tablero));// <----------esta funcion crea 5 vectores de pers pero al tratar de mostrar en pantalla falla el programa
-                                                                     //tengo entendido que es culpa del constructor al copiar texturas y sprites
-  //------------------------------------------------------------------------------------------------------------------------------------
+ // personaje pers(&tablero);
+  std::vector<personaje> pers(5, personaje(&tablero));
+for(int i=0;i<5;i++)
+{
+   manager.Asignarpersonajes(pers[i]);// <----------ahora funcona pero es nesesario asignarle despues de crearlo con sprites
+}
+//---------------------------------------------------------------------------------------------
   SisMov movimiento(3, 3, &tablero);
   cargarMapa(tablero, "testmap.txt",texCelda);
   while (window.isOpen())
@@ -226,9 +229,10 @@ int main()
     tablero.render(window);
     movimiento.calcularMovimiento(x, y, mov);
     //------------------------------------ahora manager controla personaje
-    manager.moverpersonaje(pers);
-    manager.mostrarpersonaje(pers,window);
+    manager.moverpersonaje(pers[0]);
+    manager.mostrarpersonaje(pers[0],window);//<-------------ahora se podra seleccionar el personaje que controlar(de un vector de personaje de 5 en esta ocacion)
     //------------------------------------
+
     /*
     for(int i = 0; i < 64; i++)
       visitadas[i] = false;
