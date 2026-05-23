@@ -30,7 +30,7 @@ void SisMov::resetValido()
  * te permite iteraciónes más elegantes (pero que pueden dificultar el control 
  * de flujo). En este caso en particular facilita el entendimiento porque si se
  * quisiera hacer con un ciclo while o for habria que tambien implementar una
- * estructura de datos que es una cola, acá la cola te la brinda la propia
+ * estructura de datos que es una pila, acá la pila te la brinda la propia
  * recursión.
  *
  * ej:
@@ -85,7 +85,7 @@ void SisMov::calcularMovimiento(int x, int y, int mov)
  *  Lo pensé de manera que pudiera retornar el puntero a la grilla completa y
  *  se pueda llamar a la función que dibuja
  */
-bool *SisMov::getValido()
+const bool *SisMov::getValido()
 {
   return valido;
 }

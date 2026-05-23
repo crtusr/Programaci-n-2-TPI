@@ -10,7 +10,7 @@ class managerpersonaje
 
   public:
 
-    void moverpersonaje(personaje pers);
+    void moverpersonaje(personaje &pers);
     void mostrarpersonaje(personaje pers,sf::RenderWindow& window);
 
 };

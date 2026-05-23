@@ -6,7 +6,7 @@
 #include "celdaterrestre.h"
 #include "sismov.h"
 #include "personaje.h"
-//#include "render_interfaz_mapa.h"
+#include "render_interfaz_mapa.h"
 
 #include "managerpersonaje.h" //<----SI LO INCLUYO EL PROGRAMA NO COMPILA 
 enum baldosas
@@ -160,6 +160,7 @@ int main()
   if(err)
     return -1;
   Grilla tablero(TamanioDeLaBaldosa, 11, 11);
+  RenderInterfazMapa rendUi(&tablero);
   personaje pers(&tablero); 
   SisMov movimiento(3, 3, &tablero);
   cargarMapa(tablero, "testmap.txt",texCelda);
@@ -226,7 +227,8 @@ int main()
       visitadas[i] = false;
     movRango(3,3, 3, tablero, visitadas);
     */
-    drawMovRango(square, tablero, movimiento.getValido(), window);
+    //drawMovRango(square, tablero, movimiento.getValido(), window);
+    rendUi.renderRangoMovimiento(movimiento.getValido(), window);
 
     yoyo.setPosition(posicion);
     window.draw(yoyo);

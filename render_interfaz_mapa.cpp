@@ -16,7 +16,11 @@ void RenderInterfazMapa::renderRangoMovimiento(bool *valido, sf::RenderWindow &w
     {
       if(valido[x + (y * grilla->getMaxX())])
       {
-        cuadradoTranslucido.setPosition(sf::Vector2f(x * 64, y * 64));
+        cuadradoTranslucido.setPosition
+        (
+          sf::Vector2f(x * grilla->getTamCeldaPixeles(),
+                       y * grilla->getTamCeldaPixeles())
+        );
         win.draw(cuadradoTranslucido);
       }
     }
@@ -24,7 +28,7 @@ void RenderInterfazMapa::renderRangoMovimiento(bool *valido, sf::RenderWindow &w
 }
 void RenderInterfazMapa::renderRangoAtaque()
 {
-
+  
 }
 void RenderInterfazMapa::renderCursor()
 {

@@ -17,12 +17,14 @@
       int bordeInferior;
       Grilla *grid;
       bool *valido;
+      int camino[16];
       void resetValido();
       void movRango(int x, int y, int mov);
     public:
       SisMov(int x, int y, Grilla *g);
+      void calcularCamino();
       void calcularMovimiento(int x, int y, int mov);
-      bool *getValido();
+      const bool *getValido();
       ~SisMov();
   }; 
 
