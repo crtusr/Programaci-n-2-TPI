@@ -5,146 +5,100 @@
 using namespace std;
 using namespace sf;
 
-personaje::personaje(Grilla *g) : sprite(textura)
-      {
-        grilla = g;
-        ladoCelda = g->getTamCeldaPixeles();
-        if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
-            std::cerr << "Error al cargar textura\n";
+    int personaje::getPosx()//posx tiene que devolver la posición en la grilla
+    {
+        return posx/ladoCelda;
+    }
+
+    int personaje::getPosy()//posx tiene que devolver la posición en la grilla
+    {
+        return posy/ladoCelda;
+    }
+
+
+    int personaje::getPosxPxl(){
+         return posx;
+    }
+
+    int personaje::getPosyPxl(){
+        return posy;
+    }
+
+    int personaje::getdireccion(){
+         return direccion;
+    }
+
+    int personaje::getaccion(){
+         return accion;
+         }
+
+    bool personaje::getblockaccion() {
+        return blokaccion;
         }
-        posx=ladoCelda*0;
-        posy=ladoCelda*0;
-        sprite.setTexture(textura);
-     sprite.setPosition(sf::Vector2f(posx,posy));
 
+    int personaje::getframe() {
+        return frame;
+        }
 
-    // left, top, width, height
-    sprite.setTextureRect(sf::IntRect(
-        sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet---Vector2i:pertenece a la libreria de SFLM y contiene 2 vectores
-        sf::Vector2i(ladoCelda, ladoCelda)         // tamaño del recorte
-    ));
+    int personaje::getladocelda()
+    {
+        return ladoCelda;
+        }
 
+    Sprite personaje::getsprite(){
+        return sprite;
     }
 
-void personaje::cambiarsprt(int nuevox,int nuevoy){
+    Vector2f personaje::getPosicionF(){
+        Vector2f pos(posx,posy); return pos;
+        }
 
-    // left, top, width, height
-    //imagen 13X54
-    sprite.setTextureRect(sf::IntRect(
-        sf::Vector2i(ladoCelda+nuevox, ladoCelda*nuevoy),      // posición inicial dentro del spritesheet
-        sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
-    ));
+    Vector2i personaje::getPosicionI(){
+        Vector2i pos(posx,posy); return pos;
+        }
 
-}
 
-void personaje::moverpers(){
+    void personaje::setaccion(int acc) {
+        accion=acc;
+        }
 
-if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!blokaccion))||((blokaccion)&&(direccion==2)))
-{
-  if(accion!=1)
-  {
-    frame=0;
-  }
-  blokaccion=true;
-  posx+=1;
-  sprite.setPosition(sf::Vector2f(posx,posy));
-     // left, top, width, height
-  int x=1;
-  int y=11;
-  sprite.setTextureRect
-  (
-    sf::IntRect
-    (
-      sf::Vector2i(ladoCelda* (x + (frame/8) % 9), ladoCelda*y),      // posición inicial dentro del spritesheet
-      sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
-    )
-  );
-  frame++;
-  direccion=2;
-  if(frame>=ladoCelda)
-  {
-    blokaccion=false;
-    accion=0;
-    frame=0;
-  }
-}
-          if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)&&(!blokaccion)||(blokaccion)&&(direccion==3)){
-if(accion!=1){
-frame=0;
-    }
-accion=1;
-                blokaccion=true;
-    posx-=1;
-    sprite.setPosition(sf::Vector2f(posx,posy));
-       int x=1;
-       int y=9;
-  sprite.setTextureRect
-  (
-    sf::IntRect
-    (
-      sf::Vector2i(ladoCelda* (x + (frame/8) % 9), ladoCelda*y),      // posición inicial dentro del spritesheet
-      sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
-    )
-  );
-    frame++;
-    direccion=3;
-    if(frame>=ladoCelda){
-    blokaccion=false;
-    accion=0;
-    frame=0;}
-  }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)&&(!blokaccion)||(blokaccion)&&(direccion==1)){
-if(accion!=1){
-frame=0;
-    }
-accion=1;
-                blokaccion=true;
-   posy-=1;
-    sprite.setPosition(sf::Vector2f(posx,posy));
-       int x=1;
-       int y=8;
-  sprite.setTextureRect
-  (
-    sf::IntRect
-    (
-      sf::Vector2i(ladoCelda* (x + (frame/8) % 9), ladoCelda*y),      // posición inicial dentro del spritesheet
-      sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
-    )
-  );
+    void personaje::setdireccion(int drc) {
+        direccion=drc;
+        }
+
+    void personaje::setframe(int fra) {
+        frame=fra;
+        }
+
+    void personaje::setblockaccion(bool block) {
+        blokaccion=block;
+        }
+
+    void personaje::setposx(int px){
+        posx=px;
+        }
+
+    void personaje::setposy(int py){
+        posy=py;
+        }
+
+    void personaje::setsumresposx(int px){
+        posx+=px;
+        }
+
+    void personaje::setsumresposy(int py){
+        posy+=py;
+        }
+
+    void personaje::sumarframe(){
         frame++;
-    direccion=1;
-    if(frame>=ladoCelda){
-    blokaccion=false;
-    accion=0;
-    frame=0;}
-  }
-        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)&&(!blokaccion)||(blokaccion)&&(direccion==4)){
-    if(accion!=1){
-frame=0;
-    }
-accion=1;
-                blokaccion=true;
-    posy+=1;
-    sprite.setPosition(sf::Vector2f(posx,posy));
-       int x=1;
-       int y=10;
-  sprite.setTextureRect
-  (
-    sf::IntRect
-    (
-      sf::Vector2i(ladoCelda * (x + (frame/8) % 9), ladoCelda*y),      // posición inicial dentro del spritesheet
-      sf::Vector2i(ladoCelda, ladoCelda)      // tamaño del recorte
-    )
-  );
-        frame++;
-    direccion=4;
-    if(frame>=ladoCelda){
-    blokaccion=false;
-    accion=0;
-    frame=0;}
-  }
-  if(accion==0){
-    frame++;
-  }
-  accion=1;
-}
+        }
+
+    void personaje::setposicionsprite(Vector2f pos){
+        (sprite.setPosition(pos));
+        }
+
+    void personaje::setsubrectsprite(int x1,int y1,int x2,int y2){
+        sprite.setTextureRect(IntRect(Vector2i(x1,y1),Vector2i(x2,y2)));
+        }
+
