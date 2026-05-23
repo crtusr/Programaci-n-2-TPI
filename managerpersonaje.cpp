@@ -94,8 +94,9 @@ pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.g
   }
   pers.setaccion(1);
 }
-void managerpersonaje::Asignarpersonajes(personaje& pers){
 
+void managerpersonaje::Asignarpersonajes(personaje& pers){
+pers.setsprite();
 
 }
 
