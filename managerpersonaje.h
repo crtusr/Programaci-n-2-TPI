@@ -3,16 +3,18 @@
 #include <SFML/Graphics.hpp>
 #include "personaje.h"
 
-class managerpersonaje 
-{
-  private:
 
 
-  public:
+class managerpersonaje {
+private:
 
-    void moverpersonaje(personaje pers);
-    void mostrarpersonaje(personaje pers,sf::RenderWindow& window);
+
+public:
+
+void moverpersonaje(personaje& pers);
+void mostrarpersonaje(personaje& pers,sf::RenderWindow& window);
+void Asignarpersonajes(personaje& pers);
+
 
 };
-
 #endif // MANAGERPERSONAJE_H_INCLUDED
