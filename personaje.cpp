@@ -102,3 +102,18 @@ using namespace sf;
         sprite.setTextureRect(IntRect(Vector2i(x1,y1),Vector2i(x2,y2)));
         }
 
+  void personaje::setsprite(){
+
+          if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+        sprite.setTexture(textura);
+        sprite.setPosition(sf::Vector2f(posx,posy));
+        posx=ladoCelda*0;
+        posy=ladoCelda*0;
+        sprite.setTextureRect(sf::IntRect(
+        sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet---Vector2i:pertenece a la libreria de SFLM y contiene 2 vectores
+        sf::Vector2i(ladoCelda, ladoCelda)         // tamaño del recorte
+    ));
+
+  }
