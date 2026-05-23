@@ -6,7 +6,7 @@ RenderInterfazMapa::RenderInterfazMapa(Grilla *g)
   cuadradoTranslucido.setSize(sf::Vector2f(g->getTamCeldaPixeles(), g->getTamCeldaPixeles()));
 }
 
-void RenderInterfazMapa::renderRangoMovimiento(bool *valido, sf::RenderWindow &win)
+void RenderInterfazMapa::renderRangoMovimiento(const bool *valido, sf::RenderWindow &win)
 {
   cuadradoTranslucido.setFillColor(sf::Color(127, 127, 255, 127));
   cuadradoTranslucido.setPosition(sf::Vector2f(0,0));

@@ -41,7 +41,6 @@ public:
      sprite.setPosition(sf::Vector2f(posx,posy));
 
 
-    // left, top, width, height
     sprite.setTextureRect(sf::IntRect(
         sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet---Vector2i:pertenece a la libreria de SFLM y contiene 2 vectores
         sf::Vector2i(ladoCelda, ladoCelda)         // tamaño del recorte
@@ -51,49 +50,38 @@ public:
 
 
     // Getters
-    int getposx() const { return posx;} //posx tiene que devolver la posición en la grilla
-    int getposy() const { return posy;}
-    int getdireccion() const { return direccion; }
-    int getaccion() const { return accion; }
-    bool getblockaccion() {return blokaccion; }
-    int getframe() {return frame;}
-    int getladocelda(){return ladoCelda;}
-    Sprite getsprite(){return sprite;}
+    int getPosx();            //posx tiene que devolver la posición en la grilla
+    int getPosy();            //posx tiene que devolver la posición en la grilla
+    int getPosxPxl();
+    int getPosyPxl();
+    int getdireccion();
+    int getaccion();
+    bool getblockaccion();
+    int getframe();
+    int getladocelda();
+    Sprite getsprite();
+    Vector2f getPosicionF();
+    Vector2i getPosicionI();
 
 
-    void setaccion(int acc) {accion=acc;}
-    void setdireccion(int drc) {direccion=drc;}
-    void setframe(int fra) {frame=fra;}
-    void setblockaccion(bool block) {blokaccion=block;}
-    void setposx(int px){posx=px;}
-    void setposy(int py){posy=py;}
-    void setsumresposx(int px){posx+=px;}
-    void setsumresposy(int py){posy+=py;}
-    void sumarframe(){frame++;}
-    void setposicionsprite(int x,int y){(sprite.setPosition(Vector2f(x,y)));}
-    void setsubrectsprite(int x1,int y1,int x2,int y2){sprite.setTextureRect(IntRect(Vector2i(x1,y1),Vector2i(x2,y2)));}
+    void setaccion(int acc);
+    void setdireccion(int drc);
+    void setframe(int fra);
+    void setblockaccion(bool block);
+    void setposx(int px);
+    void setposy(int py);
+    void setsumresposx(int px);
+    void setsumresposy(int py);
+    void sumarframe();
+    void setposicionsprite(Vector2f pos);
+    void setsubrectsprite(int x1,int y1,int x2,int y2);
+    void setsprite();
 
-    //---------arreglando---------//
 
-        void mostrarpersonaje(sf::RenderWindow& window) {
-        window.draw(sprite);
-    }
-//void setposx(int x) {
-//    posx = x;
-//    sprite->setPosition(sf::Vector2f(static_cast<float>(posx),
-//                                    static_cast<float>(posy)));
-//}
 
-//void setposy(int y) {
-//    posy = y;
-//    sprite->setPosition(sf::Vector2f(static_cast<float>(posx),
-//                                    static_cast<float>(posy)));
-//    }
-
-void cambiarsprt(int nuevox,int nuevoy);
-void moverpers();
 
 
 
 };
 #endif // PERSONAJE_H_INCLUDED
+
