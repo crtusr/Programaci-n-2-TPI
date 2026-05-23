@@ -90,6 +90,14 @@ const bool *SisMov::getValido()
   return valido;
 }
 
+void SisMov::resetCamino()
+{
+  for(int i = 0; i < 16; i++)
+  {
+    camino[i] = -1;
+  }
+}
+
 /*
  *  el array/matriz valido fue declarado de manera dinamica en el constructor
  *  asi que el ddestructor tendria que liberar la memoria alojada.

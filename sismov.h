@@ -19,6 +19,7 @@
       bool *valido;
       int camino[16];
       void resetValido();
+      void resetCamino();
       void movRango(int x, int y, int mov);
     public:
       SisMov(int x, int y, Grilla *g);
