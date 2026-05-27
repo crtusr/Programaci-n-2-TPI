@@ -53,6 +53,51 @@ void SisMov::resetValido()
  *  prueba en las subsiguientes funciones, hasta esplotar todos los posibles
  *  caminos que se podrian hacer con la cantidad de movimiento inicial.
  */
+bool SisMov::buscarCamino(int x, int y, int mov, int profundidad, int camino[16], int &profMax)
+{
+  if(profundidad > profMax)
+    profMax = profundidad;
+    if(x == xPos && y == yPos)
+    {
+      return true;
+    }
+    if(profundidad == 16 || mov < 0)
+    {
+      return false;
+    }
+    //si facilitan la lectura XD, lo copie pegue no mas esta parte
+    int costoCeldaInferior = y+1 < bordeInferior ? grid->getCelda(x, y + 1)->getCostoMov() : 255;
+    int costoCeldaIzquierda = x-1 >= 0 ? grid->getCelda(x - 1 , y)->getCostoMov() : 255;
+    int costoCeldaSuperior = y-1 >= 0 ? grid->getCelda(x, y - 1)->getCostoMov() : 255;
+    int costoCeldaDerecha = x+1 < bordeDerecho ? grid->getCelda(x + 1, y)->getCostoMov() : 255;
+    camino[profundidad] = 0;
+    if(y + 1 < bordeInferior && mov >= costoCeldaInferior)
+    {
+      camino[profundidad] = 1;
+      if(buscarCamino(x, y + 1, mov - costoCeldaInferior, profundidad + 1, camino, profMax))
+        return true;
+    }
+    if(x - 1 >= 0 && mov >= costoCeldaIzquierda)
+    {
+      camino[profundidad] = 2;
+      if(buscarCamino(x - 1 , y, mov - costoCeldaIzquierda, profundidad + 1, camino, profMax))
+        return true;
+    }
+    if(y - 1 >= 0 && mov >= costoCeldaSuperior)
+    {
+      camino[profundidad] = 3;
+      if(buscarCamino(x, y - 1, mov - costoCeldaSuperior, profundidad + 1, camino, profMax))
+        return true;
+    }
+    if(x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
+    {
+      camino[profundidad] = 4;
+      if(buscarCamino(x + 1, y, mov - costoCeldaDerecha, profundidad + 1, camino, profMax))
+        return true;
+    }
+    camino[profundidad] = -1;
+    return false;
+}
 
 void SisMov::movRango(int x, int y, int mov)
 {
