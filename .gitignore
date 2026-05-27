@@ -1,3 +1,47 @@
+# =========================
+# BUILD SYSTEM (CMake)
+# =========================
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.ninja
+compile_commands.json
 
-
+# =========================
+# EJECUTABLES
+# =========================
 *.exe
+*.out
+*.app
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.idea/
+*.cbp
+*.layout
+*.depend
+*.workspace
+
+# =========================
+# SISTEMA
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# TEMPORALES
+# =========================
+*.log
+*.tmp
+*.obj
+*.o
+#===============================
+# CONFIG SOLO LOCAL (NO global)
+#===============================
+config_local.json
+user_config.json
