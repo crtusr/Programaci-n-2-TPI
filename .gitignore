@@ -11,23 +11,17 @@ Makefile
 compile_commands.json
 
 # =========================
-# EJECUTABLES
+# EJECUTABLES Y BINARIOS
 # =========================
 *.exe
-<<<<<<< HEAD
 *.dll
-bin/
-obj/
-*.layout
-*.depend
-*.cbp
-*.workspace
-=======
 *.out
 *.app
+bin/
+obj/
 
 # =========================
-# IDEs
+# IDEs (Code::Blocks, VSCode, etc)
 # =========================
 .vscode/
 .idea/
@@ -49,9 +43,9 @@ Thumbs.db
 *.tmp
 *.obj
 *.o
+
 #===============================
 # CONFIG SOLO LOCAL (NO global)
 #===============================
 config_local.json
 user_config.json
->>>>>>> nightly
