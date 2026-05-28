@@ -1,3 +1,10 @@
 *.bmp
 Tiles/
 *.exe
+*.dll
+bin/
+obj/
+*.layout
+*.depend
+*.cbp
+*.workspace

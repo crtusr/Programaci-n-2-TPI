@@ -7,8 +7,9 @@
 #include "sismov.h"
 #include "personaje.h"
 #include "render_interfaz_mapa.h"
+#include "menu.h"
 
-#include "managerpersonaje.h" //<----SI LO INCLUYO EL PROGRAMA NO COMPILA 
+#include "managerpersonaje.h" //<----SI LO INCLUYO EL PROGRAMA NO COMPILA
 enum baldosas
 {
   DEFAULT,
@@ -28,7 +29,7 @@ class AdminTextura
     char tipoCelda[10];
   public:
     Admin
-    
+
 };
 */
 
@@ -37,7 +38,7 @@ int cargarMapa(Grilla &grilla, const char* nomArch, sf::Texture *tex)
 {
   const int tamFila = grilla.getMaxX();
   int i = 0;
-  char tipoCelda; 
+  char tipoCelda;
   int error = 0;
   FILE *archMapa = nullptr;
   archMapa = fopen(nomArch, "rb");
@@ -79,18 +80,18 @@ int cargarMapa(Grilla &grilla, const char* nomArch, sf::Texture *tex)
   {
     return error;
   }
-  
+
   return 0;
 }
 
 int cargarTexturasDeCeldas(sf::Texture *tex, int nTexturas)
 {
-  const char *nomArchivo[10] = 
+  const char *nomArchivo[10] =
   {
     "Tiles/defaulttile.bmp",
     "Tiles/prado.bmp",
     "Tiles/bosque.bmp",
-    "Tiles/montaña.bmp",
+    "Tiles/montania.bmp",
     "Tiles/mar.bmp"
   };
   int todoBien;
@@ -145,6 +146,7 @@ int main()
   int err;
   //Esto declara la pantalla
   sf::RenderWindow window(sf::VideoMode({1024, 768}), "SFML 3");
+  Menu menuPrincipal(1024, 768);
   window.setFramerateLimit(60);
   sf::Texture texCelda[10];
   sf::Texture texClase[5];
@@ -154,7 +156,7 @@ int main()
   int x = 0, y = 0, mov = 3;
   sf::RectangleShape square(sf::Vector2f(64,64));
   square.setFillColor(sf::Color(127, 127, 255, 127));
-  
+
   //bool visitadas[8*8] = {};
   err = cargarTexturasDeCeldas(texCelda, 5);
   if(err)
@@ -170,81 +172,92 @@ for(int i=0;i<5;i++)
    manager.Asignarpersonajes(pers[i]);// <----------ahora funcona pero es nesesario asignarle despues de crearlo con sprites
 }
 //---------------------------------------------------------------------------------------------
-  SisMov movimiento(3, 3, &tablero);
-  cargarMapa(tablero, "testmap.txt",texCelda);
-  while (window.isOpen())
+SisMov movimiento(3, 3, &tablero);
+    cargarMapa(tablero, "testmap.txt",texCelda);
+    bool enMenu = true;
+
+    while (window.isOpen())
   {
+    // =======================================================
+    //                 SECCIÓN DE EVENTOS
+    // =======================================================
     while (const std::optional<sf::Event> event = window.pollEvent())
     {
-      //Acá se manejan los eventos
       if (event->is<sf::Event::Closed>())
       {
           window.close();
       }
-      //Se supone que hay que hacer esto para que los pixeles no se estiren
       else if(const auto *resized = event->getIf<sf::Event::Resized>())
       {
         sf::FloatRect newSize(sf::Vector2f(0, 0), sf::Vector2f(resized->size.x, resized->size.y));
         window.setView(sf::View(newSize));
       }
-      else if (event->getIf<sf::Event::KeyPressed>())
+      else if (const auto *key = event->getIf<sf::Event::KeyPressed>())
       {
-        const auto *key = event->getIf<sf::Event::KeyPressed>();
-        if (key->code == sf::Keyboard::Key::Left)
+        if (enMenu)
         {
-          if(posicion.x >= TamanioDeLaBaldosa)
-            posicion.x -= TamanioDeLaBaldosa;
-          x--;
+          // --- CONTROLES DEL MENÚ ---
+          if (key->code == sf::Keyboard::Key::Up) {
+            menuPrincipal.moveUp();
+          }
+          else if (key->code == sf::Keyboard::Key::Down) {
+            menuPrincipal.moveDown();
+          }
+          else if (key->code == sf::Keyboard::Key::Enter) {
+            int opcion = menuPrincipal.getPressedItem();
+            if (opcion == 0) enMenu = false; // ¡A jugar!
+            else if (opcion == 2) window.close(); // Salir
+          }
         }
-        else if (key->code == sf::Keyboard::Key::Right)
+        else
         {
-          if(posicion.x <= TamanioDeLaBaldosa * 9)
-            posicion.x += TamanioDeLaBaldosa;
-          x++;
-        }
-        else if (key->code == sf::Keyboard::Key::Up)
-        {
-          if(posicion.y >= TamanioDeLaBaldosa)
-            posicion.y -= TamanioDeLaBaldosa;
-          y--;
-        }
-        else if (key->code == sf::Keyboard::Key::Down)
-        {
-          if(posicion.y <= TamanioDeLaBaldosa * 9)
-            posicion.y += TamanioDeLaBaldosa;
-          y++;
-        }
-        else if(key->code == sf::Keyboard::Key::A)
-        {
-          mov++;
-        }
-        else if(key->code == sf::Keyboard::Key::S)
-        {
-          mov--;
+          // --- CONTROLES JUEGO ---
+          if (key->code == sf::Keyboard::Key::Left) {
+            if(posicion.x >= TamanioDeLaBaldosa) posicion.x -= TamanioDeLaBaldosa;
+            x--;
+          }
+          else if (key->code == sf::Keyboard::Key::Right) {
+            if(posicion.x <= TamanioDeLaBaldosa * 9) posicion.x += TamanioDeLaBaldosa;
+            x++;
+          }
+          else if (key->code == sf::Keyboard::Key::Up) {
+            if(posicion.y >= TamanioDeLaBaldosa) posicion.y -= TamanioDeLaBaldosa;
+            y--;
+          }
+          else if (key->code == sf::Keyboard::Key::Down) {
+            if(posicion.y <= TamanioDeLaBaldosa * 9) posicion.y += TamanioDeLaBaldosa;
+            y++;
+          }
+          else if(key->code == sf::Keyboard::Key::A) { mov++; }
+          else if(key->code == sf::Keyboard::Key::S) { mov--; }
         }
       }
+    } // <--- Fin de eventos.
+
+    // =======================================================
+    //             SECCIÓN DE LÓGICA Y DIBUJO
+    // =======================================================
+    window.clear(sf::Color::Blue);
+
+    if (enMenu) {
+        // Si estamos en el menú, solo dibujamos tu menú
+        menuPrincipal.draw(window);
     }
-    //Acá le mandas los comandos a la ventana para que dibuje objetos
-    window.clear(sf::Color::Blue); 
-    tablero.render(window);
-    movimiento.calcularMovimiento(x, y, mov);
-    //------------------------------------ahora manager controla personaje
-    manager.moverpersonaje(pers[0]);
-    manager.mostrarpersonaje(pers[0],window);//<-------------ahora se podra seleccionar el personaje que controlar(de un vector de personaje de 5 en esta ocacion)
-    //------------------------------------
+    else {
+        // Si estamos jugando, dibujamos el juego.
+        tablero.render(window);
+        movimiento.calcularMovimiento(x, y, mov);
 
-    /*
-    for(int i = 0; i < 64; i++)
-      visitadas[i] = false;
-    movRango(3,3, 3, tablero, visitadas);
-    */
-    //drawMovRango(square, tablero, movimiento.getValido(), window);
-    rendUi.renderRangoMovimiento(movimiento.getValido(), window);
+        manager.moverpersonaje(pers[0]);
+        manager.mostrarpersonaje(pers[0], window);
+        rendUi.renderRangoMovimiento(movimiento.getValido(), window);
 
-    yoyo.setPosition(posicion);
-    window.draw(yoyo);
-    
+        yoyo.setPosition(posicion);
+        window.draw(yoyo);
+    }
+
     window.display();
+
   }
 
   return 0;
