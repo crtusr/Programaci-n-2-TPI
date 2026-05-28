@@ -238,7 +238,7 @@ for(int i=0;i<5;i++)
       visitadas[i] = false;
     movRango(3,3, 3, tablero, visitadas);
     */
-    //drawMovRango(square, tablero, movimiento.getValido(), window);
+    drawMovRango(square, tablero, movimiento.getValido(), window);
     rendUi.renderRangoMovimiento(movimiento.getValido(), window);
 
     yoyo.setPosition(posicion);
