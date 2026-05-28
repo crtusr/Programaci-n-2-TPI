@@ -3,7 +3,7 @@
 
 enum DIRECCIONES
 {
-  NULL,
+  NULO,
   ARRIBA,
   ABAJO,
   IZQUIERDA,
@@ -13,5 +13,7 @@ enum DIRECCIONES
   ABAJO_IZQUIERDA,
   ABAJO_DERECHA
 };
+
+const int profundidadMax = 16;
 
 #endif

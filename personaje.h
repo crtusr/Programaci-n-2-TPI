@@ -29,7 +29,7 @@ private:
 public:
     // Constructor
     personaje(Grilla *g) : sprite(textura)
-      {
+    {
         grilla = g;
         ladoCelda = g->getTamCeldaPixeles();
         if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
@@ -38,7 +38,7 @@ public:
         posx=ladoCelda*0;
         posy=ladoCelda*0;
         sprite.setTexture(textura);
-     sprite.setPosition(sf::Vector2f(posx,posy));
+    sprite.setPosition(sf::Vector2f(posx,posy));
 
 
     sprite.setTextureRect(sf::IntRect(

@@ -167,7 +167,7 @@ int main()
   std::vector<personaje> pers(5, personaje(&tablero));
 for(int i=0;i<5;i++)
 {
-   manager.Asignarpersonajes(pers[i]);// <----------ahora funcona pero es nesesario asignarle despues de crearlo con sprites
+  manager.Asignarpersonajes(pers[i]);// <----------ahora funcona pero es nesesario asignarle despues de crearlo con sprites
 }
 //---------------------------------------------------------------------------------------------
   SisMov movimiento(3, 3, &tablero);
@@ -245,7 +245,8 @@ for(int i=0;i<5;i++)
     window.draw(yoyo);
     
     window.display();
+    /*movimiento.buscarCamino(2, 3, 16);*/
   }
-
+    
   return 0;
 }
