@@ -247,17 +247,24 @@ SisMov movimiento(3, 3, &tablero);
         // Si estamos jugando, dibujamos el juego.
         tablero.render(window);
         movimiento.calcularMovimiento(x, y, mov);
-
+        //------------------------------------ahora manager controla personaje
         manager.moverpersonaje(pers[0]);
-        manager.mostrarpersonaje(pers[0], window);
+        manager.mostrarpersonaje(pers[0], window);//<-------------ahora se podra seleccionar el personaje que controlar(de un vector de personaje de 5 en esta ocacion)
         rendUi.renderRangoMovimiento(movimiento.getValido(), window);
+
+            /*
+    for(int i = 0; i < 64; i++)
+      visitadas[i] = false;
+    movRango(3,3, 3, tablero, visitadas);
+    */
+    drawMovRango(square, tablero, movimiento.getValido(), window);
+    rendUi.renderRangoMovimiento(movimiento.getValido(), window);
 
         yoyo.setPosition(posicion);
         window.draw(yoyo);
+
     }
-
     window.display();
-
   }
 
   return 0;

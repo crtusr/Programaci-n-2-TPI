@@ -4,7 +4,7 @@
   #include "grilla.h"
   /*
    * El objetivo de esta clase es calcular en una matriz de booleanos todas las
-   * casillas que son validas para moverse por una unidad en las coordenadas x y
+   * casillas que son validas para moverse por una unidad en las coordenadas "x" e "y"
    * de la grilla.
    */
   
@@ -24,6 +24,7 @@
     public:
       SisMov(int x, int y, Grilla *g);
       void calcularCamino();
+      bool buscarCamino(int x, int y, int mov, int profundidad, int camino[16], int &profMax);
       void calcularMovimiento(int x, int y, int mov);
       const bool *getValido();
       ~SisMov();
