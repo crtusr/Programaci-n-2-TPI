@@ -61,14 +61,14 @@ void SisMov::achicarCamino()
     i++;
   for(int j = 0; j < i; j++)
   {
-    if(camino[j] == 1 && camino[j + 1] == 3 || camino[j] == 2 && camino[j + 1] == 4)
+    if((camino[j] == ABAJO && camino[j + 1] == ARRIBA) || (camino[j] == IZQUIERDA && camino[j + 1] == DERECHA) || (camino[j] == ARRIBA && camino[j + 1] == ABAJO) || (camino[j] == DERECHA && camino[j + 1] == IZQUIERDA))
     {
       for(int k = j; k < i - 2; k++)
         camino[k] = camino[k + 2];
       camino[i - 1] = 0;
       camino[i - 2] = 0;
     }
-    if(camino[j] == 1 && camino[j + 2] == 3 || camino[j] == 2 && camino[j + 2] == 4)
+    if((camino[j] == ABAJO && camino[j + 2] == ARRIBA) || (camino[j] == IZQUIERDA && camino[j + 2] == DERECHA) || (camino[j] == ARRIBA && camino[j + 2] == ABAJO) || (camino[j] == DERECHA && camino[j + 2] == IZQUIERDA))
     {
       for(int k = j; k < i - 3; k++)
         camino[k] = camino[k + 3];
@@ -96,25 +96,25 @@ bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
     camino[profundidad] = -1;
     if(y + 1 < bordeInferior && mov >= costoCeldaInferior)
     {
-      camino[profundidad] = 1;
+      camino[profundidad] = ABAJO;
       if(buscarCaminoPriv(x, y + 1, mov - costoCeldaInferior, profundidad + 1))
         return true;
     }
     if(x - 1 >= 0 && mov >= costoCeldaIzquierda)
     {
-      camino[profundidad] = 2;
+      camino[profundidad] = IZQUIERDA;
       if(buscarCaminoPriv(x - 1 , y, mov - costoCeldaIzquierda, profundidad + 1))
         return true;
     }
     if(y - 1 >= 0 && mov >= costoCeldaSuperior)
     {
-      camino[profundidad] = 3;
+      camino[profundidad] = ARRIBA;
       if(buscarCaminoPriv(x, y - 1, mov - costoCeldaSuperior, profundidad + 1))
         return true;
     }
     if(x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
     {
-      camino[profundidad] = 4;
+      camino[profundidad] = DERECHA;
       if(buscarCaminoPriv(x + 1, y, mov - costoCeldaDerecha, profundidad + 1))
         return true;
     }

@@ -245,7 +245,7 @@ for(int i=0;i<5;i++)
     window.draw(yoyo);
     
     window.display();
-    /*movimiento.buscarCamino(2, 3, 16);*/
+    movimiento.buscarCamino(2, 3, 10);
   }
     
   return 0;
