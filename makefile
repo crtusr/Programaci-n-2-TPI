@@ -1,12 +1,12 @@
 CXX = g++
 
-STD = -std=c++17
+STD = -std=c++20
 
 SFML_INCLUDE = -I"C:/SFML_Built/include" -I.
 SFML_LIB = -L"C:/SFML_Built/lib"
 SFML_FLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
-CPP_FILES = main.cpp grilla.cpp celda.cpp defaultcelda.cpp celdaterrestre.cpp sismov.cpp personaje.cpp render_interfaz_mapa.cpp managerpersonaje.cpp
+CPP_FILES = main.cpp grilla.cpp celda.cpp defaultcelda.cpp celdaterrestre.cpp sismov.cpp personaje.cpp render_interfaz_mapa.cpp managerpersonaje.cpp menu.cpp
 
 DEBUG_FILE = game_debug.exe
 RELEASE_FILE = game_release.exe

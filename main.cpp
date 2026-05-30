@@ -232,7 +232,13 @@ SisMov movimiento(3, 3, &tablero);
           else if(key->code == sf::Keyboard::Key::S) { mov--; }
         }
       }
-    } // <--- Fin de eventos.
+    }
+   // manager.secuencia(pers[persactual]);
+   int v;
+   for(v=0;v<5;v++)
+   {
+    manager.mostrarpersonaje(pers[v],window);//<-------------aca se renderizan los 5 personajes
+   }
 
     // =======================================================
     //             SECCIÓN DE LÓGICA Y DIBUJO
