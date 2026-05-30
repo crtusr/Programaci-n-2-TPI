@@ -2,7 +2,7 @@
 #define PARTIDA_H
 
 
-  class Partida
+class Partida
   {
     private:
       int ronda;
@@ -11,7 +11,7 @@
       Partida(int r = 0, int t = 0);
       int getRonda();
       int getTurno();
-      void pasarTurno(); 
+      void pasarTurno();
   };
 
 #endif

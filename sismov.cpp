@@ -25,9 +25,9 @@ void SisMov::resetValido()
 /*
  * Esto es lo que se llama un algoritmo recursivo que usa DFS busqueda en
  * profundidad (Depth-first Search) que recorre Exaustivamente todos los caminos
- * posibles. Es un algoritmo recursivo porque en vez de usar un ciclo for o 
+ * posibles. Es un algoritmo recursivo porque en vez de usar un ciclo for o
  * while usa la propia llamada de la función para iterar, tiene la ventaja que
- * te permite iteraciónes más elegantes (pero que pueden dificultar el control 
+ * te permite iteraciónes más elegantes (pero que pueden dificultar el control
  * de flujo). En este caso en particular facilita el entendimiento porque si se
  * quisiera hacer con un ciclo while o for habria que tambien implementar una
  * estructura de datos que es una pila, acá la pila te la brinda la propia
@@ -36,7 +36,7 @@ void SisMov::resetValido()
  * ej:
  *  int funcion(a)
  *  {
- *    if(a <= 0) 
+ *    if(a <= 0)
  *      return 0;
  *    else
  *      return a + funcion(a - 1);
@@ -44,11 +44,11 @@ void SisMov::resetValido()
  *
  *  Esto se llama a si mismo mientras a > 0, y funcion(a) devolverá la sumatoria
  *  de 1 hasta a.
- *  
- *  en el caso de movRango la llamo para todas las direcciónes, pero primero va 
- *  a agotar todo el movimiento en reevaluar la función en y+1 (hacia abajo) 
- *  cuando se queda sin la función retorna pero en el lugar donde fue llamada 
- *  esa función y el movimiento "rebobina" al valor de la llamada anterior 
+ *
+ *  en el caso de movRango la llamo para todas las direcciónes, pero primero va
+ *  a agotar todo el movimiento en reevaluar la función en y+1 (hacia abajo)
+ *  cuando se queda sin la función retorna pero en el lugar donde fue llamada
+ *  esa función y el movimiento "rebobina" al valor de la llamada anterior
  *  (porque cada llamada) tiene su propio scope con su propio stack. Despues
  *  prueba en las subsiguientes funciones, hasta esplotar todos los posibles
  *  caminos que se podrian hacer con la cantidad de movimiento inicial.
@@ -126,7 +126,7 @@ void SisMov::buscarCamino(int x, int y, int mov)
 {
   resetCamino();
   if(!valido[xPos + (yPos * bordeDerecho)])
-  {   
+  {
     return;
   }
   buscarCaminoPriv(x, y, mov, 0);
@@ -185,7 +185,7 @@ void SisMov::resetCamino()
 
 /*
  *  el array/matriz valido fue declarado de manera dinamica en el constructor
- *  asi que el ddestructor tendria que liberar la memoria alojada.
+ *  asi que el destructor tendria que liberar la memoria alojada.
  */
 SisMov::~SisMov()
 {
