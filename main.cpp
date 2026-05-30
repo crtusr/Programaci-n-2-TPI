@@ -233,12 +233,7 @@ SisMov movimiento(3, 3, &tablero);
         }
       }
     }
-   // manager.secuencia(pers[persactual]);
-   int v;
-   for(v=0;v<5;v++)
-   {
-    manager.mostrarpersonaje(pers[v],window);//<-------------aca se renderizan los 5 personajes
-   }
+     //Acá le mandas los comandos a la ventana para que dibuje objetos
 
     // =======================================================
     //             SECCIÓN DE LÓGICA Y DIBUJO
@@ -254,9 +249,16 @@ SisMov movimiento(3, 3, &tablero);
         tablero.render(window);
         movimiento.calcularMovimiento(x, y, mov);
         //------------------------------------ahora manager controla personaje
-        manager.moverpersonaje(pers[0]);
-        manager.mostrarpersonaje(pers[0], window);//<-------------ahora se podra seleccionar el personaje que controlar(de un vector de personaje de 5 en esta ocacion)
-        rendUi.renderRangoMovimiento(movimiento.getValido(), window);
+     //-------------------------------------------------------ahora manager controla personaje (get actual te devuelve el personaje que manager controla en este momento)
+     manager.moverpersonaje(pers[manager.getactual()]);
+     manager.cambiarpersonaje(pers[manager.getactual()]);  //<-----cambia de personaje presionando "SPACE"
+     // manager.secuencia(pers[persactual]);
+     int v;
+     for(v=0;v<5;v++)
+     {
+       manager.mostrarpersonaje(pers[v],window);//<-------------aca se renderizan los 5 personajes
+     }
+     rendUi.renderRangoMovimiento(movimiento.getValido(), window);
 
             /*
     for(int i = 0; i < 64; i++)
