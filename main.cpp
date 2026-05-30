@@ -169,7 +169,7 @@ int main()
   std::vector<personaje> pers(5, personaje(&tablero));
 for(int i=0;i<5;i++)
 {
-   manager.Asignarpersonajes(pers[i]);// <----------ahora funcona pero es nesesario asignarle despues de crearlo con sprites
+  manager.Asignarpersonajes(pers[i]);// <----------ahora funcona pero es nesesario asignarle despues de crearlo con sprites
 }
 //---------------------------------------------------------------------------------------------
 SisMov movimiento(3, 3, &tablero);
@@ -247,12 +247,15 @@ SisMov movimiento(3, 3, &tablero);
         // Si estamos jugando, dibujamos el juego.
         tablero.render(window);
         movimiento.calcularMovimiento(x, y, mov);
-        //------------------------------------ahora manager controla personaje
-        manager.moverpersonaje(pers[0]);
-        manager.mostrarpersonaje(pers[0], window);//<-------------ahora se podra seleccionar el personaje que controlar(de un vector de personaje de 5 en esta ocacion)
-        rendUi.renderRangoMovimiento(movimiento.getValido(), window);
-
-            /*
+        //-------------------------------------------------------ahora manager controla personaje (get actual te devuelve el personaje que manager controla en este momento)
+        manager.moverpersonaje(pers[manager.getactual()]);
+        manager.cambiarpersonaje(pers[manager.getactual()]);  //<-----cambia de personaje presionando "SPACE"
+        // manager.secuencia(pers[persactual]);
+        int v;
+        for(v=0;v<5;v++){
+        manager.mostrarpersonaje(pers[v],window);//<-------------aca se renderizan los 5 personajes
+   }
+    /*
     for(int i = 0; i < 64; i++)
       visitadas[i] = false;
     movRango(3,3, 3, tablero, visitadas);
@@ -265,6 +268,7 @@ SisMov movimiento(3, 3, &tablero);
 
     }
     window.display();
+    movimiento.buscarCamino(2, 3, 10);
   }
 
   return 0;

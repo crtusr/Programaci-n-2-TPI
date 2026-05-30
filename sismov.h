@@ -21,10 +21,12 @@
       void resetValido();
       void resetCamino();
       void movRango(int x, int y, int mov);
+      bool buscarCaminoPriv(int x, int y, int mov, int profundidad);
+      void achicarCamino();
     public:
       SisMov(int x, int y, Grilla *g);
       void calcularCamino();
-      bool buscarCamino(int x, int y, int mov, int profundidad, int camino[16], int &profMax);
+      void buscarCamino(int x, int y, int mov);
       void calcularMovimiento(int x, int y, int mov);
       const bool *getValido();
       ~SisMov();

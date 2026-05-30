@@ -1,7 +1,7 @@
 #include "grilla.h"
 #include "sismov.h"
-
-
+#include "constantes.h"
+#include <iostream>
 
 SisMov::SisMov(int x, int y, Grilla *g)
 {
@@ -53,15 +53,38 @@ void SisMov::resetValido()
  *  prueba en las subsiguientes funciones, hasta esplotar todos los posibles
  *  caminos que se podrian hacer con la cantidad de movimiento inicial.
  */
-bool SisMov::buscarCamino(int x, int y, int mov, int profundidad, int camino[16], int &profMax)
+
+void SisMov::achicarCamino()
 {
-  if(profundidad > profMax)
-    profMax = profundidad;
+  int i = 0;
+  while(i < profundidadMax && camino[i] != -1)
+    i++;
+  for(int j = 0; j < i; j++)
+  {
+    if((camino[j] == ABAJO && camino[j + 1] == ARRIBA) || (camino[j] == IZQUIERDA && camino[j + 1] == DERECHA) || (camino[j] == ARRIBA && camino[j + 1] == ABAJO) || (camino[j] == DERECHA && camino[j + 1] == IZQUIERDA))
+    {
+      for(int k = j; k < i - 2; k++)
+        camino[k] = camino[k + 2];
+      camino[i - 1] = 0;
+      camino[i - 2] = 0;
+    }
+    if((camino[j] == ABAJO && camino[j + 2] == ARRIBA) || (camino[j] == IZQUIERDA && camino[j + 2] == DERECHA) || (camino[j] == ARRIBA && camino[j + 2] == ABAJO) || (camino[j] == DERECHA && camino[j + 2] == IZQUIERDA))
+    {
+      for(int k = j; k < i - 3; k++)
+        camino[k] = camino[k + 3];
+      camino[i - 1] = 0;
+      camino[i - 3] = 0;
+    }
+  }
+}
+
+bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
+{
     if(x == xPos && y == yPos)
     {
       return true;
     }
-    if(profundidad == 16 || mov < 0)
+    if(profundidad == profundidadMax || mov < 0)
     {
       return false;
     }
@@ -70,33 +93,50 @@ bool SisMov::buscarCamino(int x, int y, int mov, int profundidad, int camino[16]
     int costoCeldaIzquierda = x-1 >= 0 ? grid->getCelda(x - 1 , y)->getCostoMov() : 255;
     int costoCeldaSuperior = y-1 >= 0 ? grid->getCelda(x, y - 1)->getCostoMov() : 255;
     int costoCeldaDerecha = x+1 < bordeDerecho ? grid->getCelda(x + 1, y)->getCostoMov() : 255;
-    camino[profundidad] = 0;
+    camino[profundidad] = -1;
     if(y + 1 < bordeInferior && mov >= costoCeldaInferior)
     {
-      camino[profundidad] = 1;
-      if(buscarCamino(x, y + 1, mov - costoCeldaInferior, profundidad + 1, camino, profMax))
+      camino[profundidad] = ABAJO;
+      if(buscarCaminoPriv(x, y + 1, mov - costoCeldaInferior, profundidad + 1))
         return true;
     }
     if(x - 1 >= 0 && mov >= costoCeldaIzquierda)
     {
-      camino[profundidad] = 2;
-      if(buscarCamino(x - 1 , y, mov - costoCeldaIzquierda, profundidad + 1, camino, profMax))
+      camino[profundidad] = IZQUIERDA;
+      if(buscarCaminoPriv(x - 1 , y, mov - costoCeldaIzquierda, profundidad + 1))
         return true;
     }
     if(y - 1 >= 0 && mov >= costoCeldaSuperior)
     {
-      camino[profundidad] = 3;
-      if(buscarCamino(x, y - 1, mov - costoCeldaSuperior, profundidad + 1, camino, profMax))
+      camino[profundidad] = ARRIBA;
+      if(buscarCaminoPriv(x, y - 1, mov - costoCeldaSuperior, profundidad + 1))
         return true;
     }
     if(x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
     {
-      camino[profundidad] = 4;
-      if(buscarCamino(x + 1, y, mov - costoCeldaDerecha, profundidad + 1, camino, profMax))
+      camino[profundidad] = DERECHA;
+      if(buscarCaminoPriv(x + 1, y, mov - costoCeldaDerecha, profundidad + 1))
         return true;
     }
     camino[profundidad] = -1;
     return false;
+}
+
+void SisMov::buscarCamino(int x, int y, int mov)
+{
+  resetCamino();
+  if(!valido[xPos + (yPos * bordeDerecho)])
+  {   
+    return;
+  }
+  buscarCaminoPriv(x, y, mov, 0);
+  achicarCamino();
+  std::cout << "Camino: ";
+  for(int i = 0; i < profundidadMax; i++)
+  {
+    std::cout << camino[i] << " ";
+  }
+  std::cout << std::endl;
 }
 
 void SisMov::movRango(int x, int y, int mov)
