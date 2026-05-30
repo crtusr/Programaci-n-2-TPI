@@ -38,8 +38,6 @@ private:
 
     // Recursos
     sf::Texture texCelda[10];
-    sf::Texture yo;
-    sf::Sprite yoyo;
 
     // Variables de lógica usando las clases de lucas.
     CursorJuego cursor;       // <-- Reemplaza a 'int x' e 'int y'

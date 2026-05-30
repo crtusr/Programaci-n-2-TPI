@@ -1,6 +1,8 @@
 #include "render_interfaz_mapa.h"
 
-RenderInterfazMapa::RenderInterfazMapa(Grilla *g)
+RenderInterfazMapa::RenderInterfazMapa(Grilla *g) : 
+  cursorTex("imagen/cursor.bmp"),
+  cursorSprite(cursorTex)
 {
   grilla = g;
   cuadradoTranslucido.setSize(sf::Vector2f(g->getTamCeldaPixeles(), g->getTamCeldaPixeles()));
@@ -30,7 +32,9 @@ void RenderInterfazMapa::renderRangoAtaque()
 {
   
 }
-void RenderInterfazMapa::renderCursor()
+void RenderInterfazMapa::renderCursor(CursorJuego curs, sf::RenderWindow &win)
 {
-  
+  cursorSprite.setPosition(sf::Vector2f(curs.getXPos() * 64, curs.getYPos() * 64));
+  win.draw(cursorSprite);
+
 }

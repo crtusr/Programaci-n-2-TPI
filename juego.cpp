@@ -2,7 +2,6 @@
 #include "defaultcelda.h"
 #include "celdaterrestre.h"
 #include <cstdio>
-#include <iostream>
 
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
@@ -10,8 +9,6 @@ Juego::Juego() :
     window(sf::VideoMode({1024, 768}), "SFML 3"),
     menuPrincipal(1024, 768),
     enMenu(true),
-    yo("yo.bmp"),
-    yoyo(yo),
     cursor(0, 0),
     partida(0, 0),
     mov(3),
@@ -110,12 +107,12 @@ void Juego::renderizar() {
             manager.mostrarpersonaje(pers[v], window);
         }
 
+        
+        rendUi.renderCursor(cursor, window);
         rendUi.renderRangoMovimiento(movimiento.getValido(), window);
         drawMovRango(square, movimiento.getValido());
 
         // La posición en pixeles se calcula sola multiplicando por 64
-        yoyo.setPosition(sf::Vector2f(cursor.getXPos() * 64, cursor.getYPos() * 64));
-        window.draw(yoyo);
     }
 
     window.display();
