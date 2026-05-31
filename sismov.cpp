@@ -1,6 +1,7 @@
 #include "grilla.h"
 #include "sismov.h"
 #include "constantes.h"
+#include <cstdlib>
 #include <iostream>
 
 SisMov::SisMov(int x, int y, Grilla *g)
@@ -54,26 +55,50 @@ void SisMov::resetValido()
  *  caminos que se podrian hacer con la cantidad de movimiento inicial.
  */
 
+bool SisMov::hayNumeroDistinto(int low, int high)
+{
+  for(int i = low; i < high; i++)
+  {
+    if(camino[i] != camino[low] && camino[i] != camino[high] && camino[i])
+      return true;
+  }
+  return false;
+}
+
+int SisMov::calcDistCamino(int low, int high)
+{
+  int distancia = 0;
+  for(int i = low + 1; i < high; i++)
+    if(camino[i])
+      distancia++;
+  return distancia;
+}
+
 void SisMov::achicarCamino()
 {
-  int i = 0;
+  int i = 0, j = 0;
+  bool sePuedeRemover = true;
   while(i < profundidadMax && camino[i] != -1)
     i++;
-  for(int j = 0; j < i; j++)
-  {
-    if((camino[j] == ABAJO && camino[j + 1] == ARRIBA) || (camino[j] == IZQUIERDA && camino[j + 1] == DERECHA) || (camino[j] == ARRIBA && camino[j + 1] == ABAJO) || (camino[j] == DERECHA && camino[j + 1] == IZQUIERDA))
+  for(int diff = 1; diff < i; diff++)
+  { 
+    j = 0;
+    while(j + diff < i)
     {
-      for(int k = j; k < i - 2; k++)
-        camino[k] = camino[k + 2];
-      camino[i - 1] = 0;
-      camino[i - 2] = 0;
-    }
-    if((camino[j] == ABAJO && camino[j + 2] == ARRIBA) || (camino[j] == IZQUIERDA && camino[j + 2] == DERECHA) || (camino[j] == ARRIBA && camino[j + 2] == ABAJO) || (camino[j] == DERECHA && camino[j + 2] == IZQUIERDA))
-    {
-      for(int k = j; k < i - 3; k++)
-        camino[k] = camino[k + 3];
-      camino[i - 1] = 0;
-      camino[i - 3] = 0;
+      if(abs(camino[j] - camino[j + diff]) == 2)
+      {
+        if(calcDistCamino(j, j + diff) <= 2)
+        {
+          camino[j] = 0;
+          camino[j + diff] = 0;
+        }
+        else if(!hayNumeroDistinto(j ,j + diff))
+        {
+          camino[j] = 0;
+          camino[j + diff] = 0;
+        }
+      }
+      j++;
     }
   }
 }
@@ -130,6 +155,13 @@ void SisMov::buscarCamino(int x, int y, int mov)
     return;
   }
   buscarCaminoPriv(x, y, mov, 0);
+  system("cls");
+  std::cout << "Camino: ";
+  for(int i = 0; i < profundidadMax; i++)
+  {
+    std::cout << camino[i] << " ";
+  }
+  std::cout << std::endl;
   achicarCamino();
   std::cout << "Camino: ";
   for(int i = 0; i < profundidadMax; i++)

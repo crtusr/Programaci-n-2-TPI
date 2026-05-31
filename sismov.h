@@ -23,6 +23,8 @@ class SisMov
       void movRango(int x, int y, int mov);
       bool buscarCaminoPriv(int x, int y, int mov, int profundidad);
       void achicarCamino();
+      int calcDistCamino(int low, int high);
+      bool hayNumeroDistinto(int low, int high);
     public:
       SisMov(int x, int y, Grilla *g);
       void calcularCamino();

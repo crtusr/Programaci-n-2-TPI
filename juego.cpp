@@ -85,7 +85,7 @@ void Juego::actualizar() {
         // Le pasamos las coordenadas del cursor al sistema de movimiento
         movimiento.calcularMovimiento(cursor.getXPos(), cursor.getYPos(), mov);
         // Prueba del algoritmo de Pathfinding de Mateo.:
-        // movimiento.buscarCamino(2, 3, 10);
+        movimiento.buscarCamino(cursor.getXPos(), cursor.getYPos(), mov);
         // Lógica del manager que controla y cambia personajes (con SPACE)
         manager.moverpersonaje(pers[manager.getactual()]);
         manager.cambiarpersonaje(pers[manager.getactual()]);
