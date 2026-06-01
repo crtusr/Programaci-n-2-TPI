@@ -1,6 +1,7 @@
 #include "juego.h"
 #include "defaultcelda.h"
 #include "celdaterrestre.h"
+#include "proc_input.h"
 #include <cstdio>
 
 
@@ -21,7 +22,7 @@ Juego::Juego() :
 
     square.setSize(sf::Vector2f(64,64));
     square.setFillColor(sf::Color(127, 127, 255, 127));
-
+    teclaPresionada = 0;
     cargarTexturasDeCeldas();
     cargarMapa("testmap.txt");
 
@@ -40,36 +41,48 @@ void Juego::ejecutar() {
 
 // EVENTOS: Movemos el cursor con el ENUM de constantes.h que hizo lucas.
 void Juego::procesarEventos() {
-    while (const std::optional<sf::Event> event = window.pollEvent()) {
-        if (event->is<sf::Event::Closed>()) {
+    while (const std::optional<sf::Event> event = window.pollEvent()) 
+    {
+        if (event->is<sf::Event::Closed>()) 
+        {
             window.close();
         }
-        else if(const auto *resized = event->getIf<sf::Event::Resized>()) {
+        else if(const auto *resized = event->getIf<sf::Event::Resized>()) 
+        {
             sf::FloatRect newSize(sf::Vector2f(0, 0), sf::Vector2f(resized->size.x, resized->size.y));
             window.setView(sf::View(newSize));
         }
-        else if (const auto *key = event->getIf<sf::Event::KeyPressed>()) {
-            if (enMenu) {
-                if (key->code == sf::Keyboard::Key::Up) menuPrincipal.moveUp();
-                else if (key->code == sf::Keyboard::Key::Down) menuPrincipal.moveDown();
-                else if (key->code == sf::Keyboard::Key::Enter) {
+        else if (const auto *key = event->getIf<sf::Event::KeyPressed>()) 
+        {
+            /* Pienso que habria que hacer un atributo que sea el estado del 
+             * juego (en el menu, en el tablero, moviendo el personaje o 
+             * seleccionado objetivo) y que se decida el comportamiento en base
+             * al estado
+             */
+            teclaPresionada = procesar.tecla(key->code);
+            if (enMenu) 
+            {
+                if (teclaPresionada == ARRIBA) menuPrincipal.moveUp();
+                else if (teclaPresionada == ABAJO) menuPrincipal.moveDown();
+                else if (teclaPresionada == ENTER) 
+                {
                     int opcion = menuPrincipal.getPressedItem();
                     if (opcion == 0) enMenu = false;
                     else if (opcion == 2) window.close();
                 }
             }
             else {
-                // Control del movimiento usando la clase Cursor de lucas.
-                if (key->code == sf::Keyboard::Key::Left) {
+              // Control del movimiento usando la clase Cursor de lucas.
+                if (teclaPresionada == IZQUIERDA) {
                     if (cursor.getXPos() > 0) cursor.mover(IZQUIERDA);
                 }
-                else if (key->code == sf::Keyboard::Key::Right) {
+                else if (teclaPresionada == DERECHA) {
                     if (cursor.getXPos() < 10) cursor.mover(DERECHA);
                 }
-                else if (key->code == sf::Keyboard::Key::Up) {
+                else if (teclaPresionada == ARRIBA) {
                     if (cursor.getYPos() > 0) cursor.mover(ARRIBA);
                 }
-                else if (key->code == sf::Keyboard::Key::Down) {
+                else if (teclaPresionada == ABAJO) {
                     if (cursor.getYPos() < 10) cursor.mover(ABAJO);
                 }
                 else if(key->code == sf::Keyboard::Key::A) { mov++; }

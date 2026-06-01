@@ -14,6 +14,7 @@
 #include "constantes.h"
 #include "cursor.h"
 #include "partida.h"
+#include "proc_input.h"
 
 class Juego {
 public:
@@ -35,7 +36,7 @@ private:
     sf::RenderWindow window;
     Menu menuPrincipal;
     bool enMenu;
-
+    int teclaPresionada;
     // Recursos
     sf::Texture texCelda[10];
 
@@ -44,7 +45,7 @@ private:
     Partida partida;     // <-- Gestión de turnos.
     int mov;
     sf::RectangleShape square;
-
+    ProcInput procesar;
     // Sistemas del juego
     Grilla tablero;
     RenderInterfazMapa rendUi;

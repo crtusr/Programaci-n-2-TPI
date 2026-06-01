@@ -33,21 +33,5 @@ void CursorJuego::mover(int dir) {
         case DERECHA:
             xPos++;
             break;
-        case ARRIBA_IZQUIERDA:
-            xPos--;
-            yPos--;
-            break;
-        case ARRIBA_DERECHA:
-            xPos++;
-            yPos--;
-            break;
-        case ABAJO_IZQUIERDA:
-            xPos--;
-            yPos++;
-            break;
-        case ABAJO_DERECHA:
-            xPos++;
-            yPos++;
-            break;
     }
 }
