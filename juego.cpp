@@ -13,7 +13,7 @@ Juego::Juego() :
     cursor(0, 0),
     partida(0, 0),
     mov(3),
-    tablero(64, 11, 11),
+    tablero(64, 15, 10),
     rendUi(&tablero),
     pers(5, personaje(&tablero)),
     movimiento(3, 3, &tablero)
@@ -24,7 +24,7 @@ Juego::Juego() :
     square.setFillColor(sf::Color(127, 127, 255, 127));
     teclaPresionada = 0;
     cargarTexturasDeCeldas();
-    cargarMapa("testmap.txt");
+    cargarMapa("nivel1.txt");
 
     for(int i = 0; i < 5; i++) {
         manager.Asignarpersonajes(pers[i]);
@@ -77,13 +77,13 @@ void Juego::procesarEventos() {
                     if (cursor.getXPos() > 0) cursor.mover(IZQUIERDA);
                 }
                 else if (teclaPresionada == DERECHA) {
-                    if (cursor.getXPos() < 10) cursor.mover(DERECHA);
+                    if (cursor.getXPos() < tablero.getMaxX() - 1) cursor.mover(DERECHA);
                 }
                 else if (teclaPresionada == ARRIBA) {
                     if (cursor.getYPos() > 0) cursor.mover(ARRIBA);
                 }
                 else if (teclaPresionada == ABAJO) {
-                    if (cursor.getYPos() < 10) cursor.mover(ABAJO);
+                    if (cursor.getYPos() < tablero.getMaxY() - 1) cursor.mover(ABAJO);
                 }
                 else if(key->code == sf::Keyboard::Key::A) { mov++; }
                 else if(key->code == sf::Keyboard::Key::S) { mov--; }
