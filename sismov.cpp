@@ -223,3 +223,13 @@ SisMov::~SisMov()
 {
   delete [] valido;
 }
+const int* SisMov::getCamino()
+{
+  return camino;
+}
+bool SisMov::Alcanzable(int x, int y){
+  if(x < 0 || y < 0 || x >= bordeDerecho || y >= bordeInferior) {
+    return false;
+  }
+  return valido[y*bordeDerecho + x];
+}

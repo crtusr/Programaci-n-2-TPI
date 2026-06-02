@@ -28,6 +28,7 @@ private:
 
 public:
     // Constructor
+    bool yaActuo = false;
     personaje(Grilla *g) : sprite(textura)
     {
         grilla = g;
