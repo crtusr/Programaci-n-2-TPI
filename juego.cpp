@@ -125,7 +125,7 @@ void Juego::actualizar() {
         return;
     if (Estado == CursorLibre) {
         // L�gica del manager que controla y cambia personajes (con SPACE)
-        manager.moverpersonaje(pers[manager.getactual()]);
+        //manager.moverpersonaje(pers[manager.getactual()]);
         manager.cambiarpersonaje(pers[manager.getactual()]);
     }
 
