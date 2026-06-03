@@ -29,6 +29,14 @@ Juego::Juego() :
     for(int i = 0; i < 5; i++) {
         manager.Asignarpersonajes(pers[i]);
     }
+    
+    Estado = CursorLibre;
+
+    personajeSeleccionado = nullptr;
+
+    for (int i = 0; i < 5; i++) {
+        pers[i].yaActuo = false;
+    }
 }
 
 void Juego::ejecutar() {
@@ -60,6 +68,7 @@ void Juego::procesarEventos() {
              * al estado
              */
             teclaPresionada = procesar.tecla(key->code);
+            
             if (enMenu) 
             {
                 if (teclaPresionada == ARRIBA) menuPrincipal.moveUp();
@@ -73,36 +82,58 @@ void Juego::procesarEventos() {
             }
             else {
               // Control del movimiento usando la clase Cursor de lucas.
-                if (teclaPresionada == IZQUIERDA) {
-                    if (cursor.getXPos() > 0) cursor.mover(IZQUIERDA);
+                
+                    if (teclaPresionada == ARRIBA) cursor.mover(ARRIBA);
+                    else if (teclaPresionada == ABAJO) cursor.mover(ABAJO);
+                    else if (teclaPresionada == IZQUIERDA) cursor.mover(IZQUIERDA);
+                    else if (teclaPresionada == DERECHA) cursor.mover(DERECHA);
+                
+                if (Estado == CursorLibre && teclaPresionada == ENTER) {
+                        personaje* P = GetPersonajeSeleccionado();
+                    if (P != nullptr && !P->yaActuo) {
+                        personajeSeleccionado = P;
+                        Estado = PersonajeSeleccionado;
+                        movimiento.calcularMovimiento(P->getPosx(), P->getPosy(), mov);
+                    }
+                    // Si se selecciona un personaje, el estado pasa a PersonajeSeleccionado.
                 }
-                else if (teclaPresionada == DERECHA) {
-                    if (cursor.getXPos() < tablero.getMaxX() - 1) cursor.mover(DERECHA);
+                else if ( Estado == PersonajeSeleccionado) {
+                    if(teclaPresionada == ENTER) {
+                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos())) {
+                            Estado = CursorLibre;
+                            personajeSeleccionado = nullptr;
+                            return;
+                        }
+                        else {
+                            movimiento.buscarCamino(cursor.getXPos(), cursor.getYPos(), mov);
+                            moverPersonajeSeleccionado();
+                        }
+                    }
+                    else if(key->code == sf::Keyboard::Key::A) { mov++; }
+                    else if(key->code == sf::Keyboard::Key::S) { mov--; }
                 }
-                else if (teclaPresionada == ARRIBA) {
-                    if (cursor.getYPos() > 0) cursor.mover(ARRIBA);
-                }
-                else if (teclaPresionada == ABAJO) {
-                    if (cursor.getYPos() < tablero.getMaxY() - 1) cursor.mover(ABAJO);
-                }
-                else if(key->code == sf::Keyboard::Key::A) { mov++; }
-                else if(key->code == sf::Keyboard::Key::S) { mov--; }
+                teclaPresionada = NULO;
             }
         }
     }
 }
 
-// ACTUALIZAR: Integración total del Manager y Personajes.
+
+// ACTUALIZAR: Integraciï¿½n total del Manager y Personajes.
 void Juego::actualizar() {
-    if (!enMenu) {
-        // Le pasamos las coordenadas del cursor al sistema de movimiento
-        movimiento.calcularMovimiento(cursor.getXPos(), cursor.getYPos(), mov);
-        // Prueba del algoritmo de Pathfinding de Mateo.:
-        movimiento.buscarCamino(cursor.getXPos(), cursor.getYPos(), mov);
-        // Lógica del manager que controla y cambia personajes (con SPACE)
-        manager.moverpersonaje(pers[manager.getactual()]);
+    if (enMenu)
+        return;
+    if (Estado == CursorLibre) {
+        // Lï¿½gica del manager que controla y cambia personajes (con SPACE)
+        //manager.moverpersonaje(pers[manager.getactual()]);
         manager.cambiarpersonaje(pers[manager.getactual()]);
     }
+
+    if (todasLasUnidadesActuaron()) {
+        partida.pasarTurno();
+        resetearAccionesJugador();
+    }
+
 }
 
 // RENDERIZAR: Dibujamos los 5 personajes del vector
@@ -115,17 +146,18 @@ void Juego::renderizar() {
     else {
         tablero.render(window);
 
-        // Renderizamos los 5 personajes del equipo tal como pedía el main viejo
+        // Renderizamos los 5 personajes del equipo tal como pedï¿½a el main viejo
         for(int v = 0; v < 5; v++) {
             manager.mostrarpersonaje(pers[v], window);
         }
 
         
         rendUi.renderCursor(cursor, window);
+        if (Estado == PersonajeSeleccionado) {
         rendUi.renderRangoMovimiento(movimiento.getValido(), window);
         drawMovRango(square, movimiento.getValido());
-
-        // La posición en pixeles se calcula sola multiplicando por 64
+    }
+        // La posiciï¿½n en pixeles se calcula sola multiplicando por 64
     }
 
     window.display();
@@ -197,3 +229,49 @@ void Juego::movRango(int ax, int ay, int amov, bool *visitadas) {
     if(ax + 1 < tablero.getMaxX() && amov >= tablero.getCelda(ax + 1, ay)->getCostoMov())
         movRango(ax + 1, ay, amov - tablero.getCelda(ax + 1, ay)->getCostoMov(), visitadas);
 }
+
+personaje* Juego::GetPersonajeSeleccionado() {
+    for (int i = 0; i < pers.size(); i++) {
+        if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos()) {
+            return &pers[i];
+        }
+    }
+    return nullptr; // Placeholder para compilar
+}
+    bool Juego::todasLasUnidadesActuaron() {
+    for (int i = 0; i < pers.size(); i++) {
+        if (!pers[i].yaActuo) {
+            return false;
+        }
+    }
+    return true;
+}
+
+    void Juego::resetearAccionesJugador() {
+    for (int i = 0; i < pers.size(); i++) {
+        pers[i].yaActuo = false;
+    }
+}
+
+void Juego::moverPersonajeSeleccionado() {
+    if (personajeSeleccionado == nullptr) return;
+    const int* camino = movimiento.getCamino();
+        int x = personajeSeleccionado->getPosx();
+        int y = personajeSeleccionado->getPosy();
+        for(int i = 0; i < profundidadMax && camino[i] != -1; i++) {
+        switch(camino[i]) {
+            case ARRIBA: y -= 1; break;
+            case ABAJO: y += 1; break;
+            case IZQUIERDA: x -= 1; break;
+            case DERECHA: x += 1; break;
+        
+    }
+}
+personajeSeleccionado->setposx(x);
+personajeSeleccionado->setposy(y);
+personajeSeleccionado->yaActuo = true;
+Estado = CursorLibre;
+personajeSeleccionado = nullptr;
+movimiento.calcularMovimiento(-1, -1, 0);
+}
+

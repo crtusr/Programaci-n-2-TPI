@@ -26,10 +26,12 @@ class SisMov
       int calcDistCamino(int low, int high);
       bool hayNumeroDistinto(int low, int high);
     public:
+    bool Alcanzable(int x, int y);
       SisMov(int x, int y, Grilla *g);
       void calcularCamino();
       void buscarCamino(int x, int y, int mov);
       void calcularMovimiento(int x, int y, int mov);
+      const int* getCamino();
       const bool *getValido();
       ~SisMov();
   };

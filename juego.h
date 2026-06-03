@@ -15,13 +15,24 @@
 #include "cursor.h"
 #include "partida.h"
 #include "proc_input.h"
-
+enum EstadoJuego{
+    CursorLibre,
+    PersonajeSeleccionado,
+};
 class Juego {
 public:
     Juego();
     void ejecutar();
 
 private:
+    EstadoJuego Estado = CursorLibre;
+    personaje* personajeSeleccionado = nullptr;
+
+    personaje* GetPersonajeSeleccionado();
+    void moverPersonajeSeleccionado();
+    bool todasLasUnidadesActuaron();
+    void resetearAccionesJugador();
+
     void procesarEventos();
     void actualizar();
     void renderizar();
@@ -40,9 +51,9 @@ private:
     // Recursos
     sf::Texture texCelda[10];
 
-    // Variables de lógica usando las clases de lucas.
+    // Variables de lï¿½gica usando las clases de lucas.
     CursorJuego cursor;       // <-- Reemplaza a 'int x' e 'int y'
-    Partida partida;     // <-- Gestión de turnos.
+    Partida partida;     // <-- Gestiï¿½n de turnos.
     int mov;
     sf::RectangleShape square;
     ProcInput procesar;
