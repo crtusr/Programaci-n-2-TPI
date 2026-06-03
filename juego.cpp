@@ -158,10 +158,10 @@ int Juego::cargarMapa(const char* nomArch) {
             case '\n':
             case '\r':
                 break;
-            case '0': tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, texCelda[0])); i++; break;
-            case 'P': tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, texCelda[1])); i++; break;
-            case 'B': tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, texCelda[2])); i++; break;
-            case 'M': tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, texCelda[3])); i++; break;
+            case '0': tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, texCelda[DEFAULT])); i++; break;
+            case 'P': tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, texCelda[PRADO])); i++; break;
+            case 'B': tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, texCelda[BOSQUE])); i++; break;
+            case 'M': tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, texCelda[MONTANIA])); i++; break;
             default: i++;
         }
     }
