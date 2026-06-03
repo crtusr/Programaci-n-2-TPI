@@ -14,6 +14,13 @@ SisMov::SisMov(int x, int y, Grilla *g)
   valido = new bool[grid->getMaxX() * grid->getMaxY()];
 }
 
+void SisMov::setDestino(int x, int y)
+{
+  xPos = x;
+  yPos = y;
+  return;
+}
+
 /*  Este metodo pone toda la grilla de booleanos en false como para poder usar
  *  el rango de movimiento en otro personaje
  */

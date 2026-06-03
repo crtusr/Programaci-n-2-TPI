@@ -83,13 +83,29 @@ void Juego::procesarEventos() {
             else {
               // Control del movimiento usando la clase Cursor de lucas.
                 
-                    if (teclaPresionada == ARRIBA) cursor.mover(ARRIBA);
-                    else if (teclaPresionada == ABAJO) cursor.mover(ABAJO);
-                    else if (teclaPresionada == IZQUIERDA) cursor.mover(IZQUIERDA);
-                    else if (teclaPresionada == DERECHA) cursor.mover(DERECHA);
-                
+                    if(teclaPresionada == ARRIBA)
+                    {  
+                      if(cursor.getYPos() > 0)
+                        cursor.mover(ARRIBA);
+                    }
+                    else if (teclaPresionada == ABAJO) 
+                    {  
+                      if(cursor.getYPos() < tablero.getMaxY() - 1)
+                        cursor.mover(ABAJO);
+                    }
+                    else if(teclaPresionada == IZQUIERDA)
+                    {
+                      if(cursor.getXPos() > 0)  
+                        cursor.mover(IZQUIERDA);
+                    }
+                    else if(teclaPresionada == DERECHA) 
+                    {
+                      if(cursor.getXPos() < tablero.getMaxX() - 1)
+                        cursor.mover(DERECHA);
+                    }
+
                 if (Estado == CursorLibre && teclaPresionada == ENTER) {
-                        personaje* P = GetPersonajeSeleccionado();
+                    personaje* P = GetPersonajeSeleccionado();
                     if (P != nullptr && !P->yaActuo) {
                         personajeSeleccionado = P;
                         Estado = PersonajeSeleccionado;
@@ -99,13 +115,14 @@ void Juego::procesarEventos() {
                 }
                 else if ( Estado == PersonajeSeleccionado) {
                     if(teclaPresionada == ENTER) {
+                      movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
                         if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos())) {
                             Estado = CursorLibre;
                             personajeSeleccionado = nullptr;
                             return;
                         }
                         else {
-                            movimiento.buscarCamino(cursor.getXPos(), cursor.getYPos(), mov);
+                            movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
                             moverPersonajeSeleccionado();
                         }
                     }
@@ -253,25 +270,30 @@ personaje* Juego::GetPersonajeSeleccionado() {
     }
 }
 
-void Juego::moverPersonajeSeleccionado() {
-    if (personajeSeleccionado == nullptr) return;
-    const int* camino = movimiento.getCamino();
-        int x = personajeSeleccionado->getPosx();
-        int y = personajeSeleccionado->getPosy();
-        for(int i = 0; i < profundidadMax && camino[i] != -1; i++) {
-        switch(camino[i]) {
-            case ARRIBA: y -= 1; break;
-            case ABAJO: y += 1; break;
-            case IZQUIERDA: x -= 1; break;
-            case DERECHA: x += 1; break;
-        
+void Juego::moverPersonajeSeleccionado()
+{
+  if (personajeSeleccionado == nullptr) 
+    return;
+  const int* camino = movimiento.getCamino();
+  int x = personajeSeleccionado->getPosx();
+  int y = personajeSeleccionado->getPosy();
+  for(int i = 0; i < profundidadMax && camino[i] != -1; i++) 
+  {
+    switch(camino[i]) 
+    {
+      case ARRIBA: y -= 1; break;
+      case ABAJO: y += 1; break;
+      case IZQUIERDA: x -= 1; break;
+      case DERECHA: x += 1; break;    
     }
-}
-personajeSeleccionado->setposx(x);
-personajeSeleccionado->setposy(y);
-personajeSeleccionado->yaActuo = true;
-Estado = CursorLibre;
-personajeSeleccionado = nullptr;
-movimiento.calcularMovimiento(-1, -1, 0);
+  }
+  personajeSeleccionado->setposx(x * 64);
+  personajeSeleccionado->setposy(y * 64);
+  personajeSeleccionado->setsprite();
+  personajeSeleccionado->yaActuo = true;
+  Estado = CursorLibre;
+  for(int i = 0; i < 5; i++) 
+    cout << endl << pers[i].getPosxPxl() << " " << pers[i].getPosyPxl();
+  personajeSeleccionado = nullptr;
 }
 

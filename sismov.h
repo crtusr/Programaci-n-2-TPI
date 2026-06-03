@@ -2,6 +2,7 @@
 #define SISMOV_H
 
 #include "grilla.h"
+#include "personaje.h"
   /*
    * El objetivo de esta clase es calcular en una matriz de booleanos todas las
    * casillas que son validas para moverse por una unidad en las coordenadas "x" e "y"
@@ -26,8 +27,9 @@ class SisMov
       int calcDistCamino(int low, int high);
       bool hayNumeroDistinto(int low, int high);
     public:
-    bool Alcanzable(int x, int y);
       SisMov(int x, int y, Grilla *g);
+      void setDestino(int x, int y);
+      bool Alcanzable(int x, int y);
       void calcularCamino();
       void buscarCamino(int x, int y, int mov);
       void calcularMovimiento(int x, int y, int mov);
