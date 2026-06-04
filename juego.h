@@ -15,6 +15,7 @@
 #include "cursor.h"
 #include "partida.h"
 #include "proc_input.h"
+#include "ataque.h"
 enum EstadoJuego{
     CursorLibre,
     PersonajeSeleccionado,
@@ -63,6 +64,9 @@ private:
     managerpersonaje manager;
     std::vector<personaje> pers;
     SisMov movimiento;
+    ataque ataque;
+    int fase=5;//<-------por ajustar
+    int cont=0;//<-----posiblemente temporal
 };
 
 #endif // JUEGO_H
