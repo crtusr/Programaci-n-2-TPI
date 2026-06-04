@@ -92,10 +92,13 @@ void managerpersonaje::Asignarpersonajes(personaje& pers)
 }
 
 
-void managerpersonaje::mostrarpersonaje(personaje& pers,sf::RenderWindow& window) 
-{
-  window.draw(pers.getsprite());
-}
+void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
+       int i;
+        for(i=0;i<5;i++)
+        {
+           window.draw(pers[i].getsprite());
+        }
+    }
 
 void managerpersonaje::secuencia(personaje& pers)
 {
@@ -119,6 +122,14 @@ void managerpersonaje::cambiarpersonaje(personaje& pers)
    if(cont>0){cont++;}
    if(cont>10){cont=0;}
 }
+
+  void managerpersonaje::cambiardireccion(vector<personaje>& pers){
+if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)){ pers[actual].setdireccion(1);}
+if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)){pers[actual].setdireccion(2);}
+if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)){ pers[actual].setdireccion(3);}
+if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)){ pers[actual].setdireccion(4);}
+
+  }
 
 int managerpersonaje::getactual()
 {
