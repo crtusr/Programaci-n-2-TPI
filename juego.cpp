@@ -145,8 +145,12 @@ void Juego::actualizar() {
         return;
     if (Estado == CursorLibre) {
         // L�gica del manager que controla y cambia personajes (con SPACE)
-        //manager.moverpersonaje(pers[manager.getactual()]);
+        if(fase==5){
+         cont--;
+        manager.moverpersonaje(pers[manager.getactual()]);
         manager.cambiarpersonaje(pers[manager.getactual()]);
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){fase=6;cont=10;}
+            }
     }
 
     if (todasLasUnidadesActuaron()) {
@@ -167,8 +171,12 @@ void Juego::renderizar() {
         tablero.render(window);
 
         // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
-        for(int v = 0; v < 5; v++) {
-            manager.mostrarpersonaje(pers[v], window);
+        manager.mostrarpersonaje(pers, window);
+        if(fase==6){
+         cont--;
+         manager.cambiardireccion(pers);
+        ataque.prepararataque(pers[manager.getactual()].getPosxPxl(),pers[manager.getactual()].getPosyPxl(),pers[manager.getactual()].getdireccion(),window);
+       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){fase=5;cont=10;}
         }
         
         rendUi.renderCursor(cursor, window);

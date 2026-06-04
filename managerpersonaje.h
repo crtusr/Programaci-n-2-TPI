@@ -16,10 +16,12 @@ public:
   void resetCaminoIndice();
   int getactual();
   void moverpersonaje(personaje& pers, const int *dir);
-  void mostrarpersonaje(personaje& pers,sf::RenderWindow& window);
+  void moverpersonaje(personaje& pers);
+  void mostrarpersonaje(vector<personaje>& pers,RenderWindow& window);
   void Asignarpersonajes(personaje& pers);
   void secuencia(personaje& pers);
   void cambiarpersonaje(personaje& pers);
+  void cambiardireccion(vector<personaje>& pers);
 
 };
 #endif // MANAGERPERSONAJE_H_INCLUDED
