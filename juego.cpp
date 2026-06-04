@@ -123,7 +123,10 @@ void Juego::procesarEventos() {
                         }
                         else {
                             movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
-                            moverPersonajeSeleccionado();
+                            manager.resetCaminoIndice();
+                              manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
+                            //  manager.mostrarpersonaje(*personajeSeleccionado, window);
+                            //moverPersonajeSeleccionado();
                         }
                     }
                     else if(key->code == sf::Keyboard::Key::A) { mov++; }
@@ -167,12 +170,12 @@ void Juego::renderizar() {
         for(int v = 0; v < 5; v++) {
             manager.mostrarpersonaje(pers[v], window);
         }
-
         
         rendUi.renderCursor(cursor, window);
         if (Estado == PersonajeSeleccionado) {
         rendUi.renderRangoMovimiento(movimiento.getValido(), window);
         drawMovRango(square, movimiento.getValido());
+        manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
     }
         // La posici�n en pixeles se calcula sola multiplicando por 64
     }

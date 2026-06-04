@@ -7,12 +7,15 @@
 
 class managerpersonaje {
 private:
-  int cont=0;
-  int actual=0;
+  int cont;
+  int actual;
+  int caminoIndice;
 public:
 
+  managerpersonaje();
+  void resetCaminoIndice();
   int getactual();
-  void moverpersonaje(personaje& pers);
+  void moverpersonaje(personaje& pers, const int *dir);
   void mostrarpersonaje(personaje& pers,sf::RenderWindow& window);
   void Asignarpersonajes(personaje& pers);
   void secuencia(personaje& pers);

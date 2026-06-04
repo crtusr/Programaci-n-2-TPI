@@ -2,78 +2,68 @@
 #include <iostream>
 #include <filesystem>
 #include "managerpersonaje.h"
+#include "constantes.h"
 
 using namespace std;
 using namespace sf;
 
-void managerpersonaje::moverpersonaje(personaje& pers)
+managerpersonaje::managerpersonaje()
 {
-  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion()==2)))
-  {
-    if(pers.getaccion()!=1)
-    {
-      pers.setframe(0);
-    }
-    pers.setblockaccion(true);
-    pers.setsumresposx(1);
-    pers.setposicionsprite(pers.getPosicionF());
-    int x=1;
-    int y=11;
-    pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
-    pers.sumarframe();
-    pers.setdireccion(2);
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==3))
-  {
-    if(pers.getaccion()!=1)
-    {
-      pers.setframe(0);
-    }
-    pers.setaccion(1);
-    pers.setblockaccion(true);
-    pers.setsumresposx(-1);
-    pers.setposicionsprite(pers.getPosicionF());
-    int x=1;
-    int y=9;
-    pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
-    pers.sumarframe();
-    pers.setdireccion(3);
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==1))
-  {
-    if(pers.getaccion()!=1)
-    {
-      pers.setframe(0);
-    }
-    pers.setaccion(1);
-    pers.setblockaccion(true);
-    pers.setsumresposy(-1);
-    pers.setposicionsprite(pers.getPosicionF());
-    int x=1;
-    int y=8;
-    pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
-    pers.sumarframe();
-    pers.setdireccion(1);
-  }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==4))
-  {
-    if(pers.getaccion()!=1)
-    {
-      pers.setframe(0);
-    }
-    pers.setaccion(1);
-    pers.setblockaccion(true);
-    pers.setsumresposy(1);
-    pers.setposicionsprite(pers.getPosicionF());
-    int x=1;
-    int y=10;
-    pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
-    pers.sumarframe();
-    pers.setdireccion(4);
+  cont = 0;
+  actual = 0;
+  caminoIndice = 255;
+}
 
-  }
-  if(pers.getframe()>=pers.getladocelda())
+void managerpersonaje::resetCaminoIndice()
+{
+  caminoIndice = 0;
+}
+
+void managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
+{
+  int sentido, x, y;
+  if(dir[caminoIndice] != -1 && ((dir[caminoIndice] != 0 &&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion() == dir[caminoIndice]))))
   {
+    if(pers.getaccion()!=1)
+    {
+      pers.setframe(0);
+    }
+    pers.setblockaccion(true);
+    switch(dir[caminoIndice])
+    {
+      case DERECHA:
+        sentido = 1;
+        pers.setsumresposx(sentido);
+        x = 1;
+        y = 11;
+        break;
+      case IZQUIERDA:
+        sentido = -1;
+        pers.setsumresposx(sentido);
+        x = 1;
+        y = 9;
+        break;
+      case ARRIBA:
+        sentido = -1;
+        pers.setsumresposy(sentido);
+        x = 1;
+        y = 8;
+        break;
+      case ABAJO:
+        sentido = 1;
+        pers.setsumresposy(sentido);
+        x = 1;
+        y = 10;
+        break;
+    }
+    pers.setposicionsprite(pers.getPosicionF());
+    pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
+    pers.sumarframe();
+    pers.setdireccion(dir[caminoIndice]);
+  }
+  if(pers.getframe()>=pers.getladocelda() && dir[caminoIndice] != -1)
+  {
+    caminoIndice++;
     pers.setblockaccion(false);
     pers.setaccion(0);
     pers.setframe(0);
@@ -82,6 +72,8 @@ void managerpersonaje::moverpersonaje(personaje& pers)
   {
     pers.sumarframe();
   }
+  if(dir[caminoIndice] == -1)
+    pers.setdireccion(0);
   pers.setaccion(1);
 }
 
@@ -102,7 +94,7 @@ void managerpersonaje::secuencia(personaje& pers)
   pers.setaccion(1);
   pers.setdireccion(2);
   pers.setblockaccion(true);
-  moverpersonaje(pers);
+  //moverpersonaje(pers);
 }
 
 void managerpersonaje::cambiarpersonaje(personaje& pers)
