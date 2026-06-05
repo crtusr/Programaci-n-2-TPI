@@ -171,6 +171,7 @@ void Juego::renderizar() {
         tablero.render(window);
 
         // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
+        manager.actualizarpersonaje(pers);
         manager.mostrarpersonaje(pers, window);
         if(fase==6){
          cont--;
