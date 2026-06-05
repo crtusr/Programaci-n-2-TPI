@@ -143,7 +143,7 @@ void managerpersonaje::moverpersonaje(personaje& pers)
     pers.setdireccion(4);
 
   }
-  if(pers.getframe()>=pers.getladocelda())
+  if(pers.getframe()>pers.getladocelda())
   {
     pers.setblockaccion(false);
     pers.setaccion(0);
@@ -204,4 +204,43 @@ if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)){ pers[actual].setdirecci
 int managerpersonaje::getactual()
 {
   return actual;
+}
+
+
+int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
+{
+    int i;
+for(i=0;i<5;i++){
+
+    if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y)){
+        return 1;
+        }
+    }
+  return -1;
+}
+
+void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
+{
+int i;
+  for(i=0;i<5;i++)
+  {
+  if(pers[i].getaccion()==0)
+  {
+    int aux=0;
+    int aux2=0;
+    switch(pers[i].getdireccion()){
+    case 1: aux=22; break;
+    case 2: aux=25; break;
+    case 3: aux=23; break;
+    case 4: aux=24; break;
+    }
+    if(pers[i].getframe()>64){ pers[i].setframe(0);}
+    if(pers[i].getframe()>32){ aux2=1;}
+    if(pers[i].getframe()<=32){ aux2=0;}
+
+    pers[i].setsubrectsprite(64*aux2,64*aux,64,64);
+    pers[i].sumarframe();
+  }
+ }
+
 }
