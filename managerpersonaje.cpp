@@ -143,17 +143,13 @@ void managerpersonaje::moverpersonaje(personaje& pers)
     pers.setdireccion(4);
 
   }
-  if(pers.getframe()>pers.getladocelda())
+  if(pers.getframe()>=pers.getladocelda())
   {
     pers.setblockaccion(false);
     pers.setaccion(0);
     pers.setframe(0);
   }
-  if(pers.getaccion()==0)
-  {
-    pers.sumarframe();
-  }
-  pers.setaccion(1);
+
 }
 
 void managerpersonaje::Asignarpersonajes(personaje& pers)
