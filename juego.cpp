@@ -140,55 +140,63 @@ void Juego::procesarEventos() {
 
 
 // ACTUALIZAR: Integraci�n total del Manager y Personajes.
-void Juego::actualizar() {
-    if (enMenu)
-        return;
-    if (Estado == CURSOR_LIBRE) {
-        // L�gica del manager que controla y cambia personajes (con SPACE)
-        if(fase==5){
-         cont--;
-        manager.moverpersonaje(pers[manager.getactual()]);
-        manager.cambiarpersonaje(pers[manager.getactual()]);
-        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){fase=6;cont=10;}
-            }
+void Juego::actualizar() 
+{
+  if (enMenu)
+    return;
+  if (Estado == CURSOR_LIBRE) 
+  {
+      // L�gica del manager que controla y cambia personajes (con SPACE)
+    if(fase==5)
+    {
+      cont--;
+      manager.moverpersonaje(pers[manager.getactual()]);
+      manager.cambiarpersonaje(pers[manager.getactual()]);
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){fase=6;cont=10;}
     }
+  }
 
-    if (todasLasUnidadesActuaron()) {
-        partida.pasarTurno();
-        resetearAccionesJugador();
-    }
-
+  if (todasLasUnidadesActuaron()) 
+  {
+    partida.pasarTurno();
+    resetearAccionesJugador();
+  }
 }
 
 // RENDERIZAR: Dibujamos los 5 personajes del vector
-void Juego::renderizar() {
-    window.clear(sf::Color::Blue);
+void Juego::renderizar() 
+{
+  window.clear(sf::Color::Blue);
 
-    if (enMenu) {
-        menuPrincipal.draw(window);
-    }
-    else {
-        tablero.render(window);
+  if (enMenu) 
+  {
+      menuPrincipal.draw(window);
+  }
+  else 
+  {
+    tablero.render(window);
 
-        // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
-        manager.actualizarpersonaje(pers);
-        manager.mostrarpersonaje(pers, window);
-        if(fase==6){
-         cont--;
-         manager.cambiardireccion(pers);
-        ataque.prepararataque(pers[manager.getactual()].getPosxPxl(),pers[manager.getactual()].getPosyPxl(),pers[manager.getactual()].getdireccion(),window);
-       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){fase=5;cont=10;}
-        }
-        
-        rendUi.renderCursor(cursor, window);
-        if (Estado == PersonajeSeleccionado) {
-        rendUi.renderRangoMovimiento(movimiento.getValido(), window);
-        drawMovRango(square, movimiento.getValido());
-        manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
+    // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
+    manager.actualizarpersonaje(pers);
+    manager.mostrarpersonaje(pers, window);
+    if(fase==6)
+    {
+      cont--;
+      manager.cambiardireccion(pers);
+      ataque.prepararataque(pers[manager.getactual()].getPosxPxl(),pers[manager.getactual()].getPosyPxl(),pers[manager.getactual()].getdireccion(),window);
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0)))
+      { 
+        fase=5;cont=10;
+      }
     }
-        // La posici�n en pixeles se calcula sola multiplicando por 64
+    rendUi.renderCursor(cursor, window);
+    if (Estado == PersonajeSeleccionado) 
+    {
+      rendUi.renderRangoMovimiento(movimiento.getValido(), window);
+      drawMovRango(square, movimiento.getValido());
+      manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
     }
-
+  }
     window.display();
 }
 
@@ -230,34 +238,6 @@ int Juego::cargarMapa(const char* nomArch) {
     return 0;
 }
 
-void Juego::drawAt(sf::RectangleShape &sq, float ax, float ay) {
-    sq.setPosition(sf::Vector2f(ax * 64, ay * 64));
-    window.draw(sq);
-}
-
-void Juego::drawMovRango(sf::RectangleShape &sq, const bool *visitadas) {
-    for(int iy = 0; iy < tablero.getMaxY(); iy++) {
-        for(int ix = 0; ix < tablero.getMaxX(); ix++) {
-            if(visitadas[ix + (iy * tablero.getMaxX())]) {
-                drawAt(sq, ix, iy);
-            }
-        }
-    }
-}
-
-void Juego::movRango(int ax, int ay, int amov, bool *visitadas) {
-    if(!visitadas[ax + (ay * tablero.getMaxX())]) {
-        visitadas[ax + (ay * tablero.getMaxX())] = true;
-    }
-    if(ay + 1 < tablero.getMaxY() && amov >= tablero.getCelda(ax, ay + 1)->getCostoMov())
-        movRango(ax, ay + 1, amov - tablero.getCelda(ax, ay + 1)->getCostoMov(), visitadas);
-    if(ax - 1 >= 0 && amov >= tablero.getCelda(ax - 1, ay)->getCostoMov())
-        movRango(ax - 1 , ay, amov - tablero.getCelda(ax - 1 , ay)->getCostoMov(), visitadas);
-    if(ay - 1 >= 0 && amov >= tablero.getCelda(ax, ay - 1)->getCostoMov())
-        movRango(ax, ay - 1, amov - tablero.getCelda(ax, ay - 1)->getCostoMov(), visitadas);
-    if(ax + 1 < tablero.getMaxX() && amov >= tablero.getCelda(ax + 1, ay)->getCostoMov())
-        movRango(ax + 1, ay, amov - tablero.getCelda(ax + 1, ay)->getCostoMov(), visitadas);
-}
 
 personaje* Juego::GetPersonajeSeleccionado() {
     for (int i = 0; i < pers.size(); i++) {
