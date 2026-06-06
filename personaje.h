@@ -14,8 +14,8 @@ using namespace sf;
 
 class personaje {
 private:
-    int posx = 0;
-    int posy = 0;
+    int posx = 5;
+    int posy = 5;
     int direccion = 0;
     int accion = 0;
     bool blokaccion = false;

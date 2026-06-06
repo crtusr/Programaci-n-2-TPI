@@ -16,17 +16,13 @@
 #include "partida.h"
 #include "proc_input.h"
 #include "ataque.h"
-enum EstadoJuego{
-    CursorLibre,
-    PersonajeSeleccionado,
-};
 class Juego {
 public:
     Juego();
     void ejecutar();
 
 private:
-    EstadoJuego Estado = CursorLibre;
+    EstadoJuego Estado = CURSOR_LIBRE;
     personaje* personajeSeleccionado = nullptr;
 
     personaje* GetPersonajeSeleccionado();

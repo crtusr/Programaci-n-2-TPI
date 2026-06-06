@@ -11,7 +11,7 @@ managerpersonaje::managerpersonaje()
 {
   cont = 0;
   actual = 0;
-  caminoIndice = 255;
+  caminoIndice = 0;
 }
 
 void managerpersonaje::resetCaminoIndice()
@@ -19,12 +19,14 @@ void managerpersonaje::resetCaminoIndice()
   caminoIndice = 0;
 }
 
-void managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
+int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
 {
+  if(dir[caminoIndice] == -1)
+    return 0;
   int sentido, x, y;
   if(dir[caminoIndice] != -1 && ((dir[caminoIndice] != 0 &&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion() == dir[caminoIndice]))))
   {
-    if(pers.getaccion()!=1)
+    if(pers.getaccion()!=ACTIVO)
     {
       pers.setframe(0);
     }
@@ -65,16 +67,24 @@ void managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
   {
     caminoIndice++;
     pers.setblockaccion(false);
-    pers.setaccion(0);
+    pers.setaccion(SIN_ACCION);
     pers.setframe(0);
   }
-  if(pers.getaccion()==0)
+  if(pers.getaccion() == 0)
   {
     pers.sumarframe();
   }
   if(dir[caminoIndice] == -1)
+  {
+    pers.setblockaccion(false);
+    pers.setaccion(SIN_ACCION);
+    pers.setframe(0);
     pers.setdireccion(0);
-  pers.setaccion(1);
+    return 0;
+  }
+  pers.setaccion(ACTIVO);
+  return 1;
+
 }
 
 void managerpersonaje::moverpersonaje(personaje& pers)

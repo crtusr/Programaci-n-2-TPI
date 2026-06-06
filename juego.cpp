@@ -30,7 +30,7 @@ Juego::Juego() :
         manager.Asignarpersonajes(pers[i]);
     }
     
-    Estado = CursorLibre;
+    Estado = CURSOR_LIBRE;
 
     personajeSeleccionado = nullptr;
 
@@ -104,7 +104,7 @@ void Juego::procesarEventos() {
                         cursor.mover(DERECHA);
                     }
 
-                if (Estado == CursorLibre && teclaPresionada == ENTER) {
+                if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER) {
                     personaje* P = GetPersonajeSeleccionado();
                     if (P != nullptr && !P->yaActuo) {
                         personajeSeleccionado = P;
@@ -117,7 +117,7 @@ void Juego::procesarEventos() {
                     if(teclaPresionada == ENTER) {
                       movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
                         if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos())) {
-                            Estado = CursorLibre;
+                            Estado = CURSOR_LIBRE;
                             personajeSeleccionado = nullptr;
                             return;
                         }
@@ -143,7 +143,7 @@ void Juego::procesarEventos() {
 void Juego::actualizar() {
     if (enMenu)
         return;
-    if (Estado == CursorLibre) {
+    if (Estado == CURSOR_LIBRE) {
         // L�gica del manager que controla y cambia personajes (con SPACE)
         if(fase==5){
          cont--;
@@ -302,7 +302,7 @@ void Juego::moverPersonajeSeleccionado()
   personajeSeleccionado->setposy(y * 64);
   personajeSeleccionado->setsprite();
   personajeSeleccionado->yaActuo = true;
-  Estado = CursorLibre;
+  Estado = CURSOR_LIBRE;
   for(int i = 0; i < 5; i++) 
     cout << endl << pers[i].getPosxPxl() << " " << pers[i].getPosyPxl();
   personajeSeleccionado = nullptr;

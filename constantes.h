@@ -21,6 +21,22 @@ enum DIRECCIONES
   RETROCESO
 };
 
+//Recomendaría que los enums sean en MAYUSCULAS, por consistencia
+enum EstadoJuego
+{
+    CURSOR_LIBRE,
+    PersonajeSeleccionado,
+    MENU_PRINCIPAL,
+    MENU_INGAME,
+    ANIMACION_BLOQUEANTE
+};
+
+enum ACCION_PERSONAJE
+{
+  SIN_ACCION,
+  ACTIVO
+};
+
 const int profundidadMax = 16;
 
 #endif

@@ -15,7 +15,7 @@ public:
   managerpersonaje();
   void resetCaminoIndice();
   int getactual();
-  void moverpersonaje(personaje& pers, const int *dir);
+  int moverpersonaje(personaje& pers, const int *dir);
   void moverpersonaje(personaje& pers);
   void mostrarpersonaje(vector<personaje>& pers,RenderWindow& window);
   void Asignarpersonajes(personaje& pers);
