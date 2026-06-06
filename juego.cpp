@@ -183,7 +183,7 @@ void Juego::renderizar()
     {
       cont--;
       manager.cambiardireccion(pers);
-      ataque.prepararataque(pers[manager.getactual()].getPosxPxl(),pers[manager.getactual()].getPosyPxl(),pers[manager.getactual()].getdireccion(),window);
+      ataque.prepararataque(pers[manager.getactual()].getdireccion(),window,pers,manager);
       if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0)))
       { 
         fase=5;cont=10;
