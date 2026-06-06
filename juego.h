@@ -36,9 +36,6 @@ private:
 
     int cargarMapa(const char* nomArch);
     int cargarTexturasDeCeldas();
-    void drawAt(sf::RectangleShape &sq, float x, float y);
-    void drawMovRango(sf::RectangleShape &sq, const bool *visitadas);
-    void movRango(int x, int y, int mov, bool *visitadas);
 
     // Atributos
     sf::RenderWindow window;

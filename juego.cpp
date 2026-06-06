@@ -193,7 +193,6 @@ void Juego::renderizar()
     if (Estado == PersonajeSeleccionado) 
     {
       rendUi.renderRangoMovimiento(movimiento.getValido(), window);
-      drawMovRango(square, movimiento.getValido());
       manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
     }
   }
