@@ -22,6 +22,8 @@ public:
   void secuencia(personaje& pers);
   void cambiarpersonaje(personaje& pers);
   void cambiardireccion(vector<personaje>& pers);
+  int comprobarlugar(int x,int y,vector<personaje> pers);
+  void actualizarpersonaje(vector<personaje>& pers);
 
 };
 #endif // MANAGERPERSONAJE_H_INCLUDED

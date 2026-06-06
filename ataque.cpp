@@ -10,32 +10,45 @@ Sprite ataque::getsprite(){
     return sprite;
     }
 
-void ataque::ataque1(int posx,int posy,int direccion,RenderWindow& window){
+void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager){
+int aux;
 switch(direccion){
 case 1:
- v_dirx[0]=posx;
- v_diry[0]=posy-64;
+ v_dirx[0]=pers[manager.getactual()].getPosxPxl();
+ v_diry[0]=pers[manager.getactual()].getPosyPxl()-64;
  sprite.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
- window.draw(sprite);
+ sprite2.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
+ aux=manager.comprobarlugar(v_dirx[0],v_diry[0],pers);
+ if(aux==-1){window.draw(sprite);}
+ if(aux==1){window.draw(sprite2);}
 break;
 case 2:
-v_dirx[0]=posx+64;
-v_diry[0]=posy;
-sprite.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
-window.draw(sprite);
+v_dirx[0]=pers[manager.getactual()].getPosxPxl()+64;
+v_diry[0]=pers[manager.getactual()].getPosyPxl();
+ sprite.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
+ sprite2.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
+ aux=manager.comprobarlugar(v_dirx[0],v_diry[0],pers);
+ if(aux==-1){window.draw(sprite);}
+ if(aux==1){window.draw(sprite2);}
 break;
 case 3:
-v_dirx[0]=posx-64;
-v_diry[0]=posy;
-sprite.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
-window.draw(sprite);
+v_dirx[0]=pers[manager.getactual()].getPosxPxl()-64;
+v_diry[0]=pers[manager.getactual()].getPosyPxl();
+ sprite.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
+ sprite2.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
+ aux=manager.comprobarlugar(v_dirx[0],v_diry[0],pers);
+ if(aux==-1){window.draw(sprite);}
+ if(aux==1){window.draw(sprite2);}
 break;
 case 4:
 
-v_dirx[0]=posx;
- v_diry[0]=posy+64;
-sprite.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
-window.draw(sprite);
+ v_dirx[0]=pers[manager.getactual()].getPosxPxl();
+ v_diry[0]=pers[manager.getactual()].getPosyPxl()+64;
+ sprite.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
+ sprite2.setPosition(sf::Vector2f(v_dirx[0],v_diry[0]));
+ aux=manager.comprobarlugar(v_dirx[0],v_diry[0],pers);
+ if(aux==-1){window.draw(sprite);}
+ if(aux==1){window.draw(sprite2);}
 break;
 default:
 break;
@@ -44,13 +57,13 @@ break;
 
 }
 
-void ataque::ataque2(int posx,int posy,int direccion,RenderWindow& window){
+void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager){
 switch(direccion){
 int i;
 case 1:
 
-v_dirx[0]=posx-64;
-v_diry[0]=posy-64;
+v_dirx[0]=pers[manager.getactual()].getPosxPxl()-64;
+v_diry[0]=pers[manager.getactual()].getPosyPxl()-64;
 for(i=0;i<3;i++)
 {
 
@@ -61,8 +74,8 @@ for(i=0;i<3;i++)
 
 break;
 case 2:
-v_dirx[0]=posx+64;
-v_diry[0]=posy-64;
+v_dirx[0]=pers[manager.getactual()].getPosxPxl()+64;
+v_diry[0]=pers[manager.getactual()].getPosyPxl()-64;
 for(i=0;i<3;i++)
 {
 
@@ -72,8 +85,8 @@ v_diry[0]+=64;
 }
 break;
 case 3:
-v_dirx[0]=posx-64;
-v_diry[0]=posy+64;
+v_dirx[0]=pers[manager.getactual()].getPosxPxl()-64;
+v_diry[0]=pers[manager.getactual()].getPosyPxl()+64;
 for(i=0;i<3;i++)
 {
 
@@ -83,8 +96,8 @@ v_diry[0]-=64;
 }
 break;
 case 4:
-v_dirx[0]=posx-=64;
- v_diry[0]=posy+64;
+v_dirx[0]=pers[manager.getactual()].getPosxPxl()-64;
+v_diry[0]=pers[manager.getactual()].getPosyPxl()+64;
 for(i=0;i<3;i++)
 {
 
@@ -110,14 +123,15 @@ void ataque::ataque4(){
 
 }
 
-void ataque::prepararataque(int posx,int posy,int direccion,RenderWindow& window){
+void ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager){
 
 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){opc=1;}
 if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)){ opc=2;}
 switch(opc){
-case 1:ataque1(posx,posy,direccion,window);
+case 1:ataque1(direccion,window,pers,manager);
 break;
-case 2:ataque2(posx,posy,direccion,window);
+case 2:ataque2(direccion,window,pers,manager);
 break;
 }
 }
+
