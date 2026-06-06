@@ -95,6 +95,7 @@ void managerpersonaje::moverpersonaje(personaje& pers)
     {
       pers.setframe(0);
     }
+    pers.setaccion(1);
     pers.setblockaccion(true);
     pers.setsumresposx(1);
     pers.setposicionsprite(pers.getPosicionF());
