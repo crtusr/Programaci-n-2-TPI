@@ -144,18 +144,14 @@ void Juego::actualizar()
 {
   if (enMenu)
     return;
-  if (Estado == CURSOR_LIBRE) 
+  if (Estado == CURSOR_LIBRE)
   {
       // L�gica del manager que controla y cambia personajes (con SPACE)
-    if(fase==5)
-    {
       cont--;
       manager.moverpersonaje(pers[manager.getactual()]);
       manager.cambiarpersonaje(pers[manager.getactual()]);
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){fase=6;cont=10;}
-    }
-  }
-
+      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){Estado=PREPARAR_ATAQUE;cont=10;}
+}
   if (todasLasUnidadesActuaron()) 
   {
     partida.pasarTurno();
@@ -179,15 +175,16 @@ void Juego::renderizar()
     // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
     manager.actualizarpersonaje(pers);
     manager.mostrarpersonaje(pers, window);
-    if(fase==6)
+    if(Estado==PREPARAR_ATAQUE)
     {
       cont--;
       manager.cambiardireccion(pers);
       ataque.prepararataque(pers[manager.getactual()].getdireccion(),window,pers,manager);
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0)))
-      { 
-        fase=5;cont=10;
-      }
+      if((teclaPresionada == SPACE)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0)))
+      {
+    Estado=CURSOR_LIBRE;cont=10;
+     }
+     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){Estado=CURSOR_LIBRE;cont=20;}
     }
     rendUi.renderCursor(cursor, window);
     if (Estado == PersonajeSeleccionado) 
