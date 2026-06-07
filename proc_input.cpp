@@ -17,6 +17,10 @@ int ProcInput::tecla(sf::Keyboard::Key tecla)
       return ENTER;
     case sf::Keyboard::Key::Backspace:
       return RETROCESO;
+    case sf::Keyboard::Key::Space:
+      return SPACE;
+    case sf::Keyboard::Key::F:
+      return F;
     default:
       return NULO;
 
