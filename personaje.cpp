@@ -5,6 +5,10 @@
 using namespace std;
 using namespace sf;
 
+    int personaje::getId() {
+        return id;
+    }
+
     int personaje::getPosx()//posx tiene que devolver la posición en la grilla
     {
         return posx/ladoCelda;
@@ -57,6 +61,18 @@ using namespace sf;
         Vector2i pos(posx,posy); return pos;
         }
 
+    bool personaje::getYaActuo() {
+        return yaActuo;
+    }
+
+    TIPO_PERSONAJE personaje::getTipo() {
+        return tipo;
+    }
+
+        // Setters
+    void personaje::setId(int nuevoId) {
+        id = nuevoId;
+    }
 
     void personaje::setaccion(int acc) {
         accion=acc;
@@ -101,6 +117,16 @@ using namespace sf;
     void personaje::setsubrectsprite(int x1,int y1,int x2,int y2){
         sprite.setTextureRect(IntRect(Vector2i(x1,y1),Vector2i(x2,y2)));
         }
+    
+    void personaje::setYaActuo(bool valor) {
+        yaActuo = valor;
+    }
+
+    void personaje::setTipo(TIPO_PERSONAJE nuevoTipo) {
+        tipo = nuevoTipo;
+    }
+
+
 
   void personaje::setsprite(){
 

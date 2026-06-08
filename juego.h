@@ -22,10 +22,11 @@ public:
     void ejecutar();
 
 private:
-    EstadoJuego Estado = CURSOR_LIBRE;
+    ESTADO_JUEGO Estado = CURSOR_LIBRE;
     personaje* personajeSeleccionado = nullptr;
 
     personaje* GetPersonajeSeleccionado();
+    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
     void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
     void resetearAccionesJugador();
@@ -58,8 +59,8 @@ private:
     std::vector<personaje> pers;
     SisMov movimiento;
     ataque ataque;
-    int fase=5;//<-------por ajustar
-    int cont=0;//<-----posiblemente temporal
+    //int fase=5;//<-------por ajustar
+    //int cont=0;//<-----posiblemente temporal
 };
 
 #endif // JUEGO_H

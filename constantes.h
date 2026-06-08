@@ -22,10 +22,10 @@ enum DIRECCIONES
 };
 
 //Recomendaría que los enums sean en MAYUSCULAS, por consistencia
-enum EstadoJuego
+enum ESTADO_JUEGO
 {
     CURSOR_LIBRE,
-    PersonajeSeleccionado,
+    PERSONAJE_SELECCIONADO,
     MENU_PRINCIPAL,
     MENU_INGAME,
     ANIMACION_BLOQUEANTE
@@ -35,6 +35,11 @@ enum ACCION_PERSONAJE
 {
   SIN_ACCION,
   ACTIVO
+};
+
+enum class TIPO_PERSONAJE {
+    JUGADOR,
+    NO_JUGADOR
 };
 
 const int profundidadMax = 16;

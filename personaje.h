@@ -6,20 +6,21 @@
 #include <string>
 #include "grilla.h"
 #include "celda.h"
+#include "constantes.h"
 using namespace std;
 using namespace sf;
 
-
-
-
 class personaje {
 private:
-    int posx = 5;
-    int posy = 5;
-    int direccion = 0;
-    int accion = 0;
-    bool blokaccion = false;
-    int frame = 0;
+    bool yaActuo;
+    int id; // Agregar un identificador único para cada personaje
+    TIPO_PERSONAJE tipo; // Agregar un atributo para el tipo de personaje (jugador o no jugador)
+    int posx;
+    int posy;
+    int direccion;
+    int accion;
+    bool blokaccion;
+    int frame;
     int ladoCelda;
     Grilla *grilla;
     Sprite sprite;
@@ -28,11 +29,19 @@ private:
 
 public:
     // Constructor
-    bool yaActuo = false;
-    personaje(Grilla *g) : sprite(textura)
+    personaje(Grilla *g, int idPersonaje, TIPO_PERSONAJE tipoPersonaje) : sprite(textura)
     {
+        yaActuo = false;
+        posx = 0;
+        posy = 0;
+        direccion = 0;
+        accion = 0;
+        blokaccion = false;
+        frame = 0;
         grilla = g;
         ladoCelda = g->getTamCeldaPixeles();
+        id = idPersonaje;
+        tipo = tipoPersonaje; // Inicializar el tipo de personaje con el valor pasado al constructor
         if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
             std::cerr << "Error al cargar textura\n";
         }
@@ -51,20 +60,24 @@ public:
 
 
     // Getters
+    int getId(); // Getter para el identificador único
+    TIPO_PERSONAJE getTipo(); // Getter para el tipo de personaje
     int getPosx();            //posx tiene que devolver la posición en la grilla
     int getPosy();            //posx tiene que devolver la posición en la grilla
-    int getPosxPxl();
-    int getPosyPxl();
-    int getdireccion();
-    int getaccion();
-    bool getblockaccion();
-    int getframe();
-    int getladocelda();
-    Sprite getsprite();
-    Vector2f getPosicionF();
-    Vector2i getPosicionI();
+    int getPosxPxl();         // Devuelve la posición en píxeles
+    int getPosyPxl();         // Devuelve la posición en píxeles
+    int getdireccion();       // Devuelve la dirección actual del personaje
+    int getaccion();          // Devuelve la acción actual del personaje
+    bool getblockaccion();    // Devuelve si el personaje tiene bloqueada la acción
+    int getframe();           // Devuelve el frame actual del personaje
+    int getladocelda();       // Devuelve el tamaño de la celda en píxeles
+    bool getYaActuo();        // Devuelve si el personaje ya actuó en el turno actual
+    Sprite getsprite();       // Devuelve el sprite del personaje
+    Vector2f getPosicionF();  // Devuelve la posición del personaje como un Vector2f (útil para renderizar)
+    Vector2i getPosicionI();  // Devuelve la posición del personaje como un Vector2i (útil para cálculos de lógica)
 
-
+// Setters
+    void setId(int nuevoId); // Setter para el identificador único
     void setaccion(int acc);
     void setdireccion(int drc);
     void setframe(int fra);
@@ -77,12 +90,8 @@ public:
     void setposicionsprite(Vector2f pos);
     void setsubrectsprite(int x1,int y1,int x2,int y2);
     void setsprite();
-
-
-
-
-
-
+    void setTipo(TIPO_PERSONAJE nuevoTipo); // Setter para el tipo de personaje
+    void setYaActuo(bool valor); // Setter para el estado de acción del personaje
 };
 #endif // PERSONAJE_H_INCLUDED
 

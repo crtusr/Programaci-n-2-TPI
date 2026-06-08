@@ -15,7 +15,6 @@ Juego::Juego() :
     mov(3),
     tablero(64, 15, 10),
     rendUi(&tablero),
-    pers(5, personaje(&tablero)),
     movimiento(3, 3, &tablero)
 {
     window.setFramerateLimit(60);
@@ -26,17 +25,23 @@ Juego::Juego() :
     cargarTexturasDeCeldas();
     cargarMapa("nivel1.txt");
 
-    for(int i = 0; i < 5; i++) {
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 1);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 2, 1);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
+
+    /*for(int i = 0; i < 5; i++) {
         manager.Asignarpersonajes(pers[i]);
-    }
+    }*/
     
     Estado = CURSOR_LIBRE;
 
     personajeSeleccionado = nullptr;
 
-    for (int i = 0; i < 5; i++) {
-        pers[i].yaActuo = false;
-    }
+   /* for (int i = 0; i < 5; i++) {
+        pers[i].setYaActuo(false);
+    }*/
 }
 
 void Juego::ejecutar() {
@@ -85,37 +90,37 @@ void Juego::procesarEventos() {
                 
                     if(teclaPresionada == ARRIBA)
                     {  
-                      if(cursor.getYPos() > 0)
+                    if(cursor.getYPos() > 0)
                         cursor.mover(ARRIBA);
                     }
                     else if (teclaPresionada == ABAJO) 
                     {  
-                      if(cursor.getYPos() < tablero.getMaxY() - 1)
+                    if(cursor.getYPos() < tablero.getMaxY() - 1)
                         cursor.mover(ABAJO);
                     }
                     else if(teclaPresionada == IZQUIERDA)
                     {
-                      if(cursor.getXPos() > 0)  
+                    if(cursor.getXPos() > 0)  
                         cursor.mover(IZQUIERDA);
                     }
                     else if(teclaPresionada == DERECHA) 
                     {
-                      if(cursor.getXPos() < tablero.getMaxX() - 1)
+                    if(cursor.getXPos() < tablero.getMaxX() - 1)
                         cursor.mover(DERECHA);
                     }
 
                 if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER) {
                     personaje* P = GetPersonajeSeleccionado();
-                    if (P != nullptr && !P->yaActuo) {
+                    if (P != nullptr && !P->getYaActuo()) {
                         personajeSeleccionado = P;
-                        Estado = PersonajeSeleccionado;
+                        Estado = PERSONAJE_SELECCIONADO;
                         movimiento.calcularMovimiento(P->getPosx(), P->getPosy(), mov);
                     }
-                    // Si se selecciona un personaje, el estado pasa a PersonajeSeleccionado.
+                    // Si se selecciona un personaje, el estado pasa a PERSONAJE_SELECCIONADO.
                 }
-                else if ( Estado == PersonajeSeleccionado) {
+                else if ( Estado == PERSONAJE_SELECCIONADO) {
                     if(teclaPresionada == ENTER) {
-                      movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
+                    movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
                         if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos())) {
                             Estado = CURSOR_LIBRE;
                             personajeSeleccionado = nullptr;
@@ -124,7 +129,7 @@ void Juego::procesarEventos() {
                         else {
                             movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
                             manager.resetCaminoIndice();
-                              manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
+                            manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
                             //  manager.mostrarpersonaje(*personajeSeleccionado, window);
                             //moverPersonajeSeleccionado();
                         }
@@ -146,14 +151,8 @@ void Juego::actualizar()
     return;
   if (Estado == CURSOR_LIBRE) 
   {
-      // L�gica del manager que controla y cambia personajes (con SPACE)
-    if(fase==5)
-    {
-      cont--;
-      manager.moverpersonaje(pers[manager.getactual()]);
-      manager.cambiarpersonaje(pers[manager.getactual()]);
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){fase=6;cont=10;}
-    }
+    manager.cambiarpersonaje(pers[manager.getactual()]);
+    manager.cambiardireccion(pers);
   }
 
   if (todasLasUnidadesActuaron()) 
@@ -179,7 +178,7 @@ void Juego::renderizar()
     // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
     manager.actualizarpersonaje(pers);
     manager.mostrarpersonaje(pers, window);
-    if(fase==6)
+    /*if(fase==6)
     {
       cont--;
       manager.cambiardireccion(pers);
@@ -188,9 +187,10 @@ void Juego::renderizar()
       { 
         fase=5;cont=10;
       }
-    }
+    }*/
+   
     rendUi.renderCursor(cursor, window);
-    if (Estado == PersonajeSeleccionado) 
+    if (Estado == PERSONAJE_SELECCIONADO) 
     {
       rendUi.renderRangoMovimiento(movimiento.getValido(), window);
       manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
@@ -248,7 +248,7 @@ personaje* Juego::GetPersonajeSeleccionado() {
 }
     bool Juego::todasLasUnidadesActuaron() {
     for (int i = 0; i < pers.size(); i++) {
-        if (!pers[i].yaActuo) {
+        if (!pers[i].getYaActuo()) {
             return false;
         }
     }
@@ -257,7 +257,7 @@ personaje* Juego::GetPersonajeSeleccionado() {
 
     void Juego::resetearAccionesJugador() {
     for (int i = 0; i < pers.size(); i++) {
-        pers[i].yaActuo = false;
+        pers[i].setYaActuo(false);
     }
 }
 
@@ -281,10 +281,21 @@ void Juego::moverPersonajeSeleccionado()
   personajeSeleccionado->setposx(x * 64);
   personajeSeleccionado->setposy(y * 64);
   personajeSeleccionado->setsprite();
-  personajeSeleccionado->yaActuo = true;
+  personajeSeleccionado->setYaActuo(true);
   Estado = CURSOR_LIBRE;
   for(int i = 0; i < 5; i++) 
     cout << endl << pers[i].getPosxPxl() << " " << pers[i].getPosyPxl();
   personajeSeleccionado = nullptr;
+}
+
+void Juego::agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y) {
+    personaje nuevoPersonaje(&tablero, pers.size(), tipo);
+    nuevoPersonaje.setId(pers.size());
+    nuevoPersonaje.setTipo(tipo);
+    nuevoPersonaje.setposx(x * tablero.getTamCeldaPixeles());
+    nuevoPersonaje.setposy(y * tablero.getTamCeldaPixeles());
+    nuevoPersonaje.setsprite();
+    pers.push_back(nuevoPersonaje);
+    manager.Asignarpersonajes(pers.back());
 }
 
