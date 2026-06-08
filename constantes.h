@@ -28,6 +28,7 @@ enum EstadoJuego
     PersonajeSeleccionado,
     MENU_PRINCIPAL,
     MENU_INGAME,
+    OBJETIVO_ATAQUE,
     ANIMACION_BLOQUEANTE
 };
 

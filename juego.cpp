@@ -124,7 +124,7 @@ void Juego::procesarEventos() {
                         else {
                             movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
                             manager.resetCaminoIndice();
-                              manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
+                            Estado = ANIMACION_BLOQUEANTE;
                             //  manager.mostrarpersonaje(*personajeSeleccionado, window);
                             //moverPersonajeSeleccionado();
                         }
@@ -156,6 +156,15 @@ void Juego::actualizar()
     }
   }
 
+  manager.actualizarpersonaje(pers);
+  if(Estado == ANIMACION_BLOQUEANTE)
+  {
+    if(!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
+    {
+      Estado = CURSOR_LIBRE;
+      personajeSeleccionado->yaActuo = (true);
+    }
+  }
   if (todasLasUnidadesActuaron()) 
   {
     partida.pasarTurno();

@@ -23,7 +23,7 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
 {
   if(dir[caminoIndice] == -1)
     return 0;
-  int sentido, x, y;
+  int sentido = 1, x, y;
   if(dir[caminoIndice] != -1 && ((dir[caminoIndice] != 0 &&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion() == dir[caminoIndice]))))
   {
     if(pers.getaccion()!=ACTIVO)
@@ -34,25 +34,21 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
     switch(dir[caminoIndice])
     {
       case DERECHA:
-        sentido = 1;
         pers.setsumresposx(sentido);
         x = 1;
         y = 11;
         break;
       case IZQUIERDA:
-        sentido = -1;
-        pers.setsumresposx(sentido);
+        pers.setsumresposx(sentido * -1);
         x = 1;
         y = 9;
         break;
       case ARRIBA:
-        sentido = -1;
-        pers.setsumresposy(sentido);
+        pers.setsumresposy(sentido * -1);
         x = 1;
         y = 8;
         break;
       case ABAJO:
-        sentido = 1;
         pers.setsumresposy(sentido);
         x = 1;
         y = 10;
@@ -63,7 +59,7 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
     pers.sumarframe();
     pers.setdireccion(dir[caminoIndice]);
   }
-  if(pers.getframe()>=pers.getladocelda() && dir[caminoIndice] != -1)
+  if((pers.getPosxPxl() + pers.getPosyPxl()) % pers.getladocelda() == 0 && dir[caminoIndice] != -1)
   {
     caminoIndice++;
     pers.setblockaccion(false);
@@ -250,4 +246,13 @@ int i;
   }
  }
 
+}
+int managerpersonaje::contarPersonajesActivos(vector<personaje>& pers)
+{
+  int cuenta = 0;
+
+  for(int i = 0; i < pers.capacity(); i++)
+    if(pers[i].getHp()) cuenta++;
+
+  return cuenta;
 }
