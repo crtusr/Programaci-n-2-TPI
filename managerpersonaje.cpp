@@ -170,12 +170,10 @@ void managerpersonaje::Asignarpersonajes(personaje& pers)
 
 
 void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
-       int i;
-        for(i=0;i<5;i++)
-        {
-           window.draw(pers[i].getsprite());
-        }
+      for(int i = 0; i < pers.size(); i++) {
+        window.draw(pers[i].getsprite());
     }
+}
 
 void managerpersonaje::secuencia(personaje& pers)
 {
@@ -185,13 +183,13 @@ void managerpersonaje::secuencia(personaje& pers)
   //moverpersonaje(pers);
 }
 
-void managerpersonaje::cambiarpersonaje(personaje& pers)
+void managerpersonaje::cambiarpersonaje(vector<personaje>& pers)
 {
-   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)&&(pers.getblockaccion()==false)&&(cont==0))
+   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)&&(pers[actual].getblockaccion()==false)&&(cont==0))
    {
      cont++;
      actual++;
-     if(actual>=5)
+     if(actual>= pers.size())
      {
        actual=0;
      }
@@ -216,20 +214,18 @@ int managerpersonaje::getactual()
 
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
-    int i;
-for(i=0;i<5;i++){
-
-    if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y)){
-        return 1;
-        }
+  for(int i=0;i<pers.size();i++){
+    if(pers[i].getPosx()==x&&pers[i].getPosy()==y){
+      return i;
     }
+  }
+
   return -1;
 }
 
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
-int i;
-  for(i=0;i<5;i++)
+  for(int i=0;i<pers.size();i++)
   {
   if(pers[i].getaccion()==0)
   {

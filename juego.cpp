@@ -25,12 +25,11 @@ Juego::Juego() :
     cargarTexturasDeCeldas();
     cargarMapa("nivel1.txt");
 
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 2, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
-
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 5);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 2, 5);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 5);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 5);
+    
     /*for(int i = 0; i < 5; i++) {
         manager.Asignarpersonajes(pers[i]);
     }*/
@@ -151,7 +150,7 @@ void Juego::actualizar()
     return;
   if (Estado == CURSOR_LIBRE) 
   {
-    manager.cambiarpersonaje(pers[manager.getactual()]);
+    manager.cambiarpersonaje(pers);
     manager.cambiardireccion(pers);
   }
 

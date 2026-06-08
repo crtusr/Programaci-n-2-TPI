@@ -20,7 +20,7 @@ public:
   void mostrarpersonaje(vector<personaje>& pers,RenderWindow& window);
   void Asignarpersonajes(personaje& pers); 
   void secuencia(personaje& pers);
-  void cambiarpersonaje(personaje& pers);
+  void cambiarpersonaje(vector<personaje>& pers);
   void cambiardireccion(vector<personaje>& pers);
   int comprobarlugar(int x,int y,vector<personaje> pers); 
   void actualizarpersonaje(vector<personaje>& pers); 
