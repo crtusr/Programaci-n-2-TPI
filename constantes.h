@@ -18,7 +18,9 @@ enum DIRECCIONES
   ABAJO,
   DERECHA,
   ENTER,
-  RETROCESO
+  RETROCESO,
+  SPACE,
+  F
 };
 
 //Recomendaría que los enums sean en MAYUSCULAS, por consistencia
@@ -28,8 +30,8 @@ enum EstadoJuego
     PersonajeSeleccionado,
     MENU_PRINCIPAL,
     MENU_INGAME,
-    OBJETIVO_ATAQUE,
-    ANIMACION_BLOQUEANTE
+    ANIMACION_BLOQUEANTE,
+    PREPARAR_ATAQUE
 };
 
 enum ACCION_PERSONAJE
