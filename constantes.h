@@ -10,7 +10,7 @@ enum CELDAS
   MAR
 };
 
-enum DIRECCIONES
+enum TECLAS
 {
   NULO,
   ARRIBA,
@@ -18,7 +18,9 @@ enum DIRECCIONES
   ABAJO,
   DERECHA,
   ENTER,
-  RETROCESO
+  RETROCESO,
+  SPACE,
+  F
 };
 
 //Recomendaría que los enums sean en MAYUSCULAS, por consistencia
@@ -28,7 +30,8 @@ enum ESTADO_JUEGO
     PERSONAJE_SELECCIONADO,
     MENU_PRINCIPAL,
     MENU_INGAME,
-    ANIMACION_BLOQUEANTE
+    ANIMACION_BLOQUEANTE,
+    PREPARAR_ATAQUE
 };
 
 enum ACCION_PERSONAJE

@@ -23,7 +23,7 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
 {
   if(dir[caminoIndice] == -1)
     return 0;
-  int sentido, x, y;
+  int sentido = 1, x, y;
   if(dir[caminoIndice] != -1 && ((dir[caminoIndice] != 0 &&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion() == dir[caminoIndice]))))
   {
     if(pers.getaccion()!=ACTIVO)
@@ -34,27 +34,23 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
     switch(dir[caminoIndice])
     {
       case DERECHA:
-        sentido = 1;
         pers.setsumresposx(sentido);
-        x = 1;
+        x = 0;
         y = 11;
         break;
       case IZQUIERDA:
-        sentido = -1;
-        pers.setsumresposx(sentido);
-        x = 1;
+        pers.setsumresposx(sentido * -1);
+        x = 0;
         y = 9;
         break;
       case ARRIBA:
-        sentido = -1;
-        pers.setsumresposy(sentido);
-        x = 1;
+        pers.setsumresposy(sentido * -1);
+        x = 0;
         y = 8;
         break;
       case ABAJO:
-        sentido = 1;
         pers.setsumresposy(sentido);
-        x = 1;
+        x = 0;
         y = 10;
         break;
     }
@@ -63,12 +59,10 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
     pers.sumarframe();
     pers.setdireccion(dir[caminoIndice]);
   }
-  if(pers.getframe()>=pers.getladocelda() && dir[caminoIndice] != -1)
+  if((pers.getPosxPxl() + pers.getPosyPxl()) % pers.getladocelda() == 0 && dir[caminoIndice] != -1)
   {
     caminoIndice++;
     pers.setblockaccion(false);
-    pers.setaccion(SIN_ACCION);
-    pers.setframe(0);
   }
   if(pers.getaccion() == 0)
   {
@@ -89,7 +83,7 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
 
 void managerpersonaje::moverpersonaje(personaje& pers)
 {
-  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion()==2)))
+  if((sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)&&(!pers.getblockaccion()))||((pers.getblockaccion())&&(pers.getdireccion()==DERECHA)))
   {
     if(pers.getaccion()!=1)
     {
@@ -103,9 +97,9 @@ void managerpersonaje::moverpersonaje(personaje& pers)
     int y=11;
     pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
     pers.sumarframe();
-    pers.setdireccion(2);
+    pers.setdireccion(DERECHA);
   }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==3))
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==IZQUIERDA))
   {
     if(pers.getaccion()!=1)
     {
@@ -119,9 +113,9 @@ void managerpersonaje::moverpersonaje(personaje& pers)
     int y=9;
     pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
     pers.sumarframe();
-    pers.setdireccion(3);
+    pers.setdireccion(IZQUIERDA);
   }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==1))
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==ARRIBA))
   {
     if(pers.getaccion()!=1)
     {
@@ -135,9 +129,9 @@ void managerpersonaje::moverpersonaje(personaje& pers)
     int y=8;
     pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
     pers.sumarframe();
-    pers.setdireccion(1);
+    pers.setdireccion(ARRIBA);
   }
-  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==4))
+  if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)&&(!pers.getblockaccion())||(pers.getblockaccion())&&(pers.getdireccion()==ABAJO))
   {
     if(pers.getaccion()!=1)
     {
@@ -151,7 +145,7 @@ void managerpersonaje::moverpersonaje(personaje& pers)
     int y=10;
     pers.setsubrectsprite(pers.getladocelda()* (x + (pers.getframe()/8) % 9), pers.getladocelda()*y,pers.getladocelda(), pers.getladocelda() );
     pers.sumarframe();
-    pers.setdireccion(4);
+    pers.setdireccion(ABAJO);
 
   }
   if(pers.getframe()>=pers.getladocelda())
@@ -163,15 +157,12 @@ void managerpersonaje::moverpersonaje(personaje& pers)
 
 }
 
-void managerpersonaje::Asignarpersonajes(personaje& pers)
-{
-  pers.setsprite();
-}
+
 
 
 void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
        int i;
-        for(i=0;i<5;i++)
+        for(i=0;i<cantidad_pers;i++)
         {
            window.draw(pers[i].getsprite());
         }
@@ -191,7 +182,7 @@ void managerpersonaje::cambiarpersonaje(personaje& pers)
    {
      cont++;
      actual++;
-     if(actual>=5)
+     if(actual>=cantidad_pers)
      {
        actual=0;
      }
@@ -200,54 +191,76 @@ void managerpersonaje::cambiarpersonaje(personaje& pers)
    if(cont>10){cont=0;}
 }
 
-  void managerpersonaje::cambiardireccion(vector<personaje>& pers){
-if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Up)){ pers[actual].setdireccion(1);}
-if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right)){pers[actual].setdireccion(2);}
-if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)){ pers[actual].setdireccion(3);}
-if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down)){ pers[actual].setdireccion(4);}
-
-  }
+void managerpersonaje::cambiardireccion(vector<personaje>& pers, int dir)
+{
+  if(dir == ARRIBA)
+    pers[actual].setdireccion(ARRIBA);
+  if(dir == ABAJO)
+    pers[actual].setdireccion(ABAJO);
+  if(dir == IZQUIERDA) 
+    pers[actual].setdireccion(IZQUIERDA);
+  if(dir == DERECHA) 
+    pers[actual].setdireccion(DERECHA);
+}
 
 int managerpersonaje::getactual()
 {
   return actual;
 }
 
+  int managerpersonaje::getcantidad()
+  {
+  return cantidad_pers;
+  }
+
+
+  void managerpersonaje::setcantidad(int cantidad)
+  {
+  cantidad_pers=cantidad;
+  }
 
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
     int i;
-for(i=0;i<5;i++){
+for(i=0;i<cantidad_pers;i++){
 
-    if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y)){
+    if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
+        {
         return 1;
         }
     }
   return -1;
 }
-
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
-int i;
-  for(i=0;i<5;i++)
+  int i;
+  for(i=0;i<cantidad_pers;i++)
   {
-  if(pers[i].getaccion()==0)
-  {
-    int aux=0;
-    int aux2=0;
-    switch(pers[i].getdireccion()){
-    case 1: aux=22; break;
-    case 2: aux=25; break;
-    case 3: aux=23; break;
-    case 4: aux=24; break;
+    if(pers[i].getaccion()==0)
+    {
+      int ladoCelda = pers[i].getladocelda();
+      int nDeFilaSprite = 0, nDeColumnaSprite = 0;
+      switch(pers[i].getdireccion()){
+        case ARRIBA: nDeFilaSprite = 22; break;
+        case DERECHA: nDeFilaSprite = 25; break;
+        case ABAJO: nDeFilaSprite = 24; break;
+        case IZQUIERDA: nDeFilaSprite = 23; break;
+      }
+      nDeColumnaSprite = (pers[i].getframe() / 32) % 2;
+
+      pers[i].setsubrectsprite(ladoCelda * nDeColumnaSprite, ladoCelda * nDeFilaSprite,
+                               ladoCelda, ladoCelda);
+      pers[i].sumarframe();
     }
-    if(pers[i].getframe()>64){ pers[i].setframe(0);}
-    if(pers[i].getframe()>32){ aux2=1;}
-    if(pers[i].getframe()<=32){ aux2=0;}
-
-    pers[i].setsubrectsprite(64*aux2,64*aux,64,64);
-    pers[i].sumarframe();
   }
- }
 
+}
+int managerpersonaje::contarPersonajesActivos(vector<personaje>& pers)
+{
+  int cuenta = 0;
+
+  for(int i = 0; i < pers.capacity(); i++)
+    if(pers[i].getHp()) cuenta++;
+
+  return cuenta;
 }
