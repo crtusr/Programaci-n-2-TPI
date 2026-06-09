@@ -134,11 +134,20 @@ void personaje::setsubrectsprite(int x1,int y1,int x2,int y2){
     sprite.setTextureRect(IntRect(Vector2i(x1,y1),Vector2i(x2,y2)));
     }
 
-  void personaje::setsprite(){
-
-          if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
+  void personaje::setsprite(int tipo){
+switch(tipo){
+case 1:
+    if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
             std::cerr << "Error al cargar textura\n";
         }
+    break;
+case 2:break;
+case 3:break;
+case 4:break;
+case 5:break;
+default:break;
+
+}
         sprite.setTexture(textura);
         sprite.setPosition(sf::Vector2f(posx,posy));
         sprite.setTextureRect(sf::IntRect(
