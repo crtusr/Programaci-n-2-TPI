@@ -103,6 +103,7 @@ public:
     void setTipo(TIPO_PERSONAJE nuevoTipo); // Setter para el tipo de personaje
     void setYaActuo(bool valor); // Setter para el estado de acción del personaje
     void setsprite();
+    /*void setsprite(int tipo);*/
     bool restarHp(int num);
 };
 #endif // PERSONAJE_H_INCLUDED

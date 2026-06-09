@@ -89,7 +89,20 @@ void personaje::setsprite()
     sprite.setPosition(sf::Vector2f(posx, posy));
 }
 
+/*  void personaje::setsprite(int tipo){
+switch(tipo){
+case 1:
+    if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+    break;
+case 2:break;
+case 3:break;
+case 4:break;
+case 5:break;
+default:break;
 
+}*/
 
 
 /* ============================
