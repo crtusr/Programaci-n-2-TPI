@@ -152,7 +152,6 @@ void Juego::procesarEventos() {
                 else if(Estado == PREPARAR_ATAQUE)
                 {
                     manager.cambiardireccion(pers, teclaPresionada);
-                    ataque.prepararataque(pers[manager.getactual()].getdireccion(),window,pers,manager);
                     if((teclaPresionada == SPACE)&&(!pers[manager.getactual()].getblockaccion()))
                     {
                         Estado=CURSOR_LIBRE;
@@ -216,6 +215,7 @@ void Juego::renderizar()
     // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
     manager.actualizarpersonaje(pers);
     manager.mostrarpersonaje(pers, window);
+    if(Estado==PREPARAR_ATAQUE){ataque.prepararataque(pers[manager.getactual()].getdireccion(),window,pers,manager);}
 
     if(Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
       rendUi.renderCursor(cursor, window);
