@@ -21,7 +21,7 @@ public:
   void Asignarpersonajes(personaje& pers);
   void secuencia(personaje& pers);
   void cambiarpersonaje(personaje& pers);
-  void cambiardireccion(vector<personaje>& pers);
+  void cambiardireccion(vector<personaje>& pers, int dir);
   int comprobarlugar(int x,int y,vector<personaje> pers);
   void actualizarpersonaje(vector<personaje>& pers);
   int contarPersonajesActivos(vector<personaje>& pers);

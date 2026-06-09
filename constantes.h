@@ -10,7 +10,7 @@ enum CELDAS
   MAR
 };
 
-enum DIRECCIONES
+enum TECLAS
 {
   NULO,
   ARRIBA,
@@ -27,7 +27,7 @@ enum DIRECCIONES
 enum EstadoJuego
 {
     CURSOR_LIBRE,
-    PersonajeSeleccionado,
+    PERSONAJE_SELECCIONADO,
     MENU_PRINCIPAL,
     MENU_INGAME,
     ANIMACION_BLOQUEANTE,

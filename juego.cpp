@@ -16,7 +16,7 @@ Juego::Juego() :
     tablero(64, 15, 10),
     rendUi(&tablero),
     pers(5, personaje(&tablero)),
-    movimiento(3, 3, &tablero)
+    movimiento(0, 0, &tablero)
 {
     window.setFramerateLimit(60);
 
@@ -82,7 +82,40 @@ void Juego::procesarEventos() {
             }
             else {
               // Control del movimiento usando la clase Cursor de lucas.
-                
+                if ( Estado == PERSONAJE_SELECCIONADO) {
+                    if(teclaPresionada == ENTER) {
+                        movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
+                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos())) {
+                            Estado = CURSOR_LIBRE;
+                            teclaPresionada = NULO;
+                            personajeSeleccionado = nullptr;
+                            return;
+                        }
+                        else {
+                            movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
+                            manager.resetCaminoIndice();
+                            Estado = ANIMACION_BLOQUEANTE;
+                            //  manager.mostrarpersonaje(*personajeSeleccionado, window);
+                            //moverPersonajeSeleccionado();
+                        }
+                    }
+                    else if(key->code == sf::Keyboard::Key::A) { mov++; }
+                    else if(key->code == sf::Keyboard::Key::S) { mov--; }
+                }
+                if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER) 
+                {
+                    personaje* P = GetPersonajeSeleccionado();
+                    if (P != nullptr && !P->yaActuo) 
+                    {
+                        personajeSeleccionado = P;
+                        Estado = PERSONAJE_SELECCIONADO;
+                        teclaPresionada = NULO;
+                        movimiento.calcularMovimiento(P->getPosx(), P->getPosy(), mov);
+                    }
+                    // Si se selecciona un personaje, el estado pasa a PersonajeSeleccionado.
+                }
+                if(Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
+                {
                     if(teclaPresionada == ARRIBA)
                     {  
                       if(cursor.getYPos() > 0)
@@ -104,33 +137,24 @@ void Juego::procesarEventos() {
                         cursor.mover(DERECHA);
                     }
 
-                if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER) {
-                    personaje* P = GetPersonajeSeleccionado();
-                    if (P != nullptr && !P->yaActuo) {
-                        personajeSeleccionado = P;
-                        Estado = PersonajeSeleccionado;
-                        movimiento.calcularMovimiento(P->getPosx(), P->getPosy(), mov);
+
+                    if(teclaPresionada == F && (!pers[manager.getactual()].getblockaccion()))
+                    {
+                      Estado=PREPARAR_ATAQUE;
                     }
-                    // Si se selecciona un personaje, el estado pasa a PersonajeSeleccionado.
                 }
-                else if ( Estado == PersonajeSeleccionado) {
-                    if(teclaPresionada == ENTER) {
-                      movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
-                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos())) {
-                            Estado = CURSOR_LIBRE;
-                            personajeSeleccionado = nullptr;
-                            return;
-                        }
-                        else {
-                            movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
-                            manager.resetCaminoIndice();
-                            Estado = ANIMACION_BLOQUEANTE;
-                            //  manager.mostrarpersonaje(*personajeSeleccionado, window);
-                            //moverPersonajeSeleccionado();
-                        }
+                else if(Estado == PREPARAR_ATAQUE)
+                {
+                    manager.cambiardireccion(pers, teclaPresionada);
+                    ataque.prepararataque(pers[manager.getactual()].getdireccion(),window,pers,manager);
+                    if((teclaPresionada == SPACE)&&(!pers[manager.getactual()].getblockaccion()))
+                    {
+                        Estado=CURSOR_LIBRE;
                     }
-                    else if(key->code == sf::Keyboard::Key::A) { mov++; }
-                    else if(key->code == sf::Keyboard::Key::S) { mov--; }
+                    if(teclaPresionada == F && (!pers[manager.getactual()].getblockaccion()))
+                    {
+                        Estado=CURSOR_LIBRE;
+                    }
                 }
                 teclaPresionada = NULO;
             }
@@ -142,15 +166,16 @@ void Juego::procesarEventos() {
 // ACTUALIZAR: Integraci�n total del Manager y Personajes.
 void Juego::actualizar() 
 {
+  cout << Estado << "\n";
   if (enMenu)
     return;
   if (Estado == CURSOR_LIBRE)
   {
-      // L�gica del manager que controla y cambia personajes (con SPACE)
-      cont--;
       manager.moverpersonaje(pers[manager.getactual()]);
       manager.cambiarpersonaje(pers[manager.getactual()]);
-      if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){Estado=PREPARAR_ATAQUE;cont=10;}
+  }
+  if(Estado==PREPARAR_ATAQUE)
+  {
   }
 
   manager.actualizarpersonaje(pers);
@@ -185,22 +210,12 @@ void Juego::renderizar()
     // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
     manager.actualizarpersonaje(pers);
     manager.mostrarpersonaje(pers, window);
-    if(Estado==PREPARAR_ATAQUE)
-    {
-      cont--;
-      manager.cambiardireccion(pers);
-      ataque.prepararataque(pers[manager.getactual()].getdireccion(),window,pers,manager);
-      if((teclaPresionada == SPACE)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0)))
-      {
-    Estado=CURSOR_LIBRE;cont=10;
-     }
-     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::F)&&(!pers[manager.getactual()].getblockaccion()&&(cont<0))){Estado=CURSOR_LIBRE;cont=20;}
-    }
-    rendUi.renderCursor(cursor, window);
-    if (Estado == PersonajeSeleccionado) 
+
+    if(Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
+      rendUi.renderCursor(cursor, window);
+    if (Estado == PERSONAJE_SELECCIONADO) 
     {
       rendUi.renderRangoMovimiento(movimiento.getValido(), window);
-      manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino());
     }
   }
     window.display();

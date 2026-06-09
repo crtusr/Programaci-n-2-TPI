@@ -2,6 +2,7 @@
 #include <iostream>
 #include <filesystem>
 #include "ataque.h"
+#include "constantes.h"
 
 using namespace std;
 using namespace sf;
@@ -15,21 +16,21 @@ void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,
 {
   int aux;
   switch(direccion){
-  case 1:
+  case ARRIBA:
     v_dirx[0]=0;
     v_diry[0]=-64;
     break;
-  case 2:
+  case DERECHA:
     v_dirx[0]=64;
     v_diry[0]=0;
     break;
 
-  case 3:
+  case ABAJO:
     v_dirx[0]=-64;
     v_diry[0]=0;
     break;
 
-  case 4:
+  case IZQUIERDA:
     v_dirx[0]=0;
     v_diry[0]=64;
     break;
@@ -53,7 +54,7 @@ void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,
   int aux;
   switch(direccion)
   {
-    case 1:
+    case ARRIBA:
       v_dirx[0]=-64;
       v_dirx[1]=0;
       v_dirx[2]=64;
@@ -62,7 +63,7 @@ void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,
       v_diry[1]=-64;
       v_diry[2]=-64;
       break;
-    case 2:
+    case DERECHA:
       v_dirx[0]=64;
       v_dirx[1]=64;
       v_dirx[2]=64;
@@ -71,7 +72,7 @@ void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,
       v_diry[1]=0;
       v_diry[2]=64;
       break;
-    case 3:
+    case IZQUIERDA:
       v_dirx[0]=-64;
       v_dirx[1]=-64;
       v_dirx[2]=-64;
@@ -80,7 +81,7 @@ void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,
       v_diry[1]=0;
       v_diry[2]=-64;
       break;
-    case 4:
+    case ABAJO:
       v_dirx[0]=-64;
       v_dirx[1]=0;
       v_dirx[2]=64;
