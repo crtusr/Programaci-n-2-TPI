@@ -335,7 +335,7 @@ void Juego::procesarEventos() {
             }
             personajeSeleccionado->setposx(x * 64);
             personajeSeleccionado->setposy(y * 64);
-            personajeSeleccionado->setsprite(1);
+            personajeSeleccionado->setsprite();
             personajeSeleccionado->setYaActuo(true);
             Estado = CURSOR_LIBRE;
             for (int i = 0; i < 5; i++)
@@ -352,6 +352,6 @@ void Juego::procesarEventos() {
 
     pers.push_back(nuevo);
 
-    manager.setcantidad(pers.size());   // ← CLAVE
+    manager.setcantidad(pers.size());   
 }
 

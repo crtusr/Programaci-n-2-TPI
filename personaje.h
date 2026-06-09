@@ -102,8 +102,7 @@ public:
     void setsubrectsprite(int x1,int y1,int x2,int y2);
     void setTipo(TIPO_PERSONAJE nuevoTipo); // Setter para el tipo de personaje
     void setYaActuo(bool valor); // Setter para el estado de acción del personaje
-    void setsprite(int tipo);
+    void setsprite();
     bool restarHp(int num);
 };
 #endif // PERSONAJE_H_INCLUDED
-

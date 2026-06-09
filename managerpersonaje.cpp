@@ -11,6 +11,7 @@ managerpersonaje::managerpersonaje()
 {
   cont = 0;
   actual = 0;
+  cantidad_pers = 0;
   caminoIndice = 0;
 }
 
@@ -274,10 +275,19 @@ void managerpersonaje::Asignarpersonajes(personaje& pers, TIPO_PERSONAJE tipo, i
     pers.setposy(py);
     pers.setposicionsprite(sf::Vector2f(px, py));
 
-    pers.setdireccion(ABAJO);   // fila válida del spritesheet
+    pers.setdireccion(ABAJO);
     pers.setaccion(0);
     pers.setframe(0);
 
-    pers.setsprite(1);           // aplica textura y rect inicial
+    pers.setsprite(); // inicializa sprite
+
+    // recorte inicial visible
+    pers.setsubrectsprite(
+        0,
+        0,
+        pers.getladocelda(),
+        pers.getladocelda()
+    );
 }
+
 
