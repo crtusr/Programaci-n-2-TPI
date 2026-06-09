@@ -259,8 +259,25 @@ int managerpersonaje::contarPersonajesActivos(vector<personaje>& pers)
 {
   int cuenta = 0;
 
-  for(int i = 0; i < pers.capacity(); i++)
+  for(int i = 0; i < pers.size(); i++)
     if(pers[i].getHp()) cuenta++;
 
   return cuenta;
 }
+
+void managerpersonaje::Asignarpersonajes(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
+{
+    int px = x * pers.getladocelda();
+    int py = y * pers.getladocelda();
+
+    pers.setposx(px);
+    pers.setposy(py);
+    pers.setposicionsprite(sf::Vector2f(px, py));
+
+    pers.setdireccion(ABAJO);   // fila válida del spritesheet
+    pers.setaccion(0);
+    pers.setframe(0);
+
+    pers.setsprite(1);           // aplica textura y rect inicial
+}
+

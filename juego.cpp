@@ -344,14 +344,14 @@ void Juego::procesarEventos() {
             personajeSeleccionado = nullptr;
         }
 
-        void Juego::agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y)
-        {
-            personaje nuevoPersonaje(&tablero, pers.size(), tipo);
-            nuevoPersonaje.setId(pers.size());
-            nuevoPersonaje.setTipo(tipo);
-            nuevoPersonaje.setposx(x * tablero.getTamCeldaPixeles());
-            nuevoPersonaje.setposy(y * tablero.getTamCeldaPixeles());
-            nuevoPersonaje.setsprite();
-            pers.push_back(nuevoPersonaje);
-            manager.Asignarpersonajes(pers.back());
-        }
+     void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y)
+{
+    personaje nuevo(&tablero, pers.size(), tipoPJ);
+
+    manager.Asignarpersonajes(nuevo, tipoPJ, x, y);
+
+    pers.push_back(nuevo);
+
+    manager.setcantidad(pers.size());   // ← CLAVE
+}
+

@@ -76,29 +76,28 @@ void personaje::setTipo(TIPO_PERSONAJE nuevoTipo) { tipoPJ = nuevoTipo; }
 /* ============================
         SPRITE
    ============================ */
+  void personaje::setsprite(int tipo){
+switch(tipo){
+case 1:
+    if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+    break;
+case 2:break;
+case 3:break;
+case 4:break;
+case 5:break;
+default:break;
 
-void personaje::setsprite(int tipo) {
-    switch (tipo) {
-        case 1:
-            if (!textura.loadFromFile("imagen/character-spritesheet.png")) {
-                cerr << "Error al cargar textura\n";
-            }
-            break;
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-        default:
-            break;
-    }
-
-    sprite.setTexture(textura);
-    sprite.setPosition(Vector2f(posx, posy));
-    sprite.setTextureRect(IntRect(
-        Vector2i(0, 0),
-        Vector2i(ladoCelda, ladoCelda)
-    ));
 }
+        sprite.setTexture(textura);
+        sprite.setPosition(sf::Vector2f(posx,posy));
+        sprite.setTextureRect(sf::IntRect(
+        sf::Vector2i(ladoCelda*0, ladoCelda*0),      // posición inicial dentro del spritesheet---Vector2i:pertenece a la libreria de SFLM y contiene 2 vectores
+        sf::Vector2i(ladoCelda, ladoCelda)         // tamaño del recorte
+    ));
+
+  }
 
 
 /* ============================

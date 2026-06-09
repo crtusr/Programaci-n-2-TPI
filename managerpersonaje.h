@@ -21,7 +21,7 @@ public:
   int moverpersonaje(personaje& pers, const int *dir);
   void moverpersonaje(personaje& pers);
   void mostrarpersonaje(vector<personaje>& pers,RenderWindow& window);
-  void Asignarpersonajes(personaje& pers); 
+  void Asignarpersonajes(personaje& pers, TIPO_PERSONAJE tipo, int x, int y);
   void secuencia(personaje& pers);
   void cambiarpersonaje(personaje& pers);
   void cambiardireccion(vector<personaje>& pers, int dir);
@@ -30,4 +30,5 @@ public:
   int contarPersonajesActivos(vector<personaje>& pers);
 
 };
+
 #endif // MANAGERPERSONAJE_H_INCLUDED

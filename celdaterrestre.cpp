@@ -20,3 +20,8 @@ CeldaTerrestre::~CeldaTerrestre()
 {
 
 }
+
+int CeldaTerrestre::getDefensa()
+{
+  return defensa;
+}

@@ -100,7 +100,6 @@ public:
     void sumarframe();
     void setposicionsprite(Vector2f pos);
     void setsubrectsprite(int x1,int y1,int x2,int y2);
-    void setsprite();
     void setTipo(TIPO_PERSONAJE nuevoTipo); // Setter para el tipo de personaje
     void setYaActuo(bool valor); // Setter para el estado de acción del personaje
     void setsprite(int tipo);
