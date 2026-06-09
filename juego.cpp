@@ -26,9 +26,15 @@ Juego::Juego() :
     cargarTexturasDeCeldas();
     cargarMapa("nivel1.txt");
 
-    for(int i = 0; i < 5; i++) {
-        manager.Asignarpersonajes(pers[i]);
-    }
+    //---declaro estos vectores pero se tendrian que obtener de puntos de repawn
+int tipo[10]={1,1,1,1,1,1,1,1,1,1}; //estos son los tipos de personaje que se asignaran
+int cantidaddepersonajes = 5;
+int posinicialx[10]={};             //estos vectores los tiene que proporcionar el inicio de mapa
+int posinicialy[10]={64*2,64*3,64*4,64*5,64*6};
+manager.setcantidad(cantidaddepersonajes);            //
+    for(int i = 0; i < cantidaddepersonajes; i++) {
+        manager.Asignarpersonajes(pers[i],tipo[i],posinicialx[i],posinicialy[i]);
+        }
     
     Estado = CURSOR_LIBRE;
 
@@ -302,7 +308,7 @@ void Juego::moverPersonajeSeleccionado()
   }
   personajeSeleccionado->setposx(x * 64);
   personajeSeleccionado->setposy(y * 64);
-  personajeSeleccionado->setsprite();
+  personajeSeleccionado->setsprite(1);
   personajeSeleccionado->yaActuo = true;
   Estado = CURSOR_LIBRE;
   for(int i = 0; i < 5; i++) 
