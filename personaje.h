@@ -94,7 +94,7 @@ public:
     void sumarframe();
     void setposicionsprite(Vector2f pos);
     void setsubrectsprite(int x1,int y1,int x2,int y2);
-    void setsprite();
+    void setsprite(int tipo);
     bool restarHp(int num);
 
 
