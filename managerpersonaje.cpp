@@ -237,7 +237,7 @@ for(i=0;i<cantidad_pers;i++){
   }
   return -1;
 }
-
+}
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
   int i;
