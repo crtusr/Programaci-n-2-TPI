@@ -157,15 +157,18 @@ void managerpersonaje::moverpersonaje(personaje& pers)
 
 }
 
-void managerpersonaje::Asignarpersonajes(personaje& pers)
+void managerpersonaje::Asignarpersonajes(personaje& pers,int tipo,int posinicialx,int posinicialy)
 {
-  pers.setsprite();
+  pers.setsprite(tipo);
+  pers.setposicionsprite((sf::Vector2f(posinicialx,posinicialy)));
+  pers.setposx(posinicialx);
+  pers.setposy(posinicialy);
 }
 
 
 void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
        int i;
-        for(i=0;i<5;i++)
+        for(i=0;i<cantidad_pers;i++)
         {
            window.draw(pers[i].getsprite());
         }
@@ -185,7 +188,7 @@ void managerpersonaje::cambiarpersonaje(personaje& pers)
    {
      cont++;
      actual++;
-     if(actual>=5)
+     if(actual>=cantidad_pers)
      {
        actual=0;
      }
@@ -211,11 +214,21 @@ int managerpersonaje::getactual()
   return actual;
 }
 
+  int managerpersonaje::getcantidad()
+  {
+  return cantidad_pers;
+  }
+
+
+  void managerpersonaje::setcantidad(int cantidad)
+  {
+  cantidad_pers=cantidad;
+  }
 
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
   int i;
-  for(i=0;i<5;i++)
+for(i=0;i<cantidad_pers;i++){
   {
     if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
     {
@@ -228,7 +241,7 @@ int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
   int i;
-  for(i = 0; i < 5; i++)
+  for(i=0;i<cantidad_pers;i++)
   {
     if(pers[i].getaccion()==0)
     {
