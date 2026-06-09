@@ -25,12 +25,12 @@ void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,
     v_diry[0]=0;
     break;
 
-  case ABAJO:
+  case IZQUIERDA:
     v_dirx[0]=-64;
     v_diry[0]=0;
     break;
 
-  case IZQUIERDA:
+     case ABAJO: 
     v_dirx[0]=0;
     v_diry[0]=64;
     break;
