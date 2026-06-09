@@ -227,16 +227,15 @@ int managerpersonaje::getactual()
 
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
-  int i;
+    int i;
 for(i=0;i<cantidad_pers;i++){
-  {
+
     if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
-    {
+        {
         return 1;
+        }
     }
-  }
   return -1;
-}
 }
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
