@@ -98,11 +98,12 @@ public:
     void setsumresposx(int px);
     void setsumresposy(int py);
     void sumarframe();
+    void setSprite(sf::Texture &tex);
     void setposicionsprite(Vector2f pos);
     void setsubrectsprite(int x1,int y1,int x2,int y2);
     void setTipo(TIPO_PERSONAJE nuevoTipo); // Setter para el tipo de personaje
     void setYaActuo(bool valor); // Setter para el estado de acción del personaje
-    void setsprite();
+    void setsprite(sf::Texture &tex);
     /*void setsprite(int tipo);*/
     bool restarHp(int num);
 };

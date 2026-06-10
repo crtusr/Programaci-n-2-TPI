@@ -45,7 +45,7 @@ private:
     int teclaPresionada;
     // Recursos
     sf::Texture texCelda[10];
-
+    sf::Texture texPers[10];
     // Variables de l�gica usando las clases de lucas.
     CursorJuego cursor;       // <-- Reemplaza a 'int x' e 'int y'
     Partida partida;     // <-- Gesti�n de turnos.

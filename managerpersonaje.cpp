@@ -279,7 +279,6 @@ void managerpersonaje::Asignarpersonajes(personaje& pers, TIPO_PERSONAJE tipo, i
     pers.setaccion(0);
     pers.setframe(0);
 
-    pers.setsprite(); // inicializa sprite
 
     // recorte inicial visible
     pers.setsubrectsprite(

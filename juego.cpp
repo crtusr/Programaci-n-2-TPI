@@ -17,6 +17,11 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
 {
     window.setFramerateLimit(60);
 
+    
+    if (!texPers[0].loadFromFile("imagen/character-spritesheet.png")) {
+        std::cerr << "Error al cargar textura\n";
+    }
+
     square.setSize(sf::Vector2f(64, 64));
     square.setFillColor(sf::Color(127, 127, 255, 127));
     teclaPresionada = 0;
@@ -28,6 +33,9 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
+
+    for(unsigned int i = 0; i < pers.size(); i++)
+      pers[i].setSprite(texPers[0]);
 
     Estado = CURSOR_LIBRE;
 
@@ -161,7 +169,6 @@ void Juego::procesarEventos() {
         // ACTUALIZAR: Integraci�n total del Manager y Personajes.
         void Juego::actualizar()
         {
-            cout << Estado << "\n";
             if (enMenu)
                 return;
             if (Estado == CURSOR_LIBRE)
@@ -335,12 +342,9 @@ void Juego::procesarEventos() {
             }
             personajeSeleccionado->setposx(x * 64);
             personajeSeleccionado->setposy(y * 64);
-            personajeSeleccionado->setsprite();
+            personajeSeleccionado->setsprite(texPers[0]);
             personajeSeleccionado->setYaActuo(true);
             Estado = CURSOR_LIBRE;
-            for (int i = 0; i < 5; i++)
-                cout << endl
-                     << pers[i].getPosxPxl() << " " << pers[i].getPosyPxl();
             personajeSeleccionado = nullptr;
         }
 

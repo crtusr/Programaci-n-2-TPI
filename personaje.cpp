@@ -35,6 +35,10 @@ bool personaje::getYaActuo() { return yaActuo; }
 TIPO_PERSONAJE personaje::getTipo() { return tipoPJ; }
 
 Sprite personaje::getsprite() { return sprite; }
+void personaje::setSprite(sf::Texture &tex)
+{
+  sprite.setTexture(tex);
+}
 
 Vector2f personaje::getPosicionF() { return Vector2f(posx, posy); }
 Vector2i personaje::getPosicionI() { return Vector2i(posx, posy); }
@@ -79,9 +83,9 @@ void personaje::setTipo(TIPO_PERSONAJE nuevoTipo) { tipoPJ = nuevoTipo; }
         SPRITE
    ============================ */
 
-void personaje::setsprite()
+void personaje::setsprite(sf::Texture &tex)
 {
-    sprite.setTexture(textura);
+    sprite.setTexture(tex);
     sprite.setTextureRect(sf::IntRect(
         sf::Vector2i(0, 0),
         sf::Vector2i(ladoCelda, ladoCelda)
