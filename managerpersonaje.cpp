@@ -11,6 +11,7 @@ managerpersonaje::managerpersonaje()
 {
   cont = 0;
   actual = 0;
+  cantidad_pers = 0;
   caminoIndice = 0;
 }
 
@@ -157,13 +158,7 @@ void managerpersonaje::moverpersonaje(personaje& pers)
 
 }
 
-void managerpersonaje::Asignarpersonajes(personaje& pers,int tipo,int posinicialx,int posinicialy)
-{
-  pers.setsprite(tipo);
-  pers.setposicionsprite((sf::Vector2f(posinicialx,posinicialy)));
-  pers.setposx(posinicialx);
-  pers.setposy(posinicialy);
-}
+
 
 
 void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
@@ -214,6 +209,11 @@ int managerpersonaje::getactual()
   return actual;
 }
 
+void managerpersonaje::setactual(int index)
+{
+    actual = index;
+}
+
   int managerpersonaje::getcantidad()
   {
   return cantidad_pers;
@@ -231,13 +231,12 @@ int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
   for(i=0;i<cantidad_pers;i++)
   {
     if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
-    {
+        {
         return 1;
+        }
     }
-  }
   return -1;
 }
-
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
   int i;
@@ -266,8 +265,33 @@ int managerpersonaje::contarPersonajesActivos(vector<personaje>& pers)
 {
   int cuenta = 0;
 
-  for(int i = 0; i < pers.capacity(); i++)
+  for(int i = 0; i < pers.size(); i++)
     if(pers[i].getHp()) cuenta++;
 
   return cuenta;
 }
+
+void managerpersonaje::Asignarpersonajes(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
+{
+    int px = x * pers.getladocelda();
+    int py = y * pers.getladocelda();
+
+    pers.setposx(px);
+    pers.setposy(py);
+    pers.setposicionsprite(sf::Vector2f(px, py));
+
+    pers.setdireccion(ABAJO);
+    pers.setaccion(0);
+    pers.setframe(0);
+
+
+    // recorte inicial visible
+    pers.setsubrectsprite(
+        0,
+        0,
+        pers.getladocelda(),
+        pers.getladocelda()
+    );
+}
+
+

@@ -16,16 +16,18 @@
 #include "partida.h"
 #include "proc_input.h"
 #include "ataque.h"
+
 class Juego {
 public:
     Juego();
     void ejecutar();
 
 private:
-    EstadoJuego Estado = CURSOR_LIBRE;
+    ESTADO_JUEGO Estado = CURSOR_LIBRE;
     personaje* personajeSeleccionado = nullptr;
 
     personaje* GetPersonajeSeleccionado();
+    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
     void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
     void resetearAccionesJugador();
@@ -40,11 +42,12 @@ private:
     // Atributos
     sf::RenderWindow window;
     Menu menuPrincipal;
+    Menu* menuAccion = nullptr;
     bool enMenu;
     int teclaPresionada;
     // Recursos
     sf::Texture texCelda[10];
-
+    sf::Texture texPers[10];
     // Variables de l�gica usando las clases de lucas.
     CursorJuego cursor;       // <-- Reemplaza a 'int x' e 'int y'
     Partida partida;     // <-- Gesti�n de turnos.
@@ -58,8 +61,8 @@ private:
     std::vector<personaje> pers;
     SisMov movimiento;
     ataque ataque;
-    int fase=5;//<-------por ajustar
-    int cont=0;//<-----posiblemente temporal
+    //int fase=5;//<-------por ajustar
+    //int cont=0;//<-----posiblemente temporal
 };
 
 #endif // JUEGO_H
