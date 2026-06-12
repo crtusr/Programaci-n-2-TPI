@@ -3,6 +3,7 @@
 #include "personaje.h"
 #include "managerpersonaje.h"
 #include <SFML/Graphics.hpp>
+#include <vector>
 using namespace std;
 using namespace sf;
 
@@ -11,9 +12,11 @@ private:
     int posx = 0;
     int posy = 0;
     int frame = 0;
-    int v_dirx[10] = {};
-    int v_diry[10] = {};
     int opc=1;
+    int impactos[6];
+    int cantidadimpactos;
+    int daniosimpactos[6];
+
 
     Sprite sprite;
     Sprite sprite2;
@@ -47,6 +50,10 @@ public:
 
     // Getters
     Sprite getsprite();
+
+    int* getimpactos();
+    int* getdaniosimpactos();
+    int getcantidadimpactos();
 
 void ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager);
 void ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager);
