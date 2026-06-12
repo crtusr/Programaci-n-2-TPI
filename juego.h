@@ -16,6 +16,7 @@
 #include "partida.h"
 #include "proc_input.h"
 #include "ataque.h"
+#include "texmanager.h"
 class Juego {
 public:
     Juego();
@@ -45,7 +46,7 @@ private:
     int teclaPresionada;
     // Recursos
     sf::Texture texCelda[10];
-    sf::Texture texPers[10];
+    //sf::Texture texPers[10];
     // Variables de l�gica usando las clases de lucas.
     CursorJuego cursor;       // <-- Reemplaza a 'int x' e 'int y'
     Partida partida;     // <-- Gesti�n de turnos.
@@ -53,6 +54,7 @@ private:
     sf::RectangleShape square;
     ProcInput procesar;
     // Sistemas del juego
+    TexManager texturas;
     Grilla tablero;
     RenderInterfazMapa rendUi;
     managerpersonaje manager;

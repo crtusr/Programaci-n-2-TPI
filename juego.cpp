@@ -11,6 +11,7 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
                  cursor(0, 0),
                  partida(0, 0),
                  mov(3),
+                 texturas("archivos.txt"),
                  tablero(64, 15, 10),
                  rendUi(&tablero),
                  movimiento(3, 3, &tablero)
@@ -18,10 +19,12 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     window.setFramerateLimit(60);
 
     
-    if (!texPers[0].loadFromFile("imagen/character-spritesheet.png")) {
+   /*
+    if (!texPers[0].loadFromFile("imagen/character-guerrero.png"))
+    {
         std::cerr << "Error al cargar textura\n";
     }
-
+*/
     square.setSize(sf::Vector2f(64, 64));
     square.setFillColor(sf::Color(127, 127, 255, 127));
     teclaPresionada = 0;
@@ -35,7 +38,7 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
 
     for(unsigned int i = 0; i < pers.size(); i++)
-      pers[i].setSprite(texPers[0]);
+      pers[i].setSprite(*texturas.getPersonaje(i % 4));
 
     Estado = CURSOR_LIBRE;
 
@@ -261,19 +264,19 @@ void Juego::procesarEventos() {
                 case '\r':
                     break;
                 case '0':
-                    tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, texCelda[DEFAULT]));
+                    tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(DEFAULT)));
                     i++;
                     break;
                 case 'P':
-                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, texCelda[PRADO]));
+                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, *texturas.getCelda(PRADO)));
                     i++;
                     break;
                 case 'B':
-                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, texCelda[BOSQUE]));
+                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, *texturas.getCelda(BOSQUE)));
                     i++;
                     break;
                 case 'M':
-                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, texCelda[MONTANIA]));
+                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, *texturas.getCelda(MONTANIA)));
                     i++;
                     break;
                 default:
@@ -286,7 +289,7 @@ void Juego::procesarEventos() {
 
         personaje *Juego::GetPersonajeSeleccionado()
         {
-            for (int i = 0; i < pers.size(); i++)
+            for (unsigned int i = 0; i < pers.size(); i++)
             {
                 if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos())
                 {
@@ -297,7 +300,7 @@ void Juego::procesarEventos() {
         }
         bool Juego::todasLasUnidadesActuaron()
         {
-            for (int i = 0; i < pers.size(); i++)
+            for (unsigned int i = 0; i < pers.size(); i++)
             {
                 if (!pers[i].getYaActuo())
                 {
@@ -309,7 +312,7 @@ void Juego::procesarEventos() {
 
         void Juego::resetearAccionesJugador()
         {
-            for (int i = 0; i < pers.size(); i++)
+            for (unsigned int i = 0; i < pers.size(); i++)
             {
                 pers[i].setYaActuo(false);
             }
@@ -342,7 +345,7 @@ void Juego::procesarEventos() {
             }
             personajeSeleccionado->setposx(x * 64);
             personajeSeleccionado->setposy(y * 64);
-            personajeSeleccionado->setsprite(texPers[0]);
+            personajeSeleccionado->setsprite(*texturas.getPersonaje(0));
             personajeSeleccionado->setYaActuo(true);
             Estado = CURSOR_LIBRE;
             personajeSeleccionado = nullptr;
