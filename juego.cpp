@@ -2,18 +2,19 @@
 #include "defaultcelda.h"
 #include "celdaterrestre.h"
 #include "proc_input.h"
+#include "utilidades.h"
 #include <cstdio>
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
 Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
-                 menuPrincipal(1024, 768),
-                 enMenu(true),
-                 cursor(0, 0),
-                 partida(0, 0),
-                 mov(3),
-                 tablero(64, 15, 10),
-                 rendUi(&tablero),
-                 movimiento(3, 3, &tablero)
+                menuPrincipal(1024, 768),
+                enMenu(true),
+                cursor(0, 0),
+                partida(0, 0),
+                mov(3),
+                tablero(64, 15, 10),
+                rendUi(&tablero),
+                movimiento(3, 3, &tablero)
 {
     window.setFramerateLimit(60);
 
@@ -33,6 +34,8 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
+    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 1, 3);
+    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 2, 3);
 
     for(unsigned int i = 0; i < pers.size(); i++)
       pers[i].setSprite(texPers[0]);
@@ -113,6 +116,18 @@ void Juego::procesarEventos() {
                     if (P != nullptr && !P->getYaActuo()) 
                     {
                         personajeSeleccionado = P;
+                        /***********************ES UN MENSAJE POR CONSOLA QUE ME DICE LA INFORMACION DEL PERSONAJE SELECCIONADO(agregen mas informacion si la necesitan)*************************/
+                        std::cout << "Seleccionaste personaje ID = " << P->getId()
+                        << " | Tipo = " << tipoToString(P->getTipo())
+                        << " | Pos(" << P->getPosx() << ", " << P->getPosy() << ")"
+                        << std::endl;
+                        /*************************************************************************************************************************************************************************/
+                        for(int i = 0; i <pers.size(); i++){
+                                if(&pers[i] == P){
+                                    manager.setActual(i);   // ← ACÁ SE SETEA EL ACTUAL
+                                    break;
+                                }
+                        }
                         Estado = PERSONAJE_SELECCIONADO;
                         teclaPresionada = NULO;
                         movimiento.calcularMovimiento(P->getPosx(), P->getPosy(), mov);
@@ -171,10 +186,14 @@ void Juego::procesarEventos() {
         {
             if (enMenu)
                 return;
+
+            
+
+
             if (Estado == CURSOR_LIBRE)
             {
-                manager.moverpersonaje(pers[manager.getactual()]);
-                manager.cambiarpersonaje(pers[manager.getactual()]);
+                //manager.moverpersonaje(pers[manager.getactual()]);
+                //manager.cambiarpersonaje(pers[manager.getactual()]);
             }
             if (Estado == PREPARAR_ATAQUE)
             {
@@ -212,6 +231,10 @@ void Juego::procesarEventos() {
                 // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
                 manager.actualizarpersonaje(pers);
                 manager.mostrarpersonaje(pers, window);
+
+                for (personaje& nose : persNJ)
+            window.draw(nose.getsprite());
+
                 if (Estado == PREPARAR_ATAQUE)
                 {
                     ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, manager);
@@ -348,7 +371,7 @@ void Juego::procesarEventos() {
             personajeSeleccionado = nullptr;
         }
 
-     void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y)
+    void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y)
 {
     personaje nuevo(&tablero, pers.size(), tipoPJ);
 
@@ -359,3 +382,12 @@ void Juego::procesarEventos() {
     manager.setcantidad(pers.size());   
 }
 
+    void Juego::agregarPersonajeNJ(TIPO_PERSONAJE tipoPJ, int x, int y)
+    {
+        personaje nuevo(&tablero, persNJ.size(), tipoPJ);
+        
+        ia.registrarPNJ(nuevo, tipoPJ, x, y);
+
+        persNJ.push_back(nuevo);
+        
+    };

@@ -61,13 +61,13 @@ public:
     ));
 
     }
-
+   
 
     // Getters
     int getHp();
     int getFuerza();
     int getDefensa();
-    int getMaxHp();
+    int getMaxHp(); 
     int getId(); // Getter para el identificador único
     TIPO_PERSONAJE getTipo(); // Getter para el tipo de personaje
     bool getYaActuo(); // Getter para el estado de acción del personaje

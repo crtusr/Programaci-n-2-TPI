@@ -45,6 +45,7 @@ enum class TIPO_PERSONAJE {
     NO_JUGADOR
 };
 
+
 const int profundidadMax = 16;
 
 #endif

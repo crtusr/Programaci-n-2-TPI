@@ -177,7 +177,7 @@ void managerpersonaje::secuencia(personaje& pers)
   //moverpersonaje(pers);
 }
 
-void managerpersonaje::cambiarpersonaje(personaje& pers)
+/*void managerpersonaje::cambiarpersonaje(personaje& pers)
 {
    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)&&(pers.getblockaccion()==false)&&(cont==0))
    {
@@ -190,7 +190,7 @@ void managerpersonaje::cambiarpersonaje(personaje& pers)
    }
    if(cont>0){cont++;}
    if(cont>10){cont=0;}
-}
+}*/
 
 void managerpersonaje::cambiardireccion(vector<personaje>& pers, int dir)
 {
@@ -207,6 +207,9 @@ void managerpersonaje::cambiardireccion(vector<personaje>& pers, int dir)
 int managerpersonaje::getactual()
 {
   return actual;
+}
+void managerpersonaje::setActual(int nuevoActual){
+  actual = nuevoActual;
 }
 
   int managerpersonaje::getcantidad()
@@ -288,5 +291,6 @@ void managerpersonaje::Asignarpersonajes(personaje& pers, TIPO_PERSONAJE tipo, i
         pers.getladocelda()
     );
 }
+
 
 

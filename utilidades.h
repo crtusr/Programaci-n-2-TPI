@@ -1,0 +1,9 @@
+#ifndef UTILIDADES_H
+#define UTILIDADES_H
+#include "constantes.h"
+
+#include <string>
+
+std::string tipoToString(TIPO_PERSONAJE t);
+
+#endif // UTILIDADES_H
