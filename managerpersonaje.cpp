@@ -198,15 +198,20 @@ void managerpersonaje::cambiardireccion(vector<personaje>& pers, int dir)
     pers[actual].setdireccion(ARRIBA);
   if(dir == ABAJO)
     pers[actual].setdireccion(ABAJO);
-  if(dir == IZQUIERDA) 
+  if(dir == IZQUIERDA)
     pers[actual].setdireccion(IZQUIERDA);
-  if(dir == DERECHA) 
+  if(dir == DERECHA)
     pers[actual].setdireccion(DERECHA);
 }
 
 int managerpersonaje::getactual()
 {
   return actual;
+}
+
+void managerpersonaje::setactual(int index)
+{
+    actual = index;
 }
 
   int managerpersonaje::getcantidad()
@@ -222,9 +227,9 @@ int managerpersonaje::getactual()
 
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
-    int i;
-for(i=0;i<cantidad_pers;i++){
-
+  int i;
+  for(i=0;i<cantidad_pers;i++)
+  {
     if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
         {
         return 1;

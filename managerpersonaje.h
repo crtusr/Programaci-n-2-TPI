@@ -16,6 +16,7 @@ public:
   managerpersonaje();
   void resetCaminoIndice();
   int getactual();
+  void setactual(int index);
   int getcantidad();
   void setcantidad(int cantidad);
   int moverpersonaje(personaje& pers, const int *dir);
@@ -25,8 +26,8 @@ public:
   void secuencia(personaje& pers);
   void cambiarpersonaje(personaje& pers);
   void cambiardireccion(vector<personaje>& pers, int dir);
-  int comprobarlugar(int x,int y,vector<personaje> pers); 
-  void actualizarpersonaje(vector<personaje>& pers); 
+  int comprobarlugar(int x,int y,vector<personaje> pers);
+  void actualizarpersonaje(vector<personaje>& pers);
   int contarPersonajesActivos(vector<personaje>& pers);
 
 };

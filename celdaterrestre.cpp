@@ -1,6 +1,6 @@
 #include "celdaterrestre.h"
 
-CeldaTerrestre::CeldaTerrestre(int x, int y, int costo, int def, sf::Texture &tex) : Celda(x, y, costo), sprite(tex) 
+CeldaTerrestre::CeldaTerrestre(int x, int y, int costo, int def, sf::Texture &tex) : Celda(x, y, costo), sprite(tex)
 {
   defensa = def;
   sprite.setTexture(tex); // lo que se dibuja por pantalla es el sprite, a los que le cargo las texturas
@@ -16,12 +16,18 @@ void CeldaTerrestre::render(sf::RenderWindow &window, int ladoCeldaEnPixeles)
   window.draw(sprite);
 }
 
+int CeldaTerrestre::getDefensa()
+{
+    return defensa;
+}
+
+sf::Sprite CeldaTerrestre::getSprite()
+{
+    return sprite;
+}
+
 CeldaTerrestre::~CeldaTerrestre()
 {
 
 }
 
-int CeldaTerrestre::getDefensa()
-{
-  return defensa;
-}
