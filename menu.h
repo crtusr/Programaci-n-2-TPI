@@ -3,11 +3,12 @@
 #include <SFML/Graphics.hpp>
 
 #include <vector>
+#include <string>
 
 class Menu {
 public:
     // El constructor recibe el tamaño de la ventana para centrar los textos
-    Menu(float width, float height);
+    Menu(float x, float y, std::vector<std::string> opciones);
     ~Menu();
 
     void draw(sf::RenderWindow &window);

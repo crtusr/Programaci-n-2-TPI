@@ -17,6 +17,7 @@
 #include "proc_input.h"
 #include "ataque.h"
 #include "ia.h"
+
 class Juego {
 public:
     Juego();
@@ -44,6 +45,7 @@ private:
     // Atributos
     sf::RenderWindow window;
     Menu menuPrincipal;
+    Menu* menuAccion = nullptr;
     bool enMenu;
     int teclaPresionada;
     // Recursos
