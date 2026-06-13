@@ -17,6 +17,7 @@
 #include "proc_input.h"
 #include "ataque.h"
 #include "texmanager.h"
+#include "animacion.h"
 
 class Juego {
 public:
@@ -63,8 +64,9 @@ private:
     std::vector<personaje> pers;
     SisMov movimiento;
     ataque ataque;
+    Animacion animacion;
     //int fase=5;//<-------por ajustar
-    //int cont=0;//<-----posiblemente temporal
+    int cont=0;//<-----posiblemente temporal
 };
 
 #endif // JUEGO_H
