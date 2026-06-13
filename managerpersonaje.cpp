@@ -232,7 +232,7 @@ for(i=0;i<cantidad_pers;i++){
 
     if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
         {
-        return pers[i].getid();
+        return pers[i].getId();
         }
     }
   return -1;
