@@ -166,11 +166,15 @@ void Juego::procesarEventos()
                 // Si se presiona ENTER (o SPACE) confirmamos el ataque
                 if(teclaPresionada == ENTER)
                 {
+                //aca asigna los lugares para la animacion de golpe
+              animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
+              Estado=ANIMACION_DAÑO;
+              cont=0;
                     // Aca podria ir el codigo para restar vida....
 
                     // El personaje atacó, su turno termina.
                     personajeSeleccionado->setYaActuo(true);
-                    Estado = CURSOR_LIBRE;
+                   // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
                     personajeSeleccionado = nullptr;
                 }
                 // Si se presiona RETROCESO o F, cancelamos y volvemos al mapa
@@ -382,7 +386,7 @@ void Juego::renderizar()
         if (Estado == PREPARAR_ATAQUE)
         {
             ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, manager);
-        }
+          }
 
         if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
             rendUi.renderCursor(cursor, window);
@@ -394,6 +398,11 @@ void Juego::renderizar()
         {
             menuAccion->draw(window);
         }
+    }
+          if(Estado==ANIMACION_DAÑO){
+     animacion.mostraranimacion(window);
+      cont++;
+      if(cont>80){Estado=CURSOR_LIBRE;cont=0;}
     }
     window.display();
 }
