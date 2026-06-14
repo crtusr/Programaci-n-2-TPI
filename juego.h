@@ -17,6 +17,8 @@
 #include "proc_input.h"
 #include "ataque.h"
 #include "ia.h"
+#include "texmanager.h"
+#include "animacion.h"
 
 class Juego {
 public:
@@ -58,6 +60,7 @@ private:
     sf::RectangleShape square;
     ProcInput procesar;
     // Sistemas del juego
+    TexManager texturas;
     Grilla tablero;
     RenderInterfazMapa rendUi;
     managerpersonaje manager;
@@ -66,8 +69,9 @@ private:
     std::vector<personaje> persNJ;
     SisMov movimiento;
     ataque ataque;
+    Animacion animacion;
     //int fase=5;//<-------por ajustar
-    //int cont=0;//<-----posiblemente temporal
+    int cont=0;//<-----posiblemente temporal
 };
 
 

@@ -225,12 +225,12 @@ void managerpersonaje::setActual(int nuevoActual){
 
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
-  int i;
-  for(i=0;i<cantidad_pers;i++)
-  {
+    int i;
+for(i=0;i<cantidad_pers;i++){
+
     if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
         {
-        return 1;
+        return pers[i].getId();
         }
     }
   return -1;

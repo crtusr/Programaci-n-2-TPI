@@ -1,0 +1,11 @@
+5
+4
+Tiles/defaulttile.bmp
+Tiles/prado.bmp
+Tiles/bosque.bmp
+Tiles/montania.bmp
+Tiles/mar.bmp
+imagen/character-guerrero.png
+imagen/character-arquero.png
+imagen/character-medico.png
+imagen/character-guardia_generico.png

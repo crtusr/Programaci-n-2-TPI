@@ -7,24 +7,19 @@
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
 Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
-      menuPrincipal(450, 250,
-                    {"Jugar", "Opciones", "Salir"
-                    }),
-      enMenu(true),
-      cursor(0, 0),
-      partida(0, 0),
-      mov(3),
-      tablero(64, 15, 10),
-      rendUi(&tablero),
-      movimiento(3, 3, &tablero)
+                 menuPrincipal(450, 250,
+                                {"Jugar", "Opciones", "Salir"}
+                              ),
+                 enMenu(true),
+                 cursor(0, 0),
+                 partida(0, 0),
+                 mov(3),
+                 texturas("archivos.txt"),
+                 tablero(64, 15, 10),
+                 rendUi(&tablero),
+                 movimiento(3, 3, &tablero)
 {
     window.setFramerateLimit(60);
-
-
-    if (!texPers[0].loadFromFile("imagen/character-spritesheet.png"))
-    {
-        std::cerr << "Error al cargar textura\n";
-    }
 
     square.setSize(sf::Vector2f(64, 64));
     square.setFillColor(sf::Color(127, 127, 255, 127));
@@ -41,7 +36,7 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 2, 3);
 
     for(unsigned int i = 0; i < pers.size(); i++)
-        pers[i].setSprite(texPers[0]);
+      pers[i].setSprite(*texturas.getPersonaje(i % 4));
 
     Estado = CURSOR_LIBRE;
 
@@ -185,13 +180,17 @@ void Juego::procesarEventos()
                 manager.cambiardireccion(pers, teclaPresionada);
 
                 // Si se presiona ENTER (o SPACE) confirmamos el ataque
-                if((teclaPresionada == ENTER))
+                if(teclaPresionada == ENTER)
                 {
+                //aca asigna los lugares para la animacion de golpe
+              animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
+              Estado=ANIMACION_DAÑO;
+              cont=0;
                     // Aca podria ir el codigo para restar vida....
 
                     // El personaje atacó, su turno termina.
                     personajeSeleccionado->setYaActuo(true);
-                    Estado = CURSOR_LIBRE;
+                   // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
                     personajeSeleccionado = nullptr;
                 }
                 // Si se presiona RETROCESO o F, cancelamos y volvemos al mapa
@@ -260,6 +259,7 @@ void Juego::actualizar()
     if (Estado == PREPARAR_ATAQUE)
     {
     }
+
 
     manager.actualizarpersonaje(pers);
     if (Estado == ANIMACION_BLOQUEANTE)
@@ -343,110 +343,101 @@ void Juego::actualizar()
             if (archMapa == nullptr)
                 return -1;
 
-            while (fread(&tipoCelda, 1, 1, archMapa) && (i < (tablero.getMaxX() * tablero.getMaxY())))
-            {
-                switch (tipoCelda)
-                {
-                case '\n':
-                case '\r':
-                    break;
-                case '0':
-                    tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, texCelda[DEFAULT]));
-                    i++;
-                    break;
-                case 'P':
-                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, texCelda[PRADO]));
-                    i++;
-                    break;
-                case 'B':
-                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, texCelda[BOSQUE]));
-                    i++;
-                    break;
-                case 'M':
-                    tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, texCelda[MONTANIA]));
-                    i++;
-                    break;
-                default:
-                    i++;
-                }
-            }
-            fclose(archMapa);
-            return 0;
-        }
-
-        personaje *Juego::GetPersonajeSeleccionado()
-        {
-            for (int i = 0; i < pers.size(); i++)
-            {
-                if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos())
-                {
-                    manager.setActual(i);
-                    return &pers[i];
-                }
-            }
-            return nullptr; // Placeholder para compilar
-        }
-        bool Juego::todasLasUnidadesActuaron()
-        {
-            for (int i = 0; i < pers.size(); i++)
-            {
-                if (!pers[i].getYaActuo())
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        void Juego::resetearAccionesJugador()
-        {
-            for (int i = 0; i < pers.size(); i++)
-            {
-                pers[i].setYaActuo(false);
-            }
-        }
-
-        void Juego::moverPersonajeSeleccionado()
-        {
-            if (personajeSeleccionado == nullptr)
-                return;
-            const int *camino = movimiento.getCamino();
-            int x = personajeSeleccionado->getPosx();
-            int y = personajeSeleccionado->getPosy();
-            for (int i = 0; i < profundidadMax && camino[i] != -1; i++)
-            {
-                switch (camino[i])
-                {
-                case ARRIBA:
-                    y -= 1;
-                    break;
-                case ABAJO:
-                    y += 1;
-                    break;
-                case IZQUIERDA:
-                    x -= 1;
-                    break;
-                case DERECHA:
-                    x += 1;
-                    break;
-                }
-            }
-            personajeSeleccionado->setposx(x * 64);
-            personajeSeleccionado->setposy(y * 64);
-            personajeSeleccionado->setsprite(texPers[0]);
-            personajeSeleccionado->setYaActuo(true);
-            Estado = CURSOR_LIBRE;
-            personajeSeleccionado->setYaActuo(true);
-            
-        
-    
-    if (todasLasUnidadesActuaron())
+    while (fread(&tipoCelda, 1, 1, archMapa) && (i < (tablero.getMaxX() * tablero.getMaxY())))
     {
-        partida.pasarTurno();
-        resetearAccionesJugador();
-    }
+        switch (tipoCelda)
+        {
+        case '\n':
+        case '\r':
+            break;
+        case '0':
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, texCelda[DEFAULT]));
+            i++;
+            break;
+        case 'P':
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, texCelda[PRADO]));
+            i++;
+            break;
+        case 'B':
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, texCelda[BOSQUE]));
+            i++;
+            break;
+        case 'M':
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, texCelda[MONTANIA]));
+            i++;
+            break;
+        default:
+            i++;
         }
+    }
+    fclose(archMapa);
+    return 0;
+}
 
+personaje *Juego::GetPersonajeSeleccionado()
+{
+    for (int i = 0; i < pers.size(); i++)
+    {
+        if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos())
+        {
+            manager.setActual(i);
+            return &pers[i];
+        }
+    }
+    return nullptr;
+}
+bool Juego::todasLasUnidadesActuaron()
+{
+    for (int i = 0; i < pers.size(); i++)
+    {
+        if (!pers[i].getYaActuo())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Juego::resetearAccionesJugador()
+{
+    for (int i = 0; i < pers.size(); i++)
+    {
+        pers[i].setYaActuo(false);
+    }
+}
+
+void Juego::moverPersonajeSeleccionado()
+{
+    if (personajeSeleccionado == nullptr)
+        return;
+    const int *camino = movimiento.getCamino();
+    int x = personajeSeleccionado->getPosx();
+    int y = personajeSeleccionado->getPosy();
+    for (int i = 0; i < profundidadMax && camino[i] != -1; i++)
+    {
+        switch (camino[i])
+        {
+        case ARRIBA:
+            y -= 1;
+            break;
+        case ABAJO:
+            y += 1;
+            break;
+        case IZQUIERDA:
+            x -= 1;
+            break;
+        case DERECHA:
+            x += 1;
+            break;
+        }
+    }
+    personajeSeleccionado->setposx(x * 64);
+    personajeSeleccionado->setposy(y * 64);
+    personajeSeleccionado->setsprite(texPers[0]);
+    personajeSeleccionado->setYaActuo(true);
+    Estado = CURSOR_LIBRE;
+    personajeSeleccionado = nullptr;
+}
 
 void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y)
 {
