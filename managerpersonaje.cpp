@@ -228,15 +228,28 @@ void managerpersonaje::setactual(int index)
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
     int i;
-for(i=0;i<cantidad_pers;i++){
+    for(i=0;i<cantidad_pers;i++){
 
-    if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
+        if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
         {
-        return pers[i].getId();
+            return pers[i].getId();
         }
     }
-  return -1;
+    return -1;
 }
+
+int managerpersonaje::comprobarLugarTablero(int x,int y,vector<personaje>& pers)
+{
+    for(unsigned int i = 0; i < pers.size(); i++)
+    {
+        if((pers[i].getPosx() == x) && (pers[i].getPosy() == y))
+        {
+            return pers[i].getId();
+        }
+    }
+    return -1;
+}
+
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
   int i;

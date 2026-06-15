@@ -16,14 +16,13 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
                  texturas("archivos.txt"),
                  tablero(64, 15, 10),
                  rendUi(&tablero),
-                 movimiento(3, 3, &tablero)
+                 movimiento(3, 3, &tablero, pers)
 {
     window.setFramerateLimit(60);
 
-    square.setSize(sf::Vector2f(64, 64));
-    square.setFillColor(sf::Color(127, 127, 255, 127));
+    Estado = CURSOR_LIBRE;
+    personajeSeleccionado = nullptr;
     teclaPresionada = 0;
-    cargarTexturasDeCeldas();
     cargarMapa("nivel1.txt");
 
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 1);
@@ -31,6 +30,8 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
+
+    movimiento.setEnemigos(pers);
 
     for(unsigned int i = 0; i < pers.size(); i++)
       pers[i].setSprite(*texturas.getPersonaje(i % 4));
@@ -92,7 +93,8 @@ void Juego::procesarEventos()
                     if(teclaPresionada == ENTER)
                     {
                         movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
-                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos()))
+                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos()) ||
+                            managerpersonaje::comprobarLugarTablero(cursor.getXPos(), cursor.getYPos(), pers) != -1)
                         {
                             Estado = CURSOR_LIBRE;
                             teclaPresionada = NULO;
@@ -107,14 +109,6 @@ void Juego::procesarEventos()
                             //  manager.mostrarpersonaje(*personajeSeleccionado, window);
                             //moverPersonajeSeleccionado();
                         }
-                    }
-                    else if(key->code == sf::Keyboard::Key::A)
-                    {
-                        mov++;
-                    }
-                    else if(key->code == sf::Keyboard::Key::S)
-                    {
-                        mov--;
                     }
                 }
                 if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
@@ -167,14 +161,14 @@ void Juego::procesarEventos()
                 if(teclaPresionada == ENTER)
                 {
                 //aca asigna los lugares para la animacion de golpe
-              animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
-              Estado=ANIMACION_DAÑO;
-              cont=0;
+                    animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
+                    Estado=ANIMACION_DAÑO;
+                    cont=0;
                     // Aca podria ir el codigo para restar vida....
 
                     // El personaje atacó, su turno termina.
                     personajeSeleccionado->setYaActuo(true);
-                   // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
+                    // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
                     personajeSeleccionado = nullptr;
                 }
                 // Si se presiona RETROCESO o F, cancelamos y volvemos al mapa
@@ -182,9 +176,9 @@ void Juego::procesarEventos()
                 {
                     // Validacion
                     if (personajeSeleccionado != nullptr)
-                {
-                    personajeSeleccionado->setYaActuo(true);
-                }
+                    {
+                        personajeSeleccionado->setYaActuo(true);
+                    }
                     // No gastamos el turno y volvemos al estado CURSOR_LIBRE.
                     Estado = CURSOR_LIBRE;
                     personajeSeleccionado = nullptr;
@@ -234,7 +228,7 @@ void Juego::actualizar()
 {
     if (enMenu)
         return;
-    if (Estado == CURSOR_LIBRE)
+    if(Estado == CURSOR_LIBRE)
     {
         /// Desactivo el sistema VIEJO.
         //manager.moverpersonaje(pers[manager.getactual()]);
@@ -245,54 +239,21 @@ void Juego::actualizar()
     }
 
     manager.actualizarpersonaje(pers);
-    if (Estado == ANIMACION_BLOQUEANTE)
+    if(Estado == ANIMACION_BLOQUEANTE)
     {
         if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
         {
-            if (enMenu)
-                return;
-            if (Estado == CURSOR_LIBRE)
-            {
-                manager.moverpersonaje(pers[manager.getactual()]);
-                manager.cambiarpersonaje(pers[manager.getactual()]);
-            }
-            if (Estado == PREPARAR_ATAQUE)
-            {
-            }
-
-            manager.actualizarpersonaje(pers);
-            if (Estado == ANIMACION_BLOQUEANTE)
-            {
-                if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
-                {
-                    Estado = CURSOR_LIBRE;
-                    personajeSeleccionado->setYaActuo(true);
-                }
-            }
-            if (todasLasUnidadesActuaron())
-            {
-                partida.pasarTurno();
-                resetearAccionesJugador();
-            }
+            Estado = CURSOR_LIBRE;
+            personajeSeleccionado->setYaActuo(true);
         }
+    }
+    if(todasLasUnidadesActuaron())
+    {
+        partida.pasarTurno();
+        resetearAccionesJugador();
     }
 }
         // FUNCIONES AUXILIARES
-int Juego::cargarTexturasDeCeldas()
-{
-    const char *nomArchivo[10] = {
-        "Tiles/defaulttile.bmp",
-        "Tiles/prado.bmp",
-        "Tiles/bosque.bmp",
-        "Tiles/montania.bmp",
-        "Tiles/mar.bmp"};
-    for (int i = 0; i < 5; i++)
-    {
-        if (!texCelda[i].loadFromFile(nomArchivo[i]))
-            return -1;
-    }
-    return 0;
-}
 
 int Juego::cargarMapa(const char *nomArch)
 {
@@ -399,8 +360,9 @@ void Juego::renderizar()
             menuAccion->draw(window);
         }
     }
-          if(Estado==ANIMACION_DAÑO){
-     animacion.mostraranimacion(window);
+    if(Estado==ANIMACION_DAÑO)
+    {
+      animacion.mostraranimacion(window);
       cont++;
       if(cont>80){Estado=CURSOR_LIBRE;cont=0;}
     }

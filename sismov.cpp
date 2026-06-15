@@ -3,9 +3,11 @@
 #include "constantes.h"
 #include <cstdlib>
 #include <iostream>
+#include "managerpersonaje.h"
 
-SisMov::SisMov(int x, int y, Grilla *g)
+SisMov::SisMov(int x, int y, Grilla *g, std::vector<personaje>& e) : enemigos(e)
 {
+  enemigos = e;
   xPos = x;
   yPos = y;
   grid = g;
@@ -19,6 +21,11 @@ void SisMov::setDestino(int x, int y)
   xPos = x;
   yPos = y;
   return;
+}
+
+void SisMov::setEnemigos(std::vector<personaje>& e)
+{
+  enemigos = e;
 }
 
 /*  Este metodo pone toda la grilla de booleanos en false como para poder usar
@@ -84,7 +91,6 @@ int SisMov::calcDistCamino(int low, int high)
 void SisMov::achicarCamino()
 {
   int i = 0, j = 0;
-  bool sePuedeRemover = true;
   while(i < profundidadMax && camino[i] != -1)
     i++;
   for(int diff = 1; diff < i; diff++)
@@ -128,27 +134,39 @@ bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
     camino[profundidad] = -1;
     if(y + 1 < bordeInferior && mov >= costoCeldaInferior)
     {
-      camino[profundidad] = ABAJO;
-      if(buscarCaminoPriv(x, y + 1, mov - costoCeldaInferior, profundidad + 1))
-        return true;
+      if(managerpersonaje::comprobarLugarTablero(x , y + 1, enemigos) == -1)
+      {
+        camino[profundidad] = ABAJO;
+        if(buscarCaminoPriv(x, y + 1, mov - costoCeldaInferior, profundidad + 1))
+          return true;
+      }
     }
     if(x - 1 >= 0 && mov >= costoCeldaIzquierda)
     {
-      camino[profundidad] = IZQUIERDA;
-      if(buscarCaminoPriv(x - 1 , y, mov - costoCeldaIzquierda, profundidad + 1))
-        return true;
+      if(managerpersonaje::comprobarLugarTablero(x - 1 , y, enemigos) == -1)
+      {
+        camino[profundidad] = IZQUIERDA;
+        if(buscarCaminoPriv(x - 1 , y, mov - costoCeldaIzquierda, profundidad + 1))
+          return true;
+      }
     }
     if(y - 1 >= 0 && mov >= costoCeldaSuperior)
     {
-      camino[profundidad] = ARRIBA;
-      if(buscarCaminoPriv(x, y - 1, mov - costoCeldaSuperior, profundidad + 1))
-        return true;
+      if(managerpersonaje::comprobarLugarTablero(x, y - 1, enemigos) == -1)
+      {
+        camino[profundidad] = ARRIBA;
+        if(buscarCaminoPriv(x, y - 1, mov - costoCeldaSuperior, profundidad + 1))
+          return true;
+      }
     }
     if(x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
     {
-      camino[profundidad] = DERECHA;
-      if(buscarCaminoPriv(x + 1, y, mov - costoCeldaDerecha, profundidad + 1))
-        return true;
+      if(managerpersonaje::comprobarLugarTablero(x + 1 , y, enemigos) == -1)
+      {
+        camino[profundidad] = DERECHA;
+        if(buscarCaminoPriv(x + 1, y, mov - costoCeldaDerecha, profundidad + 1))
+          return true;
+      }
     }
     camino[profundidad] = -1;
     return false;
@@ -185,18 +203,23 @@ void SisMov::movRango(int x, int y, int mov)
   int costoCeldaIzquierda = x-1 >= 0 ? grid->getCelda(x - 1 , y)->getCostoMov() : 255;
   int costoCeldaSuperior = y-1 >= 0 ? grid->getCelda(x, y - 1)->getCostoMov() : 255;
   int costoCeldaDerecha = x+1 < bordeDerecho ? grid->getCelda(x + 1, y)->getCostoMov() : 255;
+
   if(!valido[x + (y * bordeDerecho)])
   {
     valido[x + (y * bordeDerecho)] = true;
   }
   if(y + 1 < bordeInferior && mov >= costoCeldaInferior)
-    movRango(x, y + 1, mov - costoCeldaInferior);
+    if(managerpersonaje::comprobarLugarTablero(x , y + 1, enemigos) == -1)
+      movRango(x, y + 1, mov - costoCeldaInferior);
   if(x - 1 >= 0 && mov >= costoCeldaIzquierda)
-    movRango(x - 1 , y, mov - costoCeldaIzquierda);
+    if(managerpersonaje::comprobarLugarTablero(x - 1 , y, enemigos) == -1)
+      movRango(x - 1 , y, mov - costoCeldaIzquierda);
   if(y - 1 >= 0 && mov >= costoCeldaSuperior)
-    movRango(x, y - 1, mov - costoCeldaSuperior);
+    if(managerpersonaje::comprobarLugarTablero(x , y - 1, enemigos) == -1)
+      movRango(x, y - 1, mov - costoCeldaSuperior);
   if(x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
-    movRango(x + 1, y, mov - costoCeldaDerecha);
+    if(managerpersonaje::comprobarLugarTablero(x + 1 , y, enemigos) == -1)
+      movRango(x + 1, y, mov - costoCeldaDerecha);
 }
 
 void SisMov::calcularMovimiento(int x, int y, int mov)

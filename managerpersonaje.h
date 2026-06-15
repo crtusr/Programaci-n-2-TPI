@@ -29,6 +29,7 @@ public:
   int comprobarlugar(int x,int y,vector<personaje> pers);
   void actualizarpersonaje(vector<personaje>& pers);
   int contarPersonajesActivos(vector<personaje>& pers);
+  static int comprobarLugarTablero(int x,int y,vector<personaje> &pers);
 
 };
 

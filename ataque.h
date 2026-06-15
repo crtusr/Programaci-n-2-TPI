@@ -14,7 +14,7 @@ private:
     int frame = 0;
     int opc=1;
     int impactos[6];
-    int cantidadimpactos;
+    int cantidadimpactos = 0;
     int daniosimpactos[6];
 
 
@@ -29,6 +29,11 @@ public:
     {
         if (!textura.loadFromFile("imagen/Sprite-preparado1-Sheet.png")) {
             std::cerr << "Error al cargar textura\n";
+        }
+        for(int i = 0; i < 6; i++)
+        {
+          impactos[i] = 0;
+          daniosimpactos[i] = 0;
         }
         posx=0;
         posy=0;

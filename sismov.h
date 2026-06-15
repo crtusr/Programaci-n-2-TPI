@@ -17,6 +17,7 @@ class SisMov
       int bordeDerecho;
       int bordeInferior;
       Grilla *grid;
+      std::vector<personaje>& enemigos;
       bool *valido;
       int camino[16];
       void resetValido();
@@ -27,7 +28,8 @@ class SisMov
       int calcDistCamino(int low, int high);
       bool hayNumeroDistinto(int low, int high);
     public:
-      SisMov(int x, int y, Grilla *g);
+      SisMov(int x, int y, Grilla *g, std::vector<personaje>& e);
+      void setEnemigos(std::vector<personaje>& e);
       void setDestino(int x, int y);
       bool Alcanzable(int x, int y);
       void calcularCamino();

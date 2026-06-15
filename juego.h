@@ -25,8 +25,9 @@ public:
     void ejecutar();
 
 private:
-    ESTADO_JUEGO Estado = CURSOR_LIBRE;
-    personaje* personajeSeleccionado = nullptr;
+    ESTADO_JUEGO Estado;
+    personaje* personajeSeleccionado;
+    personaje* personajeTemporal;
 
     personaje* GetPersonajeSeleccionado();
     void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
@@ -39,7 +40,6 @@ private:
     void renderizar();
 
     int cargarMapa(const char* nomArch);
-    int cargarTexturasDeCeldas();
 
     // Atributos
     sf::RenderWindow window;
@@ -48,13 +48,11 @@ private:
     bool enMenu;
     int teclaPresionada;
     // Recursos
-    sf::Texture texCelda[10];
     //sf::Texture texPers[10];
     // Variables de l�gica usando las clases de lucas.
     CursorJuego cursor;       // <-- Reemplaza a 'int x' e 'int y'
     Partida partida;     // <-- Gesti�n de turnos.
     int mov;
-    sf::RectangleShape square;
     ProcInput procesar;
     // Sistemas del juego
     TexManager texturas;

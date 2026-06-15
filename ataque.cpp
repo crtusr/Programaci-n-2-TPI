@@ -22,39 +22,41 @@ void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,
   int v_diry[2];
   int aux;
   switch(direccion){
-  case ARRIBA:
-    v_dirx[0]=0;
-    v_diry[0]=-64;
-    break;
-  case DERECHA:
-    v_dirx[0]=64;
-    v_diry[0]=0;
-    break;
+    case ARRIBA:
+      v_dirx[0]=0;
+      v_diry[0]=-64;
+      break;
+    case DERECHA:
+      v_dirx[0]=64;
+      v_diry[0]=0;
+      break;
 
-  case IZQUIERDA:
-    v_dirx[0]=-64;
-    v_diry[0]=0;
-    break;
+    case IZQUIERDA:
+      v_dirx[0]=-64;
+      v_diry[0]=0;
+      break;
 
-     case ABAJO:
-    v_dirx[0]=0;
-    v_diry[0]=64;
-    break;
+    case ABAJO:
+      v_dirx[0]=0;
+      v_diry[0]=64;
+      break;
 
-  default:
-    break;
+    default:
+      break;
 
-}
- sprite.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0]));
+  }
+  sprite.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0]));
   sprite2.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0]));
   aux=manager.comprobarlugar(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0],pers);
   if(aux==-1)
     window.draw(sprite);
   if(aux>=0)
+  {
     window.draw(sprite2);
     impactos[cont]=aux;
     cont++;
     cantidadimpactos=cont;
+  }
 }
 
 void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager)
