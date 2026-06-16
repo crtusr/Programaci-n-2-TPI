@@ -2,6 +2,7 @@
 #include "defaultcelda.h"
 #include "celdaterrestre.h"
 #include "proc_input.h"
+#include "combate.h"
 #include <cstdio>
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
@@ -165,7 +166,17 @@ void Juego::procesarEventos()
                     Estado=ANIMACION_DAÑO;
                     cont=0;
                     // Aca podria ir el codigo para restar vida....
+                    //
+                    for(int i = 0; i < ataque.getcantidadimpactos(); i++)
+                    {
+                       Combate combate(&tablero, personajeSeleccionado, &pers[ataque.getimpactos()[i]]);
+                       combate.pelea();
+                       cout << "Atacante: " << personajeSeleccionado->getHp() << "/" << personajeSeleccionado->getMaxHp() << endl;
+                       cout << "Defendiente: " << pers[ataque.getimpactos()[i]].getHp() << "/" << pers[ataque.getimpactos()[i]].getMaxHp() << endl << endl;
+                    }
+                    
 
+                    
                     // El personaje atacó, su turno termina.
                     personajeSeleccionado->setYaActuo(true);
                     // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
@@ -412,4 +423,3 @@ void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y)
 
     manager.setcantidad(pers.size());
 }
-
