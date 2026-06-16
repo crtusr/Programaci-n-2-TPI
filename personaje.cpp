@@ -36,6 +36,7 @@ int personaje::getladocelda() { return ladoCelda; }
 bool personaje::getYaActuo() { return yaActuo; }
 TIPO_PERSONAJE personaje::getTipo() { return tipoPJ; }
 
+
 Sprite personaje::getsprite() { return sprite; }
 void personaje::setSprite(sf::Texture &tex)
 {

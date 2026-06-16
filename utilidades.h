@@ -5,5 +5,6 @@
 #include <string>
 
 std::string tipoToString(TIPO_PERSONAJE t);
+std::string ClaseToString(CLASE_PERSONAJE c);
 
 #endif // UTILIDADES_H

@@ -7,7 +7,7 @@
 using namespace std;
 using namespace sf;
 
-void Animacion::asignaranimacion(vector<personaje>& pers,int* impactos,int* v_danios,int cant){
+void Animacion::asignaranimacion(vector<personaje>& pers,int* impactos ,int* v_danios,int cant){
 int cont=0;
 
 for(int i=0; i<6; i++){

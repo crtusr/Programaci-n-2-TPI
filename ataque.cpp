@@ -48,13 +48,13 @@ void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,
  sprite.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0]));
   sprite2.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0]));
   aux=manager.comprobarlugar(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0],pers);
-  if(aux==-1)
-    window.draw(sprite);
-  if(aux>=0)
+  if(aux==-1){
+    window.draw(sprite);}
+  if(aux>=0){
     window.draw(sprite2);
     impactos[cont]=aux;
     cont++;
-    cantidadimpactos=cont;
+    cantidadimpactos=cont;}
 }
 
 void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager)

@@ -14,7 +14,7 @@ private:
     int frame = 0;
     int opc=1;
     int impactos[6];
-    int cantidadimpactos;
+    int cantidadimpactos = 0;
     int daniosimpactos[6];
 
 

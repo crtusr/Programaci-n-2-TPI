@@ -61,7 +61,7 @@ public:
     ));
 
     }
-   
+  
 
     // Getters
     int getHp();

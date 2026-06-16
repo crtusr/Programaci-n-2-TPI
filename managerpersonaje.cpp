@@ -177,7 +177,7 @@ void managerpersonaje::secuencia(personaje& pers)
   //moverpersonaje(pers);
 }
 
-/*void managerpersonaje::cambiarpersonaje(personaje& pers)
+void managerpersonaje::cambiarpersonaje(personaje& pers)
 {
    if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space)&&(pers.getblockaccion()==false)&&(cont==0))
    {
@@ -190,7 +190,7 @@ void managerpersonaje::secuencia(personaje& pers)
    }
    if(cont>0){cont++;}
    if(cont>10){cont=0;}
-}*/
+}
 
 void managerpersonaje::cambiardireccion(vector<personaje>& pers, int dir)
 {
@@ -253,7 +253,7 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       nDeColumnaSprite = (pers[i].getframe() / 32) % 2;
 
       pers[i].setsubrectsprite(ladoCelda * nDeColumnaSprite, ladoCelda * nDeFilaSprite,
-                               ladoCelda, ladoCelda);
+                              ladoCelda, ladoCelda);
       pers[i].sumarframe();
     }
   }

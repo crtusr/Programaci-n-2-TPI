@@ -19,6 +19,10 @@
 #include "ia.h"
 #include "texmanager.h"
 #include "animacion.h"
+#include "Arquero.h"
+#include "Guerrero.h"
+#include "Medico.h"
+
 
 class Juego {
 public:
@@ -31,7 +35,8 @@ private:
     
 
     personaje* GetPersonajeSeleccionado();
-    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
+    void SpawnPersonaje();
+    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y, CLASE_PERSONAJE clase);
     void agregarPersonajeNJ(TIPO_PERSONAJE tipo, int x, int y);
     void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
@@ -67,10 +72,10 @@ private:
     IA ia;
     std::vector<personaje> pers;
     std::vector<personaje> persNJ;
+
     SisMov movimiento;
     ataque ataque;
     Animacion animacion;
-    //int fase=5;//<-------por ajustar
     int cont=0;//<-----posiblemente temporal
 };
 

@@ -10,3 +10,14 @@ std::string tipoToString(TIPO_PERSONAJE t)
         default: return "DESCONOCIDO";
     }
 }
+
+std::string ClaseToString(CLASE_PERSONAJE c)
+{
+    switch (c)
+    {
+        case CLASE_PERSONAJE::CLASE_GUERRERO: return "GUERRERO";
+        case CLASE_PERSONAJE::CLASE_ARQUERO: return "ARQUERO";
+        case CLASE_PERSONAJE::CLASE_MEDICO: return "MEDICO";
+        default: return "DESCONOCIDO";
+    }
+}
