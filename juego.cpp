@@ -3,6 +3,7 @@
 #include "celdaterrestre.h"
 #include "proc_input.h"
 #include "utilidades.h"
+#include "combate.h"
 #include <cstdio>
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
@@ -16,20 +17,21 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
                  texturas("archivos.txt"),
                  tablero(64, 15, 10),
                  rendUi(&tablero),
-                 movimiento(3, 3, &tablero)
+                 movimiento(3, 3, &tablero, pers)
 {
     window.setFramerateLimit(60);
 
-    square.setSize(sf::Vector2f(64, 64));
-    square.setFillColor(sf::Color(127, 127, 255, 127));
+    Estado = CURSOR_LIBRE;
+    personajeSeleccionado = nullptr;
     teclaPresionada = 0;
-    cargarTexturasDeCeldas();
-    cargarMapa("nivel2.txt");
+    cargarMapa("nivel1.txt");
 
     SpawnPersonaje();
 
-    for (unsigned int i = 0; i < pers.size(); i++)
-        pers[i].setSprite(*texturas.getPersonaje(i % 4));
+    movimiento.setEnemigos(pers);
+
+    for(unsigned int i = 0; i < pers.size(); i++)
+      pers[i].setSprite(*texturas.getPersonaje(i % 4));
 
     Estado = CURSOR_LIBRE;
 
@@ -92,7 +94,8 @@ void Juego::procesarEventos()
                     if (teclaPresionada == ENTER)
                     {
                         movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
-                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos()))
+                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos()) ||
+                            managerpersonaje::comprobarLugarTablero(cursor.getXPos(), cursor.getYPos(), pers) != -1)
                         {
                             Estado = CURSOR_LIBRE;
                             teclaPresionada = NULO;
@@ -107,14 +110,6 @@ void Juego::procesarEventos()
                             //  manager.mostrarpersonaje(*personajeSeleccionado, window);
                             // moverPersonajeSeleccionado();
                         }
-                    }
-                    else if (key->code == sf::Keyboard::Key::A)
-                    {
-                        mov++;
-                    }
-                    else if (key->code == sf::Keyboard::Key::S)
-                    {
-                        mov--;
                     }
                 }
                 if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
@@ -184,13 +179,22 @@ void Juego::procesarEventos()
                 // Si se presiona ENTER (o SPACE) confirmamos el ataque
                 if (teclaPresionada == ENTER)
                 {
-                    // aca asigna los lugares para la animacion de golpe
-                    
-                    animacion.asignaranimacion(pers, ataque.getimpactos(), ataque.getdaniosimpactos(), ataque.getcantidadimpactos());
-                    Estado = ANIMACION_DAÑO;
-                    cont = 0;
+                //aca asigna los lugares para la animacion de golpe
+                    animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
+                    Estado=ANIMACION_DAÑO;
+                    cont=0;
                     // Aca podria ir el codigo para restar vida....
+                    //
+                    for(int i = 0; i < ataque.getcantidadimpactos(); i++)
+                    {
+                       Combate combate(&tablero, personajeSeleccionado, &pers[ataque.getimpactos()[i]]);
+                       combate.pelea();
+                       cout << "Atacante: " << personajeSeleccionado->getHp() << "/" << personajeSeleccionado->getMaxHp() << endl;
+                       cout << "Defendiente: " << pers[ataque.getimpactos()[i]].getHp() << "/" << pers[ataque.getimpactos()[i]].getMaxHp() << endl << endl;
+                    }
+                    
 
+                    
                     // El personaje atacó, su turno termina.
                     personajeSeleccionado->setYaActuo(true);
                     // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
@@ -255,7 +259,7 @@ void Juego::actualizar()
 {
     if (enMenu)
         return;
-    if (Estado == CURSOR_LIBRE)
+    if(Estado == CURSOR_LIBRE)
     {
         /// Desactivo el sistema VIEJO.
         //manager.moverpersonaje(pers[manager.getactual()]);
@@ -266,38 +270,21 @@ void Juego::actualizar()
     }
 
     manager.actualizarpersonaje(pers);
-    if (Estado == ANIMACION_BLOQUEANTE)
+    if(Estado == ANIMACION_BLOQUEANTE)
     {
         if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
         {
-            if (enMenu)
-                return;
-            if (Estado == CURSOR_LIBRE)
-            {
-                manager.moverpersonaje(pers[manager.getactual()]);
-                manager.cambiarpersonaje(pers[manager.getactual()]);
-            }
-            if (Estado == PREPARAR_ATAQUE)
-            {
-            }
-
-            manager.actualizarpersonaje(pers);
-            if (Estado == ANIMACION_BLOQUEANTE)
-            {
-                if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
-                {
-                    Estado = CURSOR_LIBRE;
-                    personajeSeleccionado->setYaActuo(true);
-                }
-            }
-            if (todasLasUnidadesActuaron())
-            {
-                partida.pasarTurno();
-                resetearAccionesJugador();
-            }
+            Estado = CURSOR_LIBRE;
+            personajeSeleccionado->setYaActuo(true);
         }
     }
+    if(todasLasUnidadesActuaron())
+    {
+        partida.pasarTurno();
+        resetearAccionesJugador();
+    }
 }
+        // FUNCIONES AUXILIARES
 
 int Juego::cargarMapa(const char *nomArch)
 {
@@ -316,19 +303,19 @@ int Juego::cargarMapa(const char *nomArch)
         case '\r':
             break;
         case '0':
-            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, texCelda[DEFAULT]));
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(DEFAULT)));
             i++;
             break;
         case 'P':
-            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, texCelda[PRADO]));
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, *texturas.getCelda(PRADO)));
             i++;
             break;
         case 'B':
-            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, texCelda[BOSQUE]));
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 2, 2, *texturas.getCelda(BOSQUE)));
             i++;
             break;
         case 'M':
-            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, texCelda[MONTANIA]));
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, *texturas.getCelda(MONTANIA)));
             i++;
             break;
         default:
@@ -407,27 +394,14 @@ void Juego::renderizar()
             menuAccion->draw(window);
         }
     }
+    if(Estado==ANIMACION_DAÑO)
+    {
+      animacion.mostraranimacion(window);
+      cont++;
+      if(cont>80){Estado=CURSOR_LIBRE;cont=0;}
+    }
     window.display();
 }
-
-// FUNCIONES AUXILIARES
-int Juego::cargarTexturasDeCeldas()
-{
-    const char *nomArchivo[10] = {
-        "Tiles/defaulttile.bmp",
-        "Tiles/prado.bmp",
-        "Tiles/bosque.bmp",
-        "Tiles/montania.bmp",
-        "Tiles/mar.bmp"};
-    for (int i = 0; i < 5; i++)
-    {
-        if (!texCelda[i].loadFromFile(nomArchivo[i]))
-            return -1;
-    }
-    return 0;
-}
-
-
 
 personaje *Juego::GetPersonajeSeleccionado()
 {

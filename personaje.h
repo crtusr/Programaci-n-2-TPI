@@ -40,10 +40,10 @@ public:
     personaje(Grilla *g, int idPersonaje, TIPO_PERSONAJE tipoPersonaje) : sprite(textura)
     {
     yaActuo = false;
-      fuerza = 0;
-      defensa = 0;
-      maxHp = 0;
-      hp = 0;
+      fuerza = 10;
+      defensa = 3;
+      maxHp = 30;
+      hp = 30;
       grilla = g;
       ladoCelda = g->getTamCeldaPixeles();
       id = idPersonaje;
