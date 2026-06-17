@@ -43,3 +43,13 @@ anim_frame++;
 
 }
 
+void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers){
+
+  for(int i=0;i<pers.size();i++){
+string salud = to_string(pers[i].getHpReal());
+text.setString(salud);
+text.setPosition(Vector2f(pers[i].getPosxPxl()+10,pers[i].getPosyPxl()-10));
+text.setFillColor(Color::Black);
+window.draw(text);
+  }
+}
