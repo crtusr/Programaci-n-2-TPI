@@ -7,6 +7,7 @@
 #include "grilla.h"
 #include "celda.h"
 #include "constantes.h"
+#include "claseTrabajo.h"
 using namespace std;
 using namespace sf;
 
@@ -32,7 +33,7 @@ private:
   int maxHp;
   Grilla *grilla;
   Sprite sprite;
-
+  claseTrabajo *trabajo;
   sf::Texture textura;
 
 public:
@@ -67,7 +68,15 @@ public:
     int getHp();
     int getFuerza();
     int getDefensa();
-    int getMaxHp(); 
+    int getMaxHp();
+    /* Usé real a falta de un mejor nombre, pero te devuelve el valor real,
+     * es decir, la suma entre la fuerza del trabajo y el bono natural del
+     * personaje
+     */
+    int getHpReal();
+    int getFuerzaReal();
+    int getDefensaReal();
+    int getMaxHpReal();
     int getId(); // Getter para el identificador único
     TIPO_PERSONAJE getTipo(); // Getter para el tipo de personaje
     bool getYaActuo(); // Getter para el estado de acción del personaje
@@ -88,6 +97,7 @@ public:
     void setFuerza(int f);
     void setDef(int def);
     void setMaxHp(int mH);
+    void setTrabajo(claseTrabajo *t);
     void setId(int nuevoId); // Setter para el identificador único
     void setaccion(int acc);
     void setdireccion(int drc);
@@ -106,5 +116,6 @@ public:
     void setsprite(sf::Texture &tex);
     /*void setsprite(int tipo);*/
     bool restarHp(int num);
+    void sumarHP(int num);
 };
 #endif // PERSONAJE_H_INCLUDED

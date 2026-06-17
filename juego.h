@@ -19,10 +19,7 @@
 #include "ia.h"
 #include "texmanager.h"
 #include "animacion.h"
-#include "Arquero.h"
-#include "Guerrero.h"
-#include "Medico.h"
-
+#include "adminclase.h"
 
 class Juego {
 public:
@@ -66,13 +63,13 @@ private:
     ProcInput procesar;
     // Sistemas del juego
     TexManager texturas;
+    AdminClase trabajos;
     Grilla tablero;
     RenderInterfazMapa rendUi;
     managerpersonaje manager;
     IA ia;
     std::vector<personaje> pers;
     std::vector<personaje> persNJ;
-
     SisMov movimiento;
     ataque ataque;
     Animacion animacion;

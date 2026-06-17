@@ -17,21 +17,27 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
                  texturas("archivos.txt"),
                  tablero(64, 15, 10),
                  rendUi(&tablero),
-                 movimiento(3, 3, &tablero, pers)
+                 movimiento(3, 3, &tablero, persNJ)
 {
-    window.setFramerateLimit(60);
 
+    window.setFramerateLimit(60);
     Estado = CURSOR_LIBRE;
     personajeSeleccionado = nullptr;
     teclaPresionada = 0;
     cargarMapa("nivel1.txt");
-
+    
     SpawnPersonaje();
+    
 
-    movimiento.setEnemigos(pers);
+    movimiento.setEnemigos(persNJ);
 
     for(unsigned int i = 0; i < pers.size(); i++)
-      pers[i].setSprite(*texturas.getPersonaje(i % 4));
+    {
+      pers[i].setSprite(*texturas.getPersonaje(i % 3));
+      pers[i].setTrabajo(trabajos.getClase(i % 3));
+      persNJ[i].setSprite(*texturas.getPersonaje(i % 3));
+      persNJ[i].setTrabajo(trabajos.getClase(i % 3));
+    }
 
     Estado = CURSOR_LIBRE;
 
