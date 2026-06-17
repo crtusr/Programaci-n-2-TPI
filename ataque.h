@@ -60,10 +60,10 @@ public:
     int* getdaniosimpactos();
     int getcantidadimpactos();
 
-void ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager);
-void ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager);
+void ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
+void ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void ataque3();
 void ataque4();
-void prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager);
+void prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 };
 #endif // ATAQUE_H_INCLUDED
