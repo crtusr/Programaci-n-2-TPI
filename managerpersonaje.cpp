@@ -163,7 +163,7 @@ void managerpersonaje::moverpersonaje(personaje& pers)
 
 void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
        int i;
-        for(i=0;i<cantidad_pers;i++)
+        for(i=0;i<pers.size();i++)
         {
            window.draw(pers[i].getsprite());
         }
@@ -226,7 +226,7 @@ void managerpersonaje::setActual(int nuevoActual){
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
     int i;
-    for(i=0;i<cantidad_pers;i++){
+    for(i=0;i<pers.size();i++){
 
         if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
         {
@@ -251,7 +251,7 @@ int managerpersonaje::comprobarLugarTablero(int x,int y,vector<personaje>& pers)
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
   int i;
-  for(i=0;i<cantidad_pers;i++)
+  for(i=0;i<pers.size();i++)
   {
     if(pers[i].getaccion()==0)
     {

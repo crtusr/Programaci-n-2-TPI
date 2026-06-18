@@ -186,7 +186,7 @@ void Juego::procesarEventos()
                 if (teclaPresionada == ENTER)
                 {
                 //aca asigna los lugares para la animacion de golpe
-                    animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
+                    animacion.asignaranimacion(persNJ,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos()); //<--esta funcion tiene que ajustarse dependiendo quien recive el golpe
                     Estado=ANIMACION_DAÑO;
                     cont=0;
                     // Aca podria ir el codigo para restar vida....
@@ -275,7 +275,8 @@ void Juego::actualizar()
     {
     }
 
-    manager.actualizarpersonaje(pers);
+    //  manager.actualizarpersonaje(pers);
+  //  manager.actualizarpersonaje(persNJ);
     if(Estado == ANIMACION_BLOQUEANTE)
     {
         if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
@@ -379,14 +380,17 @@ void Juego::renderizar()
 
         // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
         manager.actualizarpersonaje(pers);
+        manager.actualizarpersonaje(persNJ);
         manager.mostrarpersonaje(pers, window);
+        animacion.mostrarvida(window,pers);
+        animacion.mostrarvida(window,persNJ);
 
         for (personaje &nose : persNJ)
             window.draw(nose.getsprite());
 
         if (Estado == PREPARAR_ATAQUE)
         {
-            ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, manager);
+            ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, persNJ, manager);
         }
 
         if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)

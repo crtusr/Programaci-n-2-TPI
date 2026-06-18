@@ -16,11 +16,17 @@ int v_posy[6];
 int danios[6];
 Sprite sprite;
 Texture textura;
+Font font;
+Text text;
+
 public:
-        Animacion() : sprite(textura)
+        Animacion() : sprite(textura),text(font," ",20)
     {
         if (!textura.loadFromFile("imagen/Sprite-000_gplpe1.png")) {
             std::cerr << "Error al cargar textura\n";
+        }
+            if (!font.openFromFile("assets/Roboto-VariableFont_wdth,wght.ttf")) {
+            std::cerr << "Error al cargar fuente\n";
         }
     sprite.setTexture(textura);
     sprite.setPosition(sf::Vector2f(0,0));
@@ -31,7 +37,7 @@ public:
     }
 void asignaranimacion(vector<personaje>& pers,int* impactos,int* v_danios,int cant);
 void mostraranimacion(RenderWindow& window);
-
+void mostrarvida(RenderWindow& window,vector<personaje>& pers);
 };
 
 #endif // ANIMACION_H_INCLUDED;
