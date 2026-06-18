@@ -4,6 +4,7 @@
 #include "proc_input.h"
 #include "utilidades.h"
 #include "combate.h"
+#include "adminarchivo.h"
 #include <cstdio>
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
@@ -31,13 +32,6 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
 
     movimiento.setEnemigos(persNJ);
 
-    for(unsigned int i = 0; i < pers.size(); i++)
-    {
-      pers[i].setSprite(*texturas.getPersonaje(i % 3));
-      pers[i].setTrabajo(trabajos.getClase(i % 3));
-      persNJ[i].setSprite(*texturas.getPersonaje(i % 3));
-      persNJ[i].setTrabajo(trabajos.getClase(i % 3));
-    }
 
     Estado = CURSOR_LIBRE;
 
@@ -129,9 +123,9 @@ void Juego::procesarEventos()
                                   << " | Tipo = " << tipoToString(P->getTipo())
                                   << " | Pos(" << P->getPosx() << ", " << P->getPosy() << ")"
                                   << " |TURNO(" << partida.getTurno() << "," << partida.getRonda() << ")"
-                                  << " |Hp = " << P->getMaxHp() << "/" << P ->getHp() 
-                                  << " |Fr = " << P->getFuerza()
-                                  << " |Def = " << P->getDefensa() << "."
+                                  << " |Hp = " << P->getMaxHpReal() << "/" << P ->getHpReal() 
+                                  << " |Fr = " << P->getFuerzaReal()
+                                  << " |Def = " << P->getDefensaReal() << "."
                                   << std::endl;
                         /*************************************************************************************************************************************************************************/
                         /*for(int i = 0; i <pers.size(); i++){
@@ -195,8 +189,8 @@ void Juego::procesarEventos()
                     {
                        Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
                        combate.pelea();
-                       cout << "Atacante: " << personajeSeleccionado->getHp() << "/" << personajeSeleccionado->getMaxHp() << endl;
-                       cout << "Defendiente: " << persNJ[ataque.getimpactos()[i]].getHp() << "/" << persNJ[ataque.getimpactos()[i]].getMaxHp() << endl << endl;
+                       cout << "Atacante: " << personajeSeleccionado->getHpReal() << "/" << personajeSeleccionado->getMaxHpReal() << endl;
+                       cout << "Defendiente: " << persNJ[ataque.getimpactos()[i]].getHpReal() << "/" << persNJ[ataque.getimpactos()[i]].getMaxHpReal() << endl << endl;
                     }
                     
 
@@ -492,6 +486,71 @@ void Juego::agregarPersonajeNJ(TIPO_PERSONAJE tipoPJ, int x, int y)
 };
 
 void Juego::SpawnPersonaje(){
+    AdminArchivo personajes("personajes1.txt");
+    int x, y, trabajo, maxHp, fuerza, defensa;
+    const char separador = ';';
+    personajes.abrir();
+    int cantPJ = personajes.leerNumero();
+    for(int i = 0; i < cantPJ; i++)
+    {
+      personajes.avanzarHastaChar(separador);
+      x = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+      y = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			trabajo = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			maxHp = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			fuerza = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			defensa = personajes.leerNumero();
+
+      agregarPersonaje(TIPO_PERSONAJE::JUGADOR, x, y, (CLASE_PERSONAJE) trabajo);
+      pers[i].setTrabajo(trabajos.getClase(trabajo));
+      pers[i].setSprite(*texturas.getPersonaje(trabajo));
+      pers[i].setMaxHp(maxHp);
+      pers[i].setHp(maxHp);
+      pers[i].setFuerza(fuerza);
+      pers[i].setDef(defensa);
+    }
+
+    int cantPNJ = personajes.leerNumero();
+
+    for(int i = 0; i < cantPNJ; i++)
+    {
+      personajes.avanzarHastaChar(separador);
+      x = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+      y = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			trabajo = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			maxHp = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			fuerza = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			defensa = personajes.leerNumero();
+
+      agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, x, y);
+      persNJ[i].setTrabajo(trabajos.getClase(trabajo));
+      persNJ[i].setSprite(*texturas.getPersonaje(trabajo));
+      persNJ[i].setMaxHp(maxHp);
+      persNJ[i].setHp(maxHp);
+      persNJ[i].setFuerza(fuerza);
+      persNJ[i].setDef(defensa);
+    }
+    /*
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 1, CLASE_GUERRERO);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 2, 1, CLASE_ARQUERO);
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1, CLASE_MEDICO);
@@ -502,4 +561,6 @@ void Juego::SpawnPersonaje(){
     agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 3, 3);
     agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 4, 3);
     agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 5, 3);
+    */
+    personajes.cerrar();
 }

@@ -25,7 +25,7 @@ private:
   int ladoCelda;
   /*
    *  una forma sería definir que una unidad activa
-   *  es aquella que tiene un hp mayor a 0
+   *  es aquella que tiene un hpReal mayor a 0
    */
   int hp;
   int fuerza;
