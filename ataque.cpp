@@ -18,6 +18,7 @@ Sprite ataque::getsprite()
 void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {
   int cont=0;
+  cantidadimpactos=0;
   int v_dirx[2];
   int v_diry[2];
   int aux;
@@ -62,6 +63,7 @@ void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_
 void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {
   int cont=0;
+  cantidadimpactos=0;
   int aux;
   int v_dirx[3];
   int v_diry[3];
