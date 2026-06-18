@@ -19,13 +19,13 @@ void Combate::pelea()
   */
   float porcBloqDef;
   
-  danioAtac = atacante->getFuerza() - defendiente->getDefensa() - celdaDef->getDefensa();
+  danioAtac = atacante->getFuerzaReal() - defendiente->getDefensaReal() - celdaDef->getDefensa();
   /*
     danioDef = defendiente->getFuerza() - atacante->getDefensa() - celdaAtac->getDefensa();
 
     porcBloqAtac = atacante->getDefensa() * 5 + celdaAtac->getDefensa() * 10;
   */
-  porcBloqDef = defendiente->getDefensa() * 5 + celdaDef->getDefensa() * 10;
+  porcBloqDef = defendiente->getDefensaReal() * 5 + celdaDef->getDefensa() * 10;
 
   if(rand() % 100 >= porcBloqDef)
   {
