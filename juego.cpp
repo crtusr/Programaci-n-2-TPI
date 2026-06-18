@@ -193,10 +193,10 @@ void Juego::procesarEventos()
                     //
                     for(int i = 0; i < ataque.getcantidadimpactos(); i++)
                     {
-                       Combate combate(&tablero, personajeSeleccionado, &pers[ataque.getimpactos()[i]]);
+                       Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
                        combate.pelea();
                        cout << "Atacante: " << personajeSeleccionado->getHp() << "/" << personajeSeleccionado->getMaxHp() << endl;
-                       cout << "Defendiente: " << pers[ataque.getimpactos()[i]].getHp() << "/" << pers[ataque.getimpactos()[i]].getMaxHp() << endl << endl;
+                       cout << "Defendiente: " << persNJ[ataque.getimpactos()[i]].getHp() << "/" << persNJ[ataque.getimpactos()[i]].getMaxHp() << endl << endl;
                     }
                     
 
