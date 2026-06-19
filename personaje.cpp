@@ -43,6 +43,10 @@ int personaje::getMaxHpReal()
 {
   return maxHp + trabajo->getMaxHp();
 }
+int personaje::getMovReal()
+{
+  return mov + trabajo->getMov();
+}
 
 
 int personaje::getdireccion() { return direccion; }

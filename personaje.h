@@ -31,6 +31,7 @@ private:
   int fuerza;
   int defensa;
   int maxHp;
+  int mov;
   Grilla *grilla;
   Sprite sprite;
   claseTrabajo *trabajo;
@@ -41,10 +42,11 @@ public:
     personaje(Grilla *g, int idPersonaje, TIPO_PERSONAJE tipoPersonaje) : sprite(textura)
     {
     yaActuo = false;
-      fuerza = 10;
-      defensa = 3;
-      maxHp = 30;
-      hp = 30;
+      fuerza = 0;
+      defensa = 0;
+      maxHp = 0;
+      hp = 0;
+      mov = 0;
       grilla = g;
       ladoCelda = g->getTamCeldaPixeles();
       id = idPersonaje;
@@ -69,6 +71,7 @@ public:
     int getFuerza();
     int getDefensa();
     int getMaxHp();
+    int getMov();
     /* Usé real a falta de un mejor nombre, pero te devuelve el valor real,
      * es decir, la suma entre la fuerza del trabajo y el bono natural del
      * personaje
@@ -77,6 +80,7 @@ public:
     int getFuerzaReal();
     int getDefensaReal();
     int getMaxHpReal();
+    int getMovReal();
     int getId(); // Getter para el identificador único
     TIPO_PERSONAJE getTipo(); // Getter para el tipo de personaje
     bool getYaActuo(); // Getter para el estado de acción del personaje

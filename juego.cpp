@@ -14,7 +14,6 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
                  enMenu(true),
                  cursor(0, 0),
                  partida(0, 0),
-                 mov(3),
                  texturas("archivos.txt"),
                  tablero(64, 15, 10),
                  rendUi(&tablero),
@@ -104,7 +103,7 @@ void Juego::procesarEventos()
                         }
                         else
                         {
-                            movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
+                            movimiento.buscarCamino(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), personajeSeleccionado->getMovReal());
                             manager.resetCaminoIndice();
                             Estado = ANIMACION_BLOQUEANTE;
                             //  manager.mostrarpersonaje(*personajeSeleccionado, window);
@@ -226,7 +225,7 @@ void Juego::procesarEventos()
                     if (opcion == 0) // Mover
                     {
                         Estado = PERSONAJE_SELECCIONADO;
-                        movimiento.calcularMovimiento(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
+                        movimiento.calcularMovimiento(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), personajeSeleccionado->getMovReal());
                     }
                     else if (opcion == 1) // Atacar
                     {

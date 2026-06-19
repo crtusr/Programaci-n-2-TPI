@@ -10,6 +10,7 @@ public:
         defensa = 8;
         maxHp = 40;
         hp = 40;
+        mov = 3;
     }
 };
 

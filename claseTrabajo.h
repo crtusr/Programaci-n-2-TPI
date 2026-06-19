@@ -7,6 +7,7 @@ protected:
     int maxHp;
     int fuerza;
     int defensa;
+    int mov;
 
 public:
     claseTrabajo();
@@ -15,6 +16,7 @@ public:
     int getMaxHp(); 
     int getFuerza();
     int getDefensa(); 
+    int getMov();
 };
 
 #endif
