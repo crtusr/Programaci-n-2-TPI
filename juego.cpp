@@ -6,17 +6,18 @@
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
 Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
-                 menuPrincipal(450, 250,
-                                {"Jugar", "Opciones", "Salir"}
-                              ),
-                 enMenu(true),
-                 cursor(0, 0),
-                 partida(0, 0),
-                 mov(3),
-                 texturas("archivos.txt"),
-                 tablero(64, 15, 10),
-                 rendUi(&tablero),
-                 movimiento(3, 3, &tablero)
+      menuPrincipal(450, 250,
+                    {"Jugar", "Opciones", "Salir"
+                    }
+                   ),
+      enMenu(true),
+      cursor(0, 0),
+      partida(0, 0),
+      mov(3),
+      texturas("archivos.txt"),
+      tablero(64, 15, 10),
+      rendUi(&tablero),
+      movimiento(3, 3, &tablero)
 {
     window.setFramerateLimit(60);
 
@@ -33,7 +34,7 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
 
     for(unsigned int i = 0; i < pers.size(); i++)
-      pers[i].setSprite(*texturas.getPersonaje(i % 4));
+        pers[i].setSprite(*texturas.getPersonaje(i % 4));
 
     Estado = CURSOR_LIBRE;
 
@@ -166,15 +167,15 @@ void Juego::procesarEventos()
                 // Si se presiona ENTER (o SPACE) confirmamos el ataque
                 if(teclaPresionada == ENTER)
                 {
-                //aca asigna los lugares para la animacion de golpe
-              animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
-              Estado=ANIMACION_DAÑO;
-              cont=0;
+                    //aca asigna los lugares para la animacion de golpe
+                    animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
+                    Estado=ANIMACION_DAÑO;
+                    cont=0;
                     // Aca podria ir el codigo para restar vida....
 
                     // El personaje atacó, su turno termina.
                     personajeSeleccionado->setYaActuo(true);
-                   // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
+                    // Estado = CURSOR_LIBRE; <----ahora pasa a un estado distinto
                     personajeSeleccionado = nullptr;
                 }
                 // Si se presiona RETROCESO o F, cancelamos y volvemos al mapa
@@ -182,9 +183,9 @@ void Juego::procesarEventos()
                 {
                     // Validacion
                     if (personajeSeleccionado != nullptr)
-                {
-                    personajeSeleccionado->setYaActuo(true);
-                }
+                    {
+                        personajeSeleccionado->setYaActuo(true);
+                    }
                     // No gastamos el turno y volvemos al estado CURSOR_LIBRE.
                     Estado = CURSOR_LIBRE;
                     personajeSeleccionado = nullptr;
@@ -277,15 +278,17 @@ void Juego::actualizar()
         }
     }
 }
-        // FUNCIONES AUXILIARES
+// FUNCIONES AUXILIARES
 int Juego::cargarTexturasDeCeldas()
 {
-    const char *nomArchivo[10] = {
+    const char *nomArchivo[10] =
+    {
         "Tiles/defaulttile.bmp",
         "Tiles/prado.bmp",
         "Tiles/bosque.bmp",
         "Tiles/montania.bmp",
-        "Tiles/mar.bmp"};
+        "Tiles/mar.bmp"
+    };
     for (int i = 0; i < 5; i++)
     {
         if (!texCelda[i].loadFromFile(nomArchivo[i]))
@@ -386,7 +389,7 @@ void Juego::renderizar()
         if (Estado == PREPARAR_ATAQUE)
         {
             ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, manager);
-          }
+        }
 
         if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
             rendUi.renderCursor(cursor, window);
@@ -399,10 +402,15 @@ void Juego::renderizar()
             menuAccion->draw(window);
         }
     }
-          if(Estado==ANIMACION_DAÑO){
-     animacion.mostraranimacion(window);
-      cont++;
-      if(cont>80){Estado=CURSOR_LIBRE;cont=0;}
+    if(Estado==ANIMACION_DAÑO)
+    {
+        animacion.mostraranimacion(window);
+        cont++;
+        if(cont>80)
+        {
+            Estado=CURSOR_LIBRE;
+            cont=0;
+        }
     }
     window.display();
 }
