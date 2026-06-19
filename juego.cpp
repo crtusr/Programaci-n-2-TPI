@@ -409,7 +409,7 @@ void Juego::renderizar()
 
 personaje *Juego::GetPersonajeSeleccionado()
 {
-    for (int i = 0; i < pers.size(); i++)
+    for (unsigned int i = 0; i < pers.size(); i++)
     {
         if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos())
         {
@@ -441,34 +441,9 @@ void Juego::resetearAccionesJugador()
 
 
 
-void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y, CLASE_PERSONAJE clase)
+void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y)
 {
  personaje nuevo(&tablero, pers.size(), tipoPJ);
-
-    claseTrabajo* stats = nullptr;
-
-    switch (clase)
-    {
-        case CLASE_GUERRERO:
-            stats = new Guerrero();
-            break;
-
-        case CLASE_ARQUERO:
-            stats = new Arquero();
-            break;
-
-        case CLASE_MEDICO:
-            stats = new Medico();
-            break;
-    }
-
-    // Copiar estadísticas al personaje
-    nuevo.setFuerza(stats->getFuerza());
-    nuevo.setDef(stats->getDefensa());
-    nuevo.setMaxHp(stats->getMaxHp());
-    nuevo.setHp(stats->getHp());
-
-    delete stats;
 
     manager.Asignarpersonajes(nuevo, tipoPJ, x, y);
 
@@ -511,7 +486,7 @@ void Juego::SpawnPersonaje(){
       personajes.avanzarHastaChar(separador);
 			defensa = personajes.leerNumero();
 
-      agregarPersonaje(TIPO_PERSONAJE::JUGADOR, x, y, (CLASE_PERSONAJE) trabajo);
+      agregarPersonaje(TIPO_PERSONAJE::JUGADOR, x, y);
       pers[i].setTrabajo(trabajos.getClase(trabajo));
       pers[i].setSprite(*texturas.getPersonaje(trabajo));
       pers[i].setMaxHp(maxHp);

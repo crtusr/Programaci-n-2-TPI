@@ -34,7 +34,7 @@ private:
 
     personaje* GetPersonajeSeleccionado();
     void SpawnPersonaje();
-    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y, CLASE_PERSONAJE clase);
+    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
     void agregarPersonajeNJ(TIPO_PERSONAJE tipo, int x, int y);
     void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
