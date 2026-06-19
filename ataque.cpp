@@ -15,51 +15,55 @@ Sprite ataque::getsprite()
     int* ataque::getdaniosimpactos(){return daniosimpactos;}
     int ataque::getcantidadimpactos(){return cantidadimpactos;}
 
-void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager)
+void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {
   int cont=0;
+  cantidadimpactos=0;
   int v_dirx[2];
   int v_diry[2];
   int aux;
   switch(direccion){
-  case ARRIBA:
-    v_dirx[0]=0;
-    v_diry[0]=-64;
-    break;
-  case DERECHA:
-    v_dirx[0]=64;
-    v_diry[0]=0;
-    break;
+    case ARRIBA:
+      v_dirx[0]=0;
+      v_diry[0]=-64;
+      break;
+    case DERECHA:
+      v_dirx[0]=64;
+      v_diry[0]=0;
+      break;
 
-  case IZQUIERDA:
-    v_dirx[0]=-64;
-    v_diry[0]=0;
-    break;
+    case IZQUIERDA:
+      v_dirx[0]=-64;
+      v_diry[0]=0;
+      break;
 
-     case ABAJO:
-    v_dirx[0]=0;
-    v_diry[0]=64;
-    break;
+    case ABAJO:
+      v_dirx[0]=0;
+      v_diry[0]=64;
+      break;
 
-  default:
-    break;
+    default:
+      break;
 
-}
- sprite.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0]));
-  sprite2.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0]));
-  aux=manager.comprobarlugar(pers[manager.getactual()].getPosxPxl()+v_dirx[0],pers[manager.getactual()].getPosyPxl()+v_diry[0],pers);
+  }
+  sprite.setPosition(sf::Vector2f(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[0],pers_atk[manager.getactual()].getPosyPxl()+v_diry[0]));
+  sprite2.setPosition(sf::Vector2f(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[0],pers_atk[manager.getactual()].getPosyPxl()+v_diry[0]));
+  aux=manager.comprobarlugar(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[0],pers_atk[manager.getactual()].getPosyPxl()+v_diry[0],pers_def);
   if(aux==-1)
     window.draw(sprite);
   if(aux>=0)
+  {
     window.draw(sprite2);
     impactos[cont]=aux;
     cont++;
     cantidadimpactos=cont;
+  }
 }
 
-void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager)
+void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {
   int cont=0;
+  cantidadimpactos=0;
   int aux;
   int v_dirx[3];
   int v_diry[3];
@@ -86,9 +90,9 @@ void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers,
   }
   for(int i=0;i<3;i++)
   {
-    sprite.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[i],pers[manager.getactual()].getPosyPxl()+v_diry[i]));
-    sprite2.setPosition(sf::Vector2f(pers[manager.getactual()].getPosxPxl()+v_dirx[i],pers[manager.getactual()].getPosyPxl()+v_diry[i]));
-    aux=manager.comprobarlugar(pers[manager.getactual()].getPosxPxl()+v_dirx[i],pers[manager.getactual()].getPosyPxl()+v_diry[i],pers);
+    sprite.setPosition(sf::Vector2f(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[i],pers_atk[manager.getactual()].getPosyPxl()+v_diry[i]));
+    sprite2.setPosition(sf::Vector2f(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[i],pers_atk[manager.getactual()].getPosyPxl()+v_diry[i]));
+    aux=manager.comprobarlugar(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[i],pers_atk[manager.getactual()].getPosyPxl()+v_diry[i],pers_def);
     if(aux==-1)
     {
       window.draw(sprite);
@@ -114,7 +118,7 @@ void ataque::ataque4(){
 
 }
 
-void ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers,managerpersonaje& manager)
+void ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){opc=1;}
 
@@ -122,10 +126,10 @@ void ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>
   switch(opc)
   {
     case 1:
-      ataque1(direccion,window,pers,manager);
+      ataque1(direccion,window,pers_atk,pers_def,manager);
       break;
     case 2:
-      ataque2(direccion,window,pers,manager);
+      ataque2(direccion,window,pers_atk,pers_def,manager);
       break;
   }
 }

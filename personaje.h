@@ -7,6 +7,7 @@
 #include "grilla.h"
 #include "celda.h"
 #include "constantes.h"
+#include "claseTrabajo.h"
 using namespace std;
 using namespace sf;
 
@@ -24,7 +25,7 @@ private:
   int ladoCelda;
   /*
    *  una forma sería definir que una unidad activa
-   *  es aquella que tiene un hp mayor a 0
+   *  es aquella que tiene un hpReal mayor a 0
    */
   int hp;
   int fuerza;
@@ -32,7 +33,7 @@ private:
   int maxHp;
   Grilla *grilla;
   Sprite sprite;
-
+  claseTrabajo *trabajo;
   sf::Texture textura;
 
 public:
@@ -40,10 +41,10 @@ public:
     personaje(Grilla *g, int idPersonaje, TIPO_PERSONAJE tipoPersonaje) : sprite(textura)
     {
     yaActuo = false;
-      fuerza = 0;
-      defensa = 0;
-      maxHp = 0;
-      hp = 0;
+      fuerza = 10;
+      defensa = 3;
+      maxHp = 30;
+      hp = 30;
       grilla = g;
       ladoCelda = g->getTamCeldaPixeles();
       id = idPersonaje;
@@ -61,13 +62,21 @@ public:
     ));
 
     }
-
+  
 
     // Getters
     int getHp();
     int getFuerza();
     int getDefensa();
     int getMaxHp();
+    /* Usé real a falta de un mejor nombre, pero te devuelve el valor real,
+     * es decir, la suma entre la fuerza del trabajo y el bono natural del
+     * personaje
+     */
+    int getHpReal();
+    int getFuerzaReal();
+    int getDefensaReal();
+    int getMaxHpReal();
     int getId(); // Getter para el identificador único
     TIPO_PERSONAJE getTipo(); // Getter para el tipo de personaje
     bool getYaActuo(); // Getter para el estado de acción del personaje
@@ -88,6 +97,7 @@ public:
     void setFuerza(int f);
     void setDef(int def);
     void setMaxHp(int mH);
+    void setTrabajo(claseTrabajo *t);
     void setId(int nuevoId); // Setter para el identificador único
     void setaccion(int acc);
     void setdireccion(int drc);
@@ -106,5 +116,6 @@ public:
     void setsprite(sf::Texture &tex);
     /*void setsprite(int tipo);*/
     bool restarHp(int num);
+    void sumarHP(int num);
 };
 #endif // PERSONAJE_H_INCLUDED

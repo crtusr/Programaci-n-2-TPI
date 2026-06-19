@@ -2,39 +2,36 @@
 #include "defaultcelda.h"
 #include "celdaterrestre.h"
 #include "proc_input.h"
+#include "utilidades.h"
+#include "combate.h"
+#include "adminarchivo.h"
 #include <cstdio>
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
 Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
-      menuPrincipal(450, 250,
-                    {"Jugar", "Opciones", "Salir"
-                    }
-                   ),
-      enMenu(true),
-      cursor(0, 0),
-      partida(0, 0),
-      mov(3),
-      texturas("archivos.txt"),
-      tablero(64, 15, 10),
-      rendUi(&tablero),
-      movimiento(3, 3, &tablero)
+                 menuPrincipal(450, 250,
+                               {"Jugar", "Opciones", "Salir"}),
+                 enMenu(true),
+                 cursor(0, 0),
+                 partida(0, 0),
+                 mov(3),
+                 texturas("archivos.txt"),
+                 tablero(64, 15, 10),
+                 rendUi(&tablero),
+                 movimiento(3, 3, &tablero, persNJ)
 {
-    window.setFramerateLimit(60);
 
-    square.setSize(sf::Vector2f(64, 64));
-    square.setFillColor(sf::Color(127, 127, 255, 127));
+    window.setFramerateLimit(60);
+    Estado = CURSOR_LIBRE;
+    personajeSeleccionado = nullptr;
     teclaPresionada = 0;
-    cargarTexturasDeCeldas();
     cargarMapa("nivel1.txt");
 
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 2, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1);
+    SpawnPersonaje();
 
-    for(unsigned int i = 0; i < pers.size(); i++)
-        pers[i].setSprite(*texturas.getPersonaje(i % 4));
+
+    movimiento.setEnemigos(persNJ);
+
 
     Estado = CURSOR_LIBRE;
 
@@ -60,7 +57,7 @@ void Juego::procesarEventos()
         {
             window.close();
         }
-        else if(const auto *resized = event->getIf<sf::Event::Resized>())
+        else if (const auto *resized = event->getIf<sf::Event::Resized>())
         {
             sf::FloatRect newSize(sf::Vector2f(0, 0), sf::Vector2f(resized->size.x, resized->size.y));
             window.setView(sf::View(newSize));
@@ -76,24 +73,29 @@ void Juego::procesarEventos()
 
             if (enMenu)
             {
-                if (teclaPresionada == ARRIBA) menuPrincipal.moveUp();
-                else if (teclaPresionada == ABAJO) menuPrincipal.moveDown();
+                if (teclaPresionada == ARRIBA)
+                    menuPrincipal.moveUp();
+                else if (teclaPresionada == ABAJO)
+                    menuPrincipal.moveDown();
                 else if (teclaPresionada == ENTER)
                 {
                     int opcion = menuPrincipal.getPressedItem();
-                    if (opcion == 0) enMenu = false;
-                    else if (opcion == 2) window.close();
+                    if (opcion == 0)
+                        enMenu = false;
+                    else if (opcion == 2)
+                        window.close();
                 }
             }
             else
             {
                 // Control del movimiento usando la clase Cursor de lucas.
-                if ( Estado == PERSONAJE_SELECCIONADO)
+                if (Estado == PERSONAJE_SELECCIONADO)
                 {
-                    if(teclaPresionada == ENTER)
+                    if (teclaPresionada == ENTER)
                     {
                         movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
-                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos()))
+                        if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos()) ||
+                            managerpersonaje::comprobarLugarTablero(cursor.getXPos(), cursor.getYPos(), pers) != -1)
                         {
                             Estado = CURSOR_LIBRE;
                             teclaPresionada = NULO;
@@ -106,29 +108,39 @@ void Juego::procesarEventos()
                             manager.resetCaminoIndice();
                             Estado = ANIMACION_BLOQUEANTE;
                             //  manager.mostrarpersonaje(*personajeSeleccionado, window);
-                            //moverPersonajeSeleccionado();
+                            // moverPersonajeSeleccionado();
                         }
-                    }
-                    else if(key->code == sf::Keyboard::Key::A)
-                    {
-                        mov++;
-                    }
-                    else if(key->code == sf::Keyboard::Key::S)
-                    {
-                        mov--;
                     }
                 }
                 if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
                 {
-                    personaje* P = GetPersonajeSeleccionado();
+                    personaje *P = GetPersonajeSeleccionado();
                     if (P != nullptr && !P->getYaActuo())
                     {
                         personajeSeleccionado = P;
+                        /***********************ES UN MENSAJE POR CONSOLA QUE ME DICE LA INFORMACION DEL PERSONAJE SELECCIONADO(agregen mas informacion si la necesitan)*************************/
+                        std::cout << "Seleccionaste personaje ID = " << P->getId()
+                                  << " | Tipo = " << tipoToString(P->getTipo())
+                                  << " | Pos(" << P->getPosx() << ", " << P->getPosy() << ")"
+                                  << " |TURNO(" << partida.getTurno() << "," << partida.getRonda() << ")"
+                                  << " |Hp = " << P->getMaxHpReal() << "/" << P ->getHpReal()
+                                  << " |Fr = " << P->getFuerzaReal()
+                                  << " |Def = " << P->getDefensaReal() << "."
+                                  << std::endl;
+                        /*************************************************************************************************************************************************************************/
+                        /*for(int i = 0; i <pers.size(); i++){
+                                if(&pers[i] == P){
+                                    manager.setActual(i);   // ← ACÁ SE SETEA EL ACTUAL
+                                    break;
+                                }
+                        }*/
+                        Estado = PERSONAJE_SELECCIONADO;
                         Estado = MENU_INGAME; // Cambiamos al nuevo estado
                         teclaPresionada = NULO;
 
                         // Si había un menú viejo dando vueltas, lo borramos
-                        if (menuAccion != nullptr) delete menuAccion;
+                        if (menuAccion != nullptr)
+                            delete menuAccion;
 
                         // Creamos el menú pasándole las coordenadas del personaje en píxeles (+64 a la derecha)
                         menuAccion = new Menu(P->getPosxPxl() + 64, P->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
@@ -136,42 +148,52 @@ void Juego::procesarEventos()
                 }
                 // Si se selecciona un personaje, el estado pasa a PersonajeSeleccionado.
             }
-            if(Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
+            if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
             {
-                if(teclaPresionada == ARRIBA)
+                if (teclaPresionada == ARRIBA)
                 {
-                    if(cursor.getYPos() > 0)
+                    if (cursor.getYPos() > 0)
                         cursor.mover(ARRIBA);
                 }
                 else if (teclaPresionada == ABAJO)
                 {
-                    if(cursor.getYPos() < tablero.getMaxY() - 1)
+                    if (cursor.getYPos() < tablero.getMaxY() - 1)
                         cursor.mover(ABAJO);
                 }
-                else if(teclaPresionada == IZQUIERDA)
+                else if (teclaPresionada == IZQUIERDA)
                 {
-                    if(cursor.getXPos() > 0)
+                    if (cursor.getXPos() > 0)
                         cursor.mover(IZQUIERDA);
                 }
-                else if(teclaPresionada == DERECHA)
+                else if (teclaPresionada == DERECHA)
                 {
-                    if(cursor.getXPos() < tablero.getMaxX() - 1)
+                    if (cursor.getXPos() < tablero.getMaxX() - 1)
                         cursor.mover(DERECHA);
                 }
             }
-            else if(Estado == PREPARAR_ATAQUE)
+            else if (Estado == PREPARAR_ATAQUE)
             {
                 // Las flechas cambian hacia dónde mira el personaje para elegir el objetivo
                 manager.cambiardireccion(pers, teclaPresionada);
 
                 // Si se presiona ENTER (o SPACE) confirmamos el ataque
-                if(teclaPresionada == ENTER)
+                if (teclaPresionada == ENTER)
                 {
-                    //aca asigna los lugares para la animacion de golpe
-                    animacion.asignaranimacion(pers,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
+                //aca asigna los lugares para la animacion de golpe
+                    animacion.asignaranimacion(persNJ,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos()); //<--esta funcion tiene que ajustarse dependiendo quien recive el golpe
                     Estado=ANIMACION_DAÑO;
                     cont=0;
                     // Aca podria ir el codigo para restar vida....
+                    //
+                    for(int i = 0; i < ataque.getcantidadimpactos(); i++)
+                    {
+                       Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
+                       combate.pelea();
+                       cout << "Atacante: " << personajeSeleccionado->getHpReal() << "/" << personajeSeleccionado->getMaxHpReal() << endl;
+                       cout << "Defendiente: " << persNJ[ataque.getimpactos()[i]].getHpReal() << "/" << persNJ[ataque.getimpactos()[i]].getMaxHpReal() << endl << endl;
+                    }
+
+
 
                     // El personaje atacó, su turno termina.
                     personajeSeleccionado->setYaActuo(true);
@@ -193,8 +215,10 @@ void Juego::procesarEventos()
             }
             if (Estado == MENU_INGAME && menuAccion != nullptr)
             {
-                if (teclaPresionada == ARRIBA) menuAccion->moveUp();
-                else if (teclaPresionada == ABAJO) menuAccion->moveDown();
+                if (teclaPresionada == ARRIBA)
+                    menuAccion->moveUp();
+                else if (teclaPresionada == ABAJO)
+                    menuAccion->moveDown();
                 else if (teclaPresionada == ENTER)
                 {
                     int opcion = menuAccion->getPressedItem();
@@ -235,7 +259,7 @@ void Juego::actualizar()
 {
     if (enMenu)
         return;
-    if (Estado == CURSOR_LIBRE)
+    if(Estado == CURSOR_LIBRE)
     {
         /// Desactivo el sistema VIEJO.
         //manager.moverpersonaje(pers[manager.getactual()]);
@@ -245,57 +269,23 @@ void Juego::actualizar()
     {
     }
 
-    manager.actualizarpersonaje(pers);
-    if (Estado == ANIMACION_BLOQUEANTE)
+    //  manager.actualizarpersonaje(pers);
+  //  manager.actualizarpersonaje(persNJ);
+    if(Estado == ANIMACION_BLOQUEANTE)
     {
         if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
         {
-            if (enMenu)
-                return;
-            if (Estado == CURSOR_LIBRE)
-            {
-                manager.moverpersonaje(pers[manager.getactual()]);
-                manager.cambiarpersonaje(pers[manager.getactual()]);
-            }
-            if (Estado == PREPARAR_ATAQUE)
-            {
-            }
-
-            manager.actualizarpersonaje(pers);
-            if (Estado == ANIMACION_BLOQUEANTE)
-            {
-                if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
-                {
-                    Estado = CURSOR_LIBRE;
-                    personajeSeleccionado->setYaActuo(true);
-                }
-            }
-            if (todasLasUnidadesActuaron())
-            {
-                partida.pasarTurno();
-                resetearAccionesJugador();
-            }
+            Estado = CURSOR_LIBRE;
+            personajeSeleccionado->setYaActuo(true);
         }
     }
-}
-// FUNCIONES AUXILIARES
-int Juego::cargarTexturasDeCeldas()
-{
-    const char *nomArchivo[10] =
+    if(todasLasUnidadesActuaron())
     {
-        "Tiles/defaulttile.bmp",
-        "Tiles/prado.bmp",
-        "Tiles/bosque.bmp",
-        "Tiles/montania.bmp",
-        "Tiles/mar.bmp"
-    };
-    for (int i = 0; i < 5; i++)
-    {
-        if (!texCelda[i].loadFromFile(nomArchivo[i]))
-            return -1;
+        partida.pasarTurno();
+        resetearAccionesJugador();
     }
-    return 0;
 }
+        // FUNCIONES AUXILIARES
 
 int Juego::cargarMapa(const char *nomArch)
 {
@@ -370,7 +360,6 @@ void Juego::moverPersonajeSeleccionado()
     personajeSeleccionado = nullptr;
 }
 
-// RENDERIZAR: Dibujamos los 5 personajes del vector
 void Juego::renderizar()
 {
     window.clear(sf::Color::Blue);
@@ -383,12 +372,19 @@ void Juego::renderizar()
     {
         tablero.render(window);
 
-        // Renderizamos los 5 personajes del equipo tal como pedIa el main viejo
+        // Renderizamos los 5 personajes del equipo tal como ped�a el main viejo
         manager.actualizarpersonaje(pers);
+        manager.actualizarpersonaje(persNJ);
         manager.mostrarpersonaje(pers, window);
+        animacion.mostrarvida(window,pers);
+        animacion.mostrarvida(window,persNJ);
+
+        for (personaje &nose : persNJ)
+            window.draw(nose.getsprite());
+
         if (Estado == PREPARAR_ATAQUE)
         {
-            ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, manager);
+            ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, persNJ, manager);
         }
 
         if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
@@ -404,17 +400,12 @@ void Juego::renderizar()
     }
     if(Estado==ANIMACION_DAÑO)
     {
-        animacion.mostraranimacion(window);
-        cont++;
-        if(cont>80)
-        {
-            Estado=CURSOR_LIBRE;
-            cont=0;
-        }
+      animacion.mostraranimacion(window);
+      cont++;
+      if(cont>80){Estado=CURSOR_LIBRE;cont=0;}
     }
     window.display();
 }
-
 
 personaje *Juego::GetPersonajeSeleccionado()
 {
@@ -422,7 +413,7 @@ personaje *Juego::GetPersonajeSeleccionado()
     {
         if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos())
         {
-            manager.setactual(i);
+            manager.setActual(i);
             return &pers[i];
         }
     }
@@ -430,7 +421,7 @@ personaje *Juego::GetPersonajeSeleccionado()
 }
 bool Juego::todasLasUnidadesActuaron()
 {
-    for (unsigned int i = 0; i < pers.size(); i++)
+    for (int i = 0; i < pers.size(); i++)
     {
         if (!pers[i].getYaActuo())
         {
@@ -442,20 +433,109 @@ bool Juego::todasLasUnidadesActuaron()
 
 void Juego::resetearAccionesJugador()
 {
-    for (unsigned int i = 0; i < pers.size(); i++)
+    for (int i = 0; i < pers.size(); i++)
     {
         pers[i].setYaActuo(false);
     }
 }
 
+
+
 void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y)
 {
-    personaje nuevo(&tablero, pers.size(), tipoPJ);
+ personaje nuevo(&tablero, pers.size(), tipoPJ);
 
     manager.Asignarpersonajes(nuevo, tipoPJ, x, y);
 
     pers.push_back(nuevo);
-
     manager.setcantidad(pers.size());
 }
 
+void Juego::agregarPersonajeNJ(TIPO_PERSONAJE tipoPJ, int x, int y)
+{
+    personaje nuevo(&tablero, persNJ.size(), tipoPJ);
+
+    ia.registrarPNJ(nuevo, tipoPJ, x, y);
+
+    persNJ.push_back(nuevo);
+};
+
+void Juego::SpawnPersonaje(){
+    AdminArchivo personajes("personajes1.txt");
+    int x, y, trabajo, maxHp, fuerza, defensa;
+    const char separador = ';';
+    personajes.abrir();
+    int cantPJ = personajes.leerNumero();
+    for(int i = 0; i < cantPJ; i++)
+    {
+      personajes.avanzarHastaChar(separador);
+      x = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+      y = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			trabajo = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			maxHp = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			fuerza = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			defensa = personajes.leerNumero();
+
+      agregarPersonaje(TIPO_PERSONAJE::JUGADOR, x, y);
+      pers[i].setTrabajo(trabajos.getClase(trabajo));
+      pers[i].setSprite(*texturas.getPersonaje(trabajo));
+      pers[i].setMaxHp(maxHp);
+      pers[i].setHp(maxHp);
+      pers[i].setFuerza(fuerza);
+      pers[i].setDef(defensa);
+    }
+
+    int cantPNJ = personajes.leerNumero();
+
+    for(int i = 0; i < cantPNJ; i++)
+    {
+      personajes.avanzarHastaChar(separador);
+      x = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+      y = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			trabajo = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			maxHp = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			fuerza = personajes.leerNumero();
+
+      personajes.avanzarHastaChar(separador);
+			defensa = personajes.leerNumero();
+
+      agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, x, y);
+      persNJ[i].setTrabajo(trabajos.getClase(trabajo));
+      persNJ[i].setSprite(*texturas.getPersonaje(trabajo));
+      persNJ[i].setMaxHp(maxHp);
+      persNJ[i].setHp(maxHp);
+      persNJ[i].setFuerza(fuerza);
+      persNJ[i].setDef(defensa);
+    }
+    /*
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 1, CLASE_GUERRERO);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 2, 1, CLASE_ARQUERO);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1, CLASE_MEDICO);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1, CLASE_GUERRERO);
+    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1,CLASE_ARQUERO);
+    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 1, 3);
+    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 2, 3);
+    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 3, 3);
+    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 4, 3);
+    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 5, 3);
+    */
+    personajes.cerrar();
+}

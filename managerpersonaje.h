@@ -16,7 +16,7 @@ public:
   managerpersonaje();
   void resetCaminoIndice();
   int getactual();
-  void setactual(int index);
+  void setActual(int nuevoActual);// Agregar un setter para el índice actual
   int getcantidad();
   void setcantidad(int cantidad);
   int moverpersonaje(personaje& pers, const int *dir);
@@ -29,6 +29,7 @@ public:
   int comprobarlugar(int x,int y,vector<personaje> pers);
   void actualizarpersonaje(vector<personaje>& pers);
   int contarPersonajesActivos(vector<personaje>& pers);
+  static int comprobarLugarTablero(int x,int y,vector<personaje> &pers);
 
 };
 

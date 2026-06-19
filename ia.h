@@ -5,28 +5,22 @@
 #include <vector>
 
 
-class IA {
+class IA
+{
 private:
+    std::vector<personaje*> vectorPJ;   // PNJ registrados
+    std::vector<personaje*> vectorPNJ; // Referencia a personajes del jugador
+    Grilla* tablero;
     personaje *personajeIA;
 
-    std::vector<personaje*> vectorPNJ ; // Vector que contiene todos los personajes no jugadores (PNJ) en el juego
-    std::vector<personaje*> vectorPJ ; // Vector que contiene todos los personajes jugadores en el juego
 public:
-    IA(personaje *p, Grilla *g);
+    IA();
 
-    personaje* getPersonajeIA(personaje *p);
+    void registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y);
+    void registrarEnemigos(std::vector<personaje>* lista);
 
-    personaje* buscarEnemigoMasCercano();
-    personaje* buscarAliadoMasCercano();
-
-    void setPersonajeIA(personaje *p);
-    void moverEnemigo();
-    void moverAliado();
-    void atacarEnemigo();
-
-// Funciones para agregar personajes a los vectores correspondientes
-    void agregrarPNJ(personaje *p);
-    void agregarPJ(personaje *p);
+    personaje* detectarEnemigoCercano(personaje* p);
+    void colocarPNJEnMapa(personaje* p, int x, int y);
 };
 
 #endif // IA_H_INCLUDED

@@ -6,6 +6,8 @@
 using namespace std;
 using namespace sf;
 
+
+
 /* ============================
         GETTERS
    ============================ */
@@ -25,6 +27,24 @@ int personaje::getFuerza() { return fuerza; }
 int personaje::getDefensa() { return defensa; }
 int personaje::getMaxHp() { return maxHp; }
 
+int personaje::getHpReal()
+{
+  return hp + trabajo->getMaxHp();
+}
+int personaje::getFuerzaReal()
+{
+  return fuerza + trabajo->getFuerza();
+}
+int personaje::getDefensaReal()
+{
+  return defensa + trabajo->getDefensa();
+}
+int personaje::getMaxHpReal()
+{
+  return maxHp + trabajo->getMaxHp();
+}
+
+
 int personaje::getdireccion() { return direccion; }
 int personaje::getaccion() { return accion; }
 bool personaje::getblockaccion() { return blokaccion; }
@@ -33,6 +53,7 @@ int personaje::getladocelda() { return ladoCelda; }
 
 bool personaje::getYaActuo() { return yaActuo; }
 TIPO_PERSONAJE personaje::getTipo() { return tipoPJ; }
+
 
 Sprite personaje::getsprite() { return sprite; }
 void personaje::setSprite(sf::Texture &tex)
@@ -54,6 +75,11 @@ void personaje::setHp(int h) { hp = h; }
 void personaje::setFuerza(int f) { fuerza = f; }
 void personaje::setDef(int def) { defensa = def; }
 void personaje::setMaxHp(int mH) { maxHp = mH; }
+
+void personaje::setTrabajo(claseTrabajo *t)
+{
+  trabajo = t;
+}
 
 void personaje::setaccion(int acc) { accion = acc; }
 void personaje::setdireccion(int drc) { direccion = drc; }
@@ -113,12 +139,27 @@ default:break;
         LÓGICA
    ============================ */
 
+
+
+void personaje::sumarHP(int num)
+{
+  if(num <= 0)
+    return;
+  hp += num;
+  if(hp > maxHp)
+    hp = maxHp;
+}
+
+/*IMPORTANTE: cuando se agreguen los trabajos se deberían acceder como hp*/
+
 bool personaje::restarHp(int num)
 {
+    if(num <= 0)
+      return false;
     hp -= num;
 
-    if (hp <= 0) {
-        hp = 0;
+    if (hp + trabajo->getMaxHp() <= 0) {
+        hp = -trabajo->getMaxHp();
         return true;   // murió
     }
 

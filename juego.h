@@ -16,8 +16,10 @@
 #include "partida.h"
 #include "proc_input.h"
 #include "ataque.h"
+#include "ia.h"
 #include "texmanager.h"
 #include "animacion.h"
+#include "adminclase.h"
 
 class Juego {
 public:
@@ -25,11 +27,15 @@ public:
     void ejecutar();
 
 private:
-    ESTADO_JUEGO Estado = CURSOR_LIBRE;
-    personaje* personajeSeleccionado = nullptr;
+    ESTADO_JUEGO Estado;
+    personaje* personajeSeleccionado;
+    personaje* personajeTemporal;
+    
 
     personaje* GetPersonajeSeleccionado();
+    void SpawnPersonaje();
     void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
+    void agregarPersonajeNJ(TIPO_PERSONAJE tipo, int x, int y);
     void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
     void resetearAccionesJugador();
@@ -39,7 +45,6 @@ private:
     void renderizar();
 
     int cargarMapa(const char* nomArch);
-    int cargarTexturasDeCeldas();
 
     // Atributos
     sf::RenderWindow window;
@@ -58,15 +63,18 @@ private:
     ProcInput procesar;
     // Sistemas del juego
     TexManager texturas;
+    AdminClase trabajos;
     Grilla tablero;
     RenderInterfazMapa rendUi;
     managerpersonaje manager;
+    IA ia;
     std::vector<personaje> pers;
+    std::vector<personaje> persNJ;
     SisMov movimiento;
     ataque ataque;
     Animacion animacion;
-    //int fase=5;//<-------por ajustar
     int cont=0;//<-----posiblemente temporal
 };
+
 
 #endif // JUEGO_H

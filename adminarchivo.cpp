@@ -38,6 +38,19 @@ void AdminArchivo::leerLinea(char *str)
   while(leido != '\n')
     fread(&leido, 1, 1, arch);
 }
+
+void AdminArchivo::avanzarHastaChar(char start)
+{
+  if(arch == nullptr)
+    return;
+  char leido = 0;
+  fread(&leido, 1, 1, arch);
+  while(leido != start)
+  {
+    fread(&leido, 1, 1, arch);
+  }
+  return;
+}
 int AdminArchivo::leerNumero()
 {
   char str[20];

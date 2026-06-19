@@ -1,6 +1,13 @@
 #ifndef CONSTANTES_H
 #define CONSTANTES_H
 
+enum NIVEL_TERMINADO
+{
+  NIVEL_1_TERMINADO,
+  NIVEL_2_TERMINADO, 
+  NIVEL_3_TERMINADO, 
+};
+
 enum CELDAS
 {
   DEFAULT,
@@ -44,6 +51,12 @@ enum ACCION_PERSONAJE
 enum class TIPO_PERSONAJE {
     JUGADOR,
     NO_JUGADOR
+};
+
+enum CLASE_PERSONAJE{
+  CLASE_GUERRERO,
+  CLASE_MEDICO,
+  CLASE_ARQUERO
 };
 
 const int profundidadMax = 16;
