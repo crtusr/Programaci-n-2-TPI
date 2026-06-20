@@ -7,15 +7,15 @@
 using namespace std;
 using namespace sf;
 
-void Animacion::asignaranimacion(vector<personaje>& pers,int* impactos ,int* v_danios,int cant){
+ void Animacion::asignaranimacion(vector<personaje>& pers,Ataque& ataque){
 int cont=0;
 
 for(int i=0; i<6; i++){
-  if(!anim_activa[i]&&cont<cant){
+  if(!anim_activa[i]&&cont<ataque.getcantidadimpactos()){
     anim_activa[i]=true;
-    danios[i]=v_danios[cont];
-    v_posx[i]=pers[impactos[cont]].getPosxPxl();
-    v_posy[i]=pers[impactos[cont]].getPosyPxl();
+    danios[i]=ataque.getdanio(cont);
+    v_posx[i]=pers[ataque.getimpacto(cont)].getPosxPxl();
+    v_posy[i]=pers[ataque.getimpacto(cont)].getPosyPxl();
     cont++;
   }
 }
