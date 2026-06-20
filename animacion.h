@@ -2,6 +2,7 @@
 #define ANIMACION_H_INCLUDED
 #include <SFML/Graphics.hpp>
 #include "personaje.h"
+#include "ataque.h"
 
 using namespace std;
 using namespace sf;
@@ -35,7 +36,7 @@ public:
         sf::Vector2i(64, 64)         // tama�o del recorte
     ));
     }
-void asignaranimacion(vector<personaje>& pers,int* impactos,int* v_danios,int cant);
+void asignaranimacion(vector<personaje>& pers,Ataque& ataque);
 void mostraranimacion(RenderWindow& window);
 void mostrarvida(RenderWindow& window,vector<personaje>& pers);
 };
