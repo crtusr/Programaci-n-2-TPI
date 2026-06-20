@@ -16,7 +16,7 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
                  partida(0, 0),
                  mov(3),
                  texturas("archivos.txt"),
-                 tablero(64, 15, 10),
+                 tablero(64, 17, 12),
                  rendUi(&tablero),
                  movimiento(3, 3, &tablero, persNJ)
 {
@@ -36,6 +36,10 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     Estado = CURSOR_LIBRE;
 
     personajeSeleccionado = nullptr;
+    sf::FloatRect newSize(sf::Vector2f(0, 0), 
+                          sf::Vector2f(tablero.getMaxX() * tablero.getTamCeldaPixeles(),
+                                       tablero.getMaxY() * tablero.getTamCeldaPixeles()));
+    window.setView(sf::View(newSize));
 }
 
 void Juego::ejecutar()
@@ -305,6 +309,10 @@ int Juego::cargarMapa(const char *nomArch)
             break;
         case '0':
             tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(DEFAULT)));
+            i++;
+            break;
+        case '1':
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(BOSQUE_ESPESO)));
             i++;
             break;
         case 'P':

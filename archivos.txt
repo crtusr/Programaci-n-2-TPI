@@ -1,6 +1,7 @@
-5
+6
 4
 Tiles/defaulttile.bmp
+Tiles/Thicket.bmp
 Tiles/prado.bmp
 Tiles/bosque.bmp
 Tiles/montania.bmp
