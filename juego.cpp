@@ -180,7 +180,7 @@ void Juego::procesarEventos()
                 if (teclaPresionada == ENTER)
                 {
                 //aca asigna los lugares para la animacion de golpe
-                    animacion.asignaranimacion(persNJ,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos()); //<--esta funcion tiene que ajustarse dependiendo quien recive el golpe
+                    animacion.asignaranimacion(persNJ,ataque); //<--esta funcion tiene que ajustarse dependiendo quien recive el golpe
                     Estado=ANIMACION_DAÑO;
                     cont=0;
                     // Aca podria ir el codigo para restar vida....
@@ -384,7 +384,8 @@ void Juego::renderizar()
 
         if (Estado == PREPARAR_ATAQUE)
         {
-            ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, persNJ, manager);
+			     //getopciondeataque es temporal se va a reemplazar por el ataque que seleccione el menu de ataques
+            ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, persNJ, manager,ataque.getopciondeataque());
         }
 
         if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
