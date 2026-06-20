@@ -7,7 +7,7 @@
 using namespace std;
 using namespace sf;
 
-class ataque {
+class Ataque {
 private:
     int posx = 0;
     int posy = 0;
@@ -25,7 +25,7 @@ private:
 
 public:
     // Constructor
-    ataque() : sprite(textura),sprite2(textura)
+    Ataque() : sprite(textura),sprite2(textura)
     {
         if (!textura.loadFromFile("imagen/Sprite-preparado1-Sheet.png")) {
             std::cerr << "Error al cargar textura\n";
@@ -59,11 +59,14 @@ public:
     int* getimpactos();
     int* getdaniosimpactos();
     int getcantidadimpactos();
+    int getimpacto(int pos);
+    int getdanio(int pos);
+    int getopciondeataque(){return opc;} // temporal asta que menu elija el ataque
 
 void ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void ataque3();
 void ataque4();
-void prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
+void prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager,int opc_atk);
 };
 #endif // ATAQUE_H_INCLUDED
