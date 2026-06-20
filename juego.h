@@ -71,7 +71,7 @@ private:
     std::vector<personaje> pers;
     std::vector<personaje> persNJ;
     SisMov movimiento;
-    ataque ataque;
+    Ataque ataque;
     Animacion animacion;
     int cont=0;//<-----posiblemente temporal
 };
