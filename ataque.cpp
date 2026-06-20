@@ -7,15 +7,17 @@
 using namespace std;
 using namespace sf;
 
-Sprite ataque::getsprite()
+Sprite Ataque::getsprite()
 {
   return sprite;
 }
-    int* ataque::getimpactos(){return impactos;}
-    int* ataque::getdaniosimpactos(){return daniosimpactos;}
-    int ataque::getcantidadimpactos(){return cantidadimpactos;}
+    int* Ataque::getimpactos(){return impactos;}
+    int* Ataque::getdaniosimpactos(){return daniosimpactos;}
+    int Ataque::getcantidadimpactos(){return cantidadimpactos;}
+    int Ataque::getimpacto(int pos){return impactos[pos];}
+    int Ataque::getdanio(int pos){return daniosimpactos[pos];}
 
-void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
+void Ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {
   int cont=0;
   cantidadimpactos=0;
@@ -60,7 +62,7 @@ void ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_
   }
 }
 
-void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
+void Ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {
   int cont=0;
   cantidadimpactos=0;
@@ -108,22 +110,22 @@ void ataque::ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_
 
 }
 
-void ataque::ataque3(){
+void Ataque::ataque3(){
 
 
 }
 
-void ataque::ataque4(){
+void Ataque::ataque4(){
 
 
 }
 
-void ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
+void Ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager,int opc_atk)
 {
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){opc=1;}
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){opc=1;} //esto no va a estar mas cuando menu elija el ataque
 
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)){ opc=2; }
-  switch(opc)
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)){ opc=2; } //esto no va a estar mas cuando menu elija el ataque
+  switch(opc_atk)
   {
     case 1:
       ataque1(direccion,window,pers_atk,pers_def,manager);
