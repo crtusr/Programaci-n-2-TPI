@@ -7,15 +7,24 @@
 using namespace std;
 using namespace sf;
 
- void Animacion::asignaranimacion(vector<personaje>& pers,Ataque& ataque){
+ void Animacion::asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque){
 int cont=0;
 
 for(int i=0; i<6; i++){
   if(!anim_activa[i]&&cont<ataque.getcantidadimpactos()){
     anim_activa[i]=true;
     danios[i]=ataque.getdanio(cont);
-    v_posx[i]=pers[ataque.getimpacto(cont)].getPosxPxl();
-    v_posy[i]=pers[ataque.getimpacto(cont)].getPosyPxl();
+    switch(ataque.gettipodeataque()){
+    case DANIO:
+    v_posx[i]=pers_def[ataque.getimpacto(cont)].getPosxPxl();
+    v_posy[i]=pers_def[ataque.getimpacto(cont)].getPosyPxl();
+    break;
+    case CURACION:
+    v_posx[i]=pers_atk[ataque.getimpacto(cont)].getPosxPxl();
+    v_posy[i]=pers_atk[ataque.getimpacto(cont)].getPosyPxl();
+    break;
+    }
+
     cont++;
   }
 }
