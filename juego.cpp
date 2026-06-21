@@ -184,7 +184,7 @@ void Juego::procesarEventos()
                 if (teclaPresionada == ENTER)
                 {
                 //aca asigna los lugares para la animacion de golpe
-                    animacion.asignaranimacion(persNJ,ataque); //<--esta funcion tiene que ajustarse dependiendo quien recive el golpe
+                    animacion.asignaranimacion(pers,persNJ,ataque); //<--esta funcion tiene que ajustarse dependiendo quien recive el golpe
                     Estado=ANIMACION_DAÑO;
                     cont=0;
                     // Aca podria ir el codigo para restar vida....
@@ -234,6 +234,7 @@ void Juego::procesarEventos()
                     }
                     else if (opcion == 1) // Atacar
                     {
+						pers[manager.getactual()].setdireccion(DERECHA);
                         Estado = PREPARAR_ATAQUE;
                     }
                     else if (opcion == 2) // Esperar
