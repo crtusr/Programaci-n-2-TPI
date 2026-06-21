@@ -29,7 +29,7 @@ private:
 
 public:
     // Constructor
-    Ataque() : sprite(textura),sprite2(textura)
+    Ataque() : sprite(textura),sprite2(textura),sprite3(textura),sprite4(textura)
     {
         if (!textura.loadFromFile("imagen/Sprite-preparado1-Sheet.png")) {
             std::cerr << "Error al cargar textura\n";
