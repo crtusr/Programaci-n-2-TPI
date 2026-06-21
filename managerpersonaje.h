@@ -3,8 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include "personaje.h"
 
-
-
 class managerpersonaje {
 private:
   int cont;
