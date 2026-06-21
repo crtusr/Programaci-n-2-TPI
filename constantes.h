@@ -11,10 +11,14 @@ enum NIVEL_TERMINADO
 enum CELDAS
 {
   DEFAULT,
+  BOSQUE_ESPESO,
   PRADO,
   BOSQUE,
   MONTANIA,
-  MAR
+  MAR,
+  PISO,
+  PICO,
+  PARED
 };
 
 enum TECLAS
@@ -57,6 +61,12 @@ enum CLASE_PERSONAJE{
   CLASE_GUERRERO,
   CLASE_MEDICO,
   CLASE_ARQUERO
+};
+
+enum TIPO_DE_ATAQUE
+{
+  DANIO,
+  CURACION
 };
 
 const int profundidadMax = 16;

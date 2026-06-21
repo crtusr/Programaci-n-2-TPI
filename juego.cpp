@@ -16,7 +16,7 @@ Juego::Juego(const char* archivoMapa, const char* archivoPersonajes) :
     partida(0, 0),
     mov(3),
     texturas("archivos.txt"),
-    tablero(64, 15, 10),
+    tablero(64, 13, 12),
     rendUi(&tablero),
     movimiento(3, 3, &tablero, persNJ)
 {
@@ -39,6 +39,12 @@ Juego::Juego(const char* archivoMapa, const char* archivoPersonajes) :
 
 bool Juego::ejecutar(sf::RenderWindow& window)
 {
+    // Ajustamos la cámara al tamaño del tablero justo antes de empezar a jugar
+    sf::FloatRect newSize(sf::Vector2f(0, 0),
+                          sf::Vector2f(tablero.getMaxX() * tablero.getTamCeldaPixeles(),
+                                       tablero.getMaxY() * tablero.getTamCeldaPixeles()));
+    window.setView(sf::View(newSize));
+
     // El bucle ahora depende de la ventana prestada y de nuestras banderas
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
@@ -139,9 +145,10 @@ void Juego::procesarEventos(sf::RenderWindow& window)
 
                 if (teclaPresionada == ENTER)
                 {
-                    animacion.asignaranimacion(persNJ,ataque.getimpactos(),ataque.getdaniosimpactos(),ataque.getcantidadimpactos());
-                    Estado=ANIMACION_DAÑO;
-                    cont=0;
+                    // ACTUALIZADO: Nueva lógica de animación de lucas.
+                    animacion.asignaranimacion(pers, persNJ, ataque);
+                    Estado = ANIMACION_DAÑO;
+                    cont = 0;
 
                     for(int i = 0; i < ataque.getcantidadimpactos(); i++)
                     {
@@ -170,13 +177,14 @@ void Juego::procesarEventos(sf::RenderWindow& window)
                 {
                     int opcion = menuAccion->getPressedItem();
 
-                    if (opcion == 0) // Mover
+                    if (opcion == 0 && personajeSeleccionado->getYaMovio() == false) // Mover
                     {
                         Estado = PERSONAJE_SELECCIONADO;
                         movimiento.calcularMovimiento(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
                     }
                     else if (opcion == 1) // Atacar
                     {
+                        pers[manager.getactual()].setdireccion(DERECHA);
                         Estado = PREPARAR_ATAQUE;
                     }
                     else if (opcion == 2) // Esperar
@@ -191,8 +199,12 @@ void Juego::procesarEventos(sf::RenderWindow& window)
                         personajeSeleccionado = nullptr;
                     }
 
-                    delete menuAccion;
-                    menuAccion = nullptr;
+                    // ACTUALIZADO: Condicional de borrado de menú
+                    if(Estado != MENU_INGAME)
+                    {
+                        delete menuAccion;
+                        menuAccion = nullptr;
+                    }
                 }
             }
 
@@ -207,8 +219,14 @@ void Juego::actualizar()
     {
         if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
         {
-            Estado = CURSOR_LIBRE;
-            personajeSeleccionado->setYaActuo(true);
+            Estado = MENU_INGAME;
+
+            if (menuAccion != nullptr)
+                delete menuAccion;
+
+            // Creamos el menú pasándole las coordenadas del personaje en píxeles (+64 a la derecha)
+            menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+            personajeSeleccionado->setYaMovio(true);
         }
     }
     if(todasLasUnidadesActuaron())
@@ -217,8 +235,10 @@ void Juego::actualizar()
         resetearAccionesJugador();
     }
 
-    // NOTA: Aquí pueden agregar la condición de victoria para pasar al siguiente nivel
-    // if (persNJ.size() == 0) { nivelSuperado = true; }
+    if (persNJ.empty())
+    {
+        nivelSuperado = true;
+    }
 }
 
 int Juego::cargarMapa(const char *nomArch)
@@ -241,6 +261,18 @@ int Juego::cargarMapa(const char *nomArch)
             tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(DEFAULT)));
             i++;
             break;
+        case '1':
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(BOSQUE_ESPESO)));
+            i++;
+            break;
+        case '2':
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(PICO)));
+            i++;
+            break;
+        case '3':
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(PARED)));
+            i++;
+            break;
         case 'P':
             tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, *texturas.getCelda(PRADO)));
             i++;
@@ -251,6 +283,10 @@ int Juego::cargarMapa(const char *nomArch)
             break;
         case 'M':
             tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, *texturas.getCelda(MONTANIA)));
+            i++;
+            break;
+        case ' ':
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 0, *texturas.getCelda(PISO)));
             i++;
             break;
         default:
@@ -272,18 +308,10 @@ void Juego::moverPersonajeSeleccionado()
     {
         switch (camino[i])
         {
-        case ARRIBA:
-            y -= 1;
-            break;
-        case ABAJO:
-            y += 1;
-            break;
-        case IZQUIERDA:
-            x -= 1;
-            break;
-        case DERECHA:
-            x += 1;
-            break;
+        case ARRIBA:    y -= 1; break;
+        case ABAJO:     y += 1; break;
+        case IZQUIERDA: x -= 1; break;
+        case DERECHA:   x += 1; break;
         }
     }
     personajeSeleccionado->setposx(x * 64);
@@ -311,7 +339,8 @@ void Juego::renderizar(sf::RenderWindow& window)
 
     if (Estado == PREPARAR_ATAQUE)
     {
-        ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, persNJ, manager);
+        // ACTUALIZADO: Nuevo parámetro del ataque agregado
+        ataque.prepararataque(pers[manager.getactual()].getdireccion(), window, pers, persNJ, manager, ataque.getopciondeataque());
     }
 
     if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
@@ -327,14 +356,14 @@ void Juego::renderizar(sf::RenderWindow& window)
         menuAccion->draw(window);
     }
 
-    if(Estado==ANIMACION_DAÑO)
+    if(Estado == ANIMACION_DAÑO)
     {
         animacion.mostraranimacion(window);
         cont++;
-        if(cont>80)
+        if(cont > 80)
         {
-            Estado=CURSOR_LIBRE;
-            cont=0;
+            Estado = CURSOR_LIBRE;
+            cont = 0;
         }
     }
     window.display();
@@ -367,6 +396,7 @@ void Juego::resetearAccionesJugador()
     for (unsigned int i = 0; i < pers.size(); i++)
     {
         pers[i].setYaActuo(false);
+        pers[i].setYaMovio(false);
     }
 }
 
@@ -387,7 +417,6 @@ void Juego::agregarPersonajeNJ(TIPO_PERSONAJE tipoPJ, int x, int y)
 
 void Juego::SpawnPersonaje(const char* archivoPersonajes)
 {
-    // AHORA LEE EL ARCHIVO QUE LE PIDE EL MANAGER
     AdminArchivo personajes(archivoPersonajes);
     int x, y, trabajo, maxHp, fuerza, defensa;
     const char separador = ';';

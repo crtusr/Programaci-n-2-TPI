@@ -11,6 +11,7 @@ ManagerJuego::ManagerJuego() :
 
 // EL MENÚ PRINCIPAL
 bool ManagerJuego::mostrarMenuPrincipal() {
+    window.setView(window.getDefaultView());
     bool enMenu = true;
     bool quiereSalirDelJuego = false;
 
