@@ -236,8 +236,7 @@ void Juego::actualizar()
         partida.pasarTurno();
         resetearAccionesJugador();
     }
-
-    if (persNJ.empty())
+    if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
     {
         nivelSuperado = true;
     }

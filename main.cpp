@@ -10,7 +10,7 @@ int main() {
         salir = miManager.mostrarMenuPrincipal();
         if(salir) break;
 
-        int cantidadDeNiveles = 1;
+        int cantidadDeNiveles = 3;
         bool jugadorSigueVivo = true;
 
         for(int i = 1; i <= cantidadDeNiveles; i++)

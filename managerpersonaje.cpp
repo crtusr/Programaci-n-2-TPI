@@ -277,7 +277,10 @@ int managerpersonaje::contarPersonajesActivos(vector<personaje>& pers)
   int cuenta = 0;
 
   for(unsigned int i = 0; i < pers.size(); i++)
-    if(pers[i].getHpReal()) cuenta++;
+    if(pers[i].getHpReal() > 0)
+      {
+          cuenta++;
+      }
 
   return cuenta;
 }
