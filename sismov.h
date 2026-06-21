@@ -36,6 +36,7 @@ class SisMov
       void calcularCamino();
       void buscarCamino(int x, int y, int mov);
       void calcularMovimiento(int x, int y, int mov);
+      void resizeGrid(Grilla *g);
       const int* getCamino();
       const bool *getValido();
       ~SisMov();

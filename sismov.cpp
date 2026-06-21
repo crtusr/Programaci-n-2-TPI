@@ -14,8 +14,21 @@ SisMov::SisMov(int x, int y, Grilla *g, std::vector<personaje>& e) : enemigos(e)
   bordeDerecho = grid->getMaxX();
   bordeInferior = grid->getMaxY();
   valido = new bool[grid->getMaxX() * grid->getMaxY()];
+  if(valido == nullptr)
+  {
+    bordeDerecho = 0;
+    bordeInferior = 0;
+  }
 }
 
+void SisMov::resizeGrid(Grilla *g)
+{
+  if(valido != nullptr)
+    delete [] valido;
+  bordeDerecho = g->getMaxX();
+  bordeInferior = g->getMaxY();
+  valido = new bool[g->getMaxX() * g->getMaxY()];
+}
 void SisMov::setDestino(int x, int y)
 {
   xPos = x;

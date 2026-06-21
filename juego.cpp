@@ -29,6 +29,7 @@ Juego::Juego(const char* archivoMapa, const char* archivoPersonajes) :
 
     // Cargamos los archivos que nos pasó el Manager
     tablero.resize(archivoMapa);
+    movimiento.resizeGrid(&tablero);
     cargarMapa(archivoMapa);
     SpawnPersonaje(archivoPersonajes);
 
