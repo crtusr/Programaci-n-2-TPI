@@ -63,6 +63,12 @@ enum CLASE_PERSONAJE{
   CLASE_ARQUERO
 };
 
+enum TIPO_DE_ATAQUE
+{
+  DANIO,
+  CURACION
+};
+
 const int profundidadMax = 16;
 
 #endif
