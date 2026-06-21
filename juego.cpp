@@ -16,7 +16,7 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
                  partida(0, 0),
                  mov(3),
                  texturas("archivos.txt"),
-                 tablero(64, 17, 12),
+                 tablero(64, 13, 12),
                  rendUi(&tablero),
                  movimiento(3, 3, &tablero, persNJ)
 {
@@ -25,7 +25,7 @@ Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
     Estado = CURSOR_LIBRE;
     personajeSeleccionado = nullptr;
     teclaPresionada = 0;
-    cargarMapa("nivel1.txt");
+    cargarMapa("nivel3.txt");
 
     SpawnPersonaje();
 
@@ -315,6 +315,14 @@ int Juego::cargarMapa(const char *nomArch)
             tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(BOSQUE_ESPESO)));
             i++;
             break;
+        case '2':
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(PICO)));
+            i++;
+            break;
+        case '3':
+            tablero.setCelda(new DefaultCelda(i % tamFila, i / tamFila, 255, *texturas.getCelda(PARED)));
+            i++;
+            break;
         case 'P':
             tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 1, *texturas.getCelda(PRADO)));
             i++;
@@ -325,6 +333,10 @@ int Juego::cargarMapa(const char *nomArch)
             break;
         case 'M':
             tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 4, 3, *texturas.getCelda(MONTANIA)));
+            i++;
+            break;
+        case ' ':
+            tablero.setCelda(new CeldaTerrestre(i % tamFila, i / tamFila, 1, 0, *texturas.getCelda(PISO)));
             i++;
             break;
         default:

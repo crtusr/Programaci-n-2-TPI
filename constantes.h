@@ -15,7 +15,10 @@ enum CELDAS
   PRADO,
   BOSQUE,
   MONTANIA,
-  MAR
+  MAR,
+  PISO,
+  PICO,
+  PARED
 };
 
 enum TECLAS
