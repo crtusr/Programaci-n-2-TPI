@@ -16,7 +16,7 @@ Juego::Juego(const char* archivoMapa, const char* archivoPersonajes) :
     partida(0, 0),
     mov(3),
     texturas("archivos.txt"),
-    tablero(64, 13, 12),
+    tablero(64, 0, 0),
     rendUi(&tablero),
     movimiento(3, 3, &tablero, persNJ)
 {
@@ -28,6 +28,7 @@ Juego::Juego(const char* archivoMapa, const char* archivoPersonajes) :
     teclaPresionada = 0;
 
     // Cargamos los archivos que nos pasó el Manager
+    tablero.resize(archivoMapa);
     cargarMapa(archivoMapa);
     SpawnPersonaje(archivoPersonajes);
 

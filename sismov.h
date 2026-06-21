@@ -27,6 +27,7 @@ class SisMov
       void achicarCamino();
       int calcDistCamino(int low, int high);
       bool hayNumeroDistinto(int low, int high);
+      bool esDir(int num);
     public:
       SisMov(int x, int y, Grilla *g, std::vector<personaje>& e);
       void setEnemigos(std::vector<personaje>& e);

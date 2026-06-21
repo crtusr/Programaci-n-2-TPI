@@ -1,5 +1,5 @@
 #include "grilla.h"
-
+#include "adminarchivo.h"
 /*
  *  Sobre la "matriz" la matriz[Y][X] es en realidad una abrebiatura de [Y * maxX + X]
  *  y hacer eso te saca un * de la declaración, porque para implementar 
@@ -48,6 +48,42 @@ int Grilla::getCantCeldas()
 int Grilla::getTamCeldaPixeles()
 {
   return tamCeldaPixeles;
+}
+
+void Grilla::setTamDesdeArchivo(const char * arch)
+{
+  AdminArchivo baldosas(arch);
+  baldosas.abrir();
+  maxX = baldosas.avanzarHastaChar('\r') - 1;
+  maxY = baldosas.contarLineas();
+  return;
+}
+
+void Grilla::resize(const char *arch)
+{
+  if(celda != nullptr)
+  {
+    for(int i = 0; i < (maxX * maxY); i++)
+      if(celda[i] != nullptr)
+        delete celda[i];
+    delete [] celda;
+  }
+  setTamDesdeArchivo(arch);
+  if(maxX > 0 && maxY > 0)
+  {
+    celda = new Celda* [maxY * maxX];
+    if(celda == nullptr)
+    {
+      maxX = 0;
+      maxY = 0;
+      return;
+    }
+      for(int i = 0; i < maxY * maxX; i++)
+    {
+      celda[i] = nullptr;
+    }
+      return;
+  }
 }
 
 /*

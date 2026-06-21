@@ -13,7 +13,8 @@
       int abrir();
       int cerrar();
       void leerLinea(char *str);
-      void avanzarHastaChar(char start);
+      int avanzarHastaChar(char start);
+      int contarLineas();
       int leerNumero();
       int leerInt();
       personaje leerPersonaje();
