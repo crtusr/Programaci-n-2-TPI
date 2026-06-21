@@ -227,7 +227,7 @@ void Juego::procesarEventos()
                 {
                     int opcion = menuAccion->getPressedItem();
 
-                    if (opcion == 0) // Mover
+                    if (opcion == 0 && personajeSeleccionado->getYaMovio() == false) // Mover
                     {
                         Estado = PERSONAJE_SELECCIONADO;
                         movimiento.calcularMovimiento(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), mov);
@@ -249,8 +249,11 @@ void Juego::procesarEventos()
                     }
 
                     // Borramos el menú porque ya se eligió una opción
-                    delete menuAccion;
-                    menuAccion = nullptr;
+                    if(Estado != MENU_INGAME)
+                    {    
+                        delete menuAccion;
+                        menuAccion = nullptr;
+                    }
                 }
             }
             teclaPresionada = NULO;
@@ -279,8 +282,14 @@ void Juego::actualizar()
     {
         if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
         {
-            Estado = CURSOR_LIBRE;
-            personajeSeleccionado->setYaActuo(true);
+            Estado = MENU_INGAME;
+
+            if (menuAccion != nullptr)
+                delete menuAccion;
+
+            // Creamos el menú pasándole las coordenadas del personaje en píxeles (+64 a la derecha)
+            menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+            personajeSeleccionado->setYaMovio(true);
         }
     }
     if(todasLasUnidadesActuaron())
@@ -457,6 +466,7 @@ void Juego::resetearAccionesJugador()
     for (int i = 0; i < pers.size(); i++)
     {
         pers[i].setYaActuo(false);
+        pers[i].setYaMovio(false);
     }
 }
 
