@@ -1,5 +1,6 @@
 #include "grilla.h"
 #include "adminarchivo.h"
+#include "cstring"
 /*
  *  Sobre la "matriz" la matriz[Y][X] es en realidad una abrebiatura de [Y * maxX + X]
  *  y hacer eso te saca un * de la declaración, porque para implementar 
@@ -54,7 +55,10 @@ void Grilla::setTamDesdeArchivo(const char * arch)
 {
   AdminArchivo baldosas(arch);
   baldosas.abrir();
-  maxX = baldosas.avanzarHastaChar('\r') - 1;
+  char str[64] = {0};
+  baldosas.leerLinea(str);
+  maxX = strnlen(str, 64);
+  //maxX = baldosas.avanzarHastaChar('\r') - 1;
   maxY = baldosas.contarLineas();
   return;
 }
