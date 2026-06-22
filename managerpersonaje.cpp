@@ -74,7 +74,7 @@ int managerpersonaje::moverpersonaje(personaje &pers, const int *dir)
     pers.setblockaccion(false);
     pers.setaccion(SIN_ACCION);
     pers.setframe(0);
-    pers.setdireccion(0);
+    pers.setdireccion(ABAJO);
     return 0;
   }
   pers.setaccion(ACTIVO);
