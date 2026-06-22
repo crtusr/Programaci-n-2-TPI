@@ -17,6 +17,8 @@
       int getTamCeldaPixeles();
       Celda* getCelda(int x, int y);
       void setCelda(Celda* cel);
+      void resize(const char *arch);
+      void setTamDesdeArchivo(const char * arch);
       void render(sf::RenderWindow &window);
       ~Grilla();
   };

@@ -14,6 +14,7 @@ using namespace sf;
 class personaje {
 private:
   bool yaActuo;
+  bool yaMovio;
   int id; // Agregar un identificador único para cada personaje
     TIPO_PERSONAJE tipoPJ; // Agregar un atributo para el tipo de personaje (jugador o no jugador)
   int posx;
@@ -41,7 +42,8 @@ public:
     // Constructor
     personaje(Grilla *g, int idPersonaje, TIPO_PERSONAJE tipoPersonaje) : sprite(textura)
     {
-    yaActuo = false;
+      yaActuo = false;
+      yaMovio = false;
       fuerza = 0;
       defensa = 0;
       maxHp = 0;
@@ -84,6 +86,7 @@ public:
     int getId(); // Getter para el identificador único
     TIPO_PERSONAJE getTipo(); // Getter para el tipo de personaje
     bool getYaActuo(); // Getter para el estado de acción del personaje
+    bool getYaMovio();
     int getPosx();            //posx tiene que devolver la posición en la grilla
     int getPosy();            //posx tiene que devolver la posición en la grilla
     int getPosxPxl();
@@ -117,6 +120,7 @@ public:
     void setsubrectsprite(int x1,int y1,int x2,int y2);
     void setTipo(TIPO_PERSONAJE nuevoTipo); // Setter para el tipo de personaje
     void setYaActuo(bool valor); // Setter para el estado de acción del personaje
+    void setYaMovio(bool set);
     void setsprite(sf::Texture &tex);
     /*void setsprite(int tipo);*/
     bool restarHp(int num);

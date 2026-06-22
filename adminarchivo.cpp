@@ -39,18 +39,42 @@ void AdminArchivo::leerLinea(char *str)
     fread(&leido, 1, 1, arch);
 }
 
-void AdminArchivo::avanzarHastaChar(char start)
+int AdminArchivo::avanzarHastaChar(char start)
 {
+  int nColumnas = 0;
+  int avanzo;
   if(arch == nullptr)
-    return;
+    return 0;
   char leido = 0;
-  fread(&leido, 1, 1, arch);
-  while(leido != start)
+  avanzo = fread(&leido, 1, 1, arch);
+  if(avanzo)
+    nColumnas++;
+  while(leido != start && avanzo)
   {
-    fread(&leido, 1, 1, arch);
+    avanzo = fread(&leido, 1, 1, arch);
+    nColumnas++;
   }
-  return;
+  return nColumnas;
 }
+
+int AdminArchivo::contarLineas()
+{
+  int nFilas = 0;
+  int nChar;
+  char *txt = nullptr;
+  if(arch == nullptr)
+    return nFilas;
+  fseek(arch, 0, SEEK_END);
+  nChar = ftell(arch);
+  txt = new char[nChar];
+  fseek(arch, 0, SEEK_SET);
+  fread(txt, 1, nChar, arch);
+  for(int i = 0; i < nChar; i++)
+    if(txt[i] == '\n')
+      nFilas++;
+  return nFilas + 1;
+}
+
 int AdminArchivo::leerNumero()
 {
   char str[20];

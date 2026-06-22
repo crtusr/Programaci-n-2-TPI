@@ -162,7 +162,7 @@ void managerpersonaje::moverpersonaje(personaje& pers)
 
 
 void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
-       int i;
+       unsigned int i;
         for(i=0;i<pers.size();i++)
         {
            window.draw(pers[i].getsprite());
@@ -225,7 +225,7 @@ void managerpersonaje::setActual(int nuevoActual){
 
 int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
 {
-    int i;
+    unsigned int i;
     for(i=0;i<pers.size();i++){
 
         if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
@@ -276,8 +276,11 @@ int managerpersonaje::contarPersonajesActivos(vector<personaje>& pers)
 {
   int cuenta = 0;
 
-  for(int i = 0; i < pers.size(); i++)
-    if(pers[i].getHp()) cuenta++;
+  for(unsigned int i = 0; i < pers.size(); i++)
+    if(pers[i].getHpReal() > 0)
+      {
+          cuenta++;
+      }
 
   return cuenta;
 }

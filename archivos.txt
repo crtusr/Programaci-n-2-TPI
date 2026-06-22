@@ -1,10 +1,14 @@
-5
+9
 4
 Tiles/defaulttile.bmp
+Tiles/Thicket.bmp
 Tiles/prado.bmp
 Tiles/bosque.bmp
 Tiles/montania.bmp
 Tiles/mar.bmp
+Tiles/piso.bmp
+Tiles/cima.bmp
+Tiles/pared.bmp
 imagen/character-guerrero.png
 imagen/character-arquero.png
 imagen/character-medico.png

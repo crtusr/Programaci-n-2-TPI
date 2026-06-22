@@ -23,36 +23,41 @@
 
 class Juego {
 public:
-    Juego();
-    void ejecutar();
+    // El constructor ahora recibe los archivos de texto
+    Juego(const char* archivoMapa, const char* archivoPersonajes);
+
+    // Ejecutar devuelve un bool para avisarle al manager si ganó o salió, y recibe la ventana
+    bool ejecutar(sf::RenderWindow& window);
 
 private:
     ESTADO_JUEGO Estado;
     personaje* personajeSeleccionado;
     personaje* personajeTemporal;
-    
+
+    // Banderas para controlar el flujo del nivel
+    bool nivelSuperado;
+    bool jugadorQuiereSalir;
 
     personaje* GetPersonajeSeleccionado();
-    void SpawnPersonaje();
-    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y, CLASE_PERSONAJE clase);
+    void SpawnPersonaje(const char* archivoPersonajes); // Recibe el txt
+    void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
     void agregarPersonajeNJ(TIPO_PERSONAJE tipo, int x, int y);
     void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
     void resetearAccionesJugador();
     void procesarIA();
 
-    void procesarEventos();
+    // Estas funciones ahora necesitan la ventana prestada
+    void procesarEventos(sf::RenderWindow& window);
     void actualizar();
-    void renderizar();
+    void renderizar(sf::RenderWindow& window);
 
     int cargarMapa(const char* nomArch);
 
-    // Atributos
-    sf::RenderWindow window;
-    Menu menuPrincipal;
+    // Atributos de UI In-game
     Menu* menuAccion = nullptr;
-    bool enMenu;
     int teclaPresionada;
+
     // Recursos
     sf::Texture texCelda[10];
     //sf::Texture texPers[10];
@@ -61,6 +66,7 @@ private:
     Partida partida;     // <-- Gesti�n de turnos.
     sf::RectangleShape square;
     ProcInput procesar;
+
     // Sistemas del juego
     TexManager texturas;
     AdminClase trabajos;
@@ -71,10 +77,9 @@ private:
     std::vector<personaje> pers;
     std::vector<personaje> persNJ;
     SisMov movimiento;
-    ataque ataque;
+    Ataque ataque;
     Animacion animacion;
-    int cont=0;//<-----posiblemente temporal
+    int cont = 0;
 };
-
 
 #endif // JUEGO_H

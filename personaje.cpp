@@ -56,6 +56,10 @@ int personaje::getframe() { return frame; }
 int personaje::getladocelda() { return ladoCelda; }
 
 bool personaje::getYaActuo() { return yaActuo; }
+bool personaje::getYaMovio() 
+{
+    return yaMovio;
+}
 TIPO_PERSONAJE personaje::getTipo() { return tipoPJ; }
 
 
@@ -105,6 +109,10 @@ void personaje::setsubrectsprite(int x1, int y1, int x2, int y2) {
 }
 
 void personaje::setYaActuo(bool valor) { yaActuo = valor; }
+void personaje::setYaMovio(bool valor) 
+{
+    yaMovio = valor; 
+}
 
 void personaje::setTipo(TIPO_PERSONAJE nuevoTipo) { tipoPJ = nuevoTipo; }
 
