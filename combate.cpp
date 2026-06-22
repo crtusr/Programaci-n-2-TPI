@@ -25,7 +25,7 @@ void Combate::pelea()
 
     porcBloqAtac = atacante->getDefensa() * 5 + celdaAtac->getDefensa() * 10;
   */
-  porcBloqDef = defendiente->getDefensaReal() * 5 + celdaDef->getDefensa() * 10;
+  porcBloqDef = defendiente->getDefensaReal() * 5 + celdaDef->getDefensa() * 7;
 
   if(rand() % 100 >= porcBloqDef)
   {

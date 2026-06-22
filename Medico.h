@@ -7,7 +7,7 @@ class Medico : public claseTrabajo {
 public:
     Medico() {
         fuerza = 4;
-        defensa = 5;
+        defensa = 2;
         maxHp = 35;
         hp = 35;
         mov = 4;

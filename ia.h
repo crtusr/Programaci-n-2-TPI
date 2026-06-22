@@ -8,19 +8,17 @@
 class IA
 {
 private:
-    std::vector<personaje*> vectorPJ;   // PNJ registrados
-    std::vector<personaje*> vectorPNJ; // Referencia a personajes del jugador
     Grilla* tablero;
     personaje *personajeIA;
+    int cont;
 
 public:
     IA();
 
     void registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y);
-    void registrarEnemigos(std::vector<personaje>* lista);
 
-    personaje* detectarEnemigoCercano(personaje* p);
-    void colocarPNJEnMapa(personaje* p, int x, int y);
+    int detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
+
 };
 
 #endif // IA_H_INCLUDED

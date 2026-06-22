@@ -7,7 +7,7 @@ class Guerrero : public claseTrabajo {
 public:
     Guerrero() {
         fuerza = 12;
-        defensa = 8;
+        defensa = 3;
         maxHp = 40;
         hp = 40;
         mov = 3;

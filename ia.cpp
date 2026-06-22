@@ -1,8 +1,9 @@
 #include "ia.h"
 #include <cmath>
 
-IA::IA(){
 
+IA::IA(){
+int cont = 0;
 }
 
 void IA::registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
@@ -28,15 +29,34 @@ void IA::registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
     );
 }
 
-/*void IA::registrarEnemigos(std::vector<personaje>* lista)
+int IA::detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
 {
-}*/
+    int MenosPasos = 999;
+    int idMasCercano;
+    for (int i = 0; i <enemigos.size(); i++)
+    {
+        if(!enemigos[i].getYaActuo())
+        {
+            for (int j = 0; j < aliados.size(); j++)
+            {
+                int pasos = abs(aliados[j].getPosx() - enemigos[i].getPosx()) + abs(aliados[j].getPosy() - enemigos[i].getPosy());
+                if(pasos < MenosPasos)
+                {
+                    MenosPasos = pasos;
+                    idMasCercano = aliados[j].getId();
+                }
+            }
+        }
+    }
+    cout << "pasos: " << MenosPasos <<", "<<"id: "<< idMasCercano << endl;
+    if(MenosPasos == 999)
+    {
+        return -1;
+    }
+    else
+    {
+        return MenosPasos;
+    }
+}
 
-/*personaje* IA::detectarEnemigoCercano(personaje* p)
-{
-}*/
-
-/*void IA::colocarPNJEnMapa(personaje* p, int x, int y)
-{
-}*/
 

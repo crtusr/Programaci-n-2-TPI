@@ -59,6 +59,9 @@ enum CLASE_PERSONAJE{
   CLASE_ARQUERO
 };
 
+enum ESTADO_IA{
+  DECIDIENDO
+};
 const int profundidadMax = 16;
 
 #endif

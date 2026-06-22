@@ -9,15 +9,15 @@
 
 // CONSTRUCTOR: Inicializa el Cursor y la Partida.
 Juego::Juego() : window(sf::VideoMode({1024, 768}), "SFML 3"),
-                 menuPrincipal(450, 250,
-                               {"Jugar", "Opciones", "Salir"}),
-                 enMenu(true),
-                 cursor(0, 0),
-                 partida(0, 0),
-                 texturas("archivos.txt"),
-                 tablero(64, 15, 10),
-                 rendUi(&tablero),
-                 movimiento(3, 3, &tablero, persNJ)
+                menuPrincipal(450, 250,
+                {"Jugar", "Opciones", "Salir"}),
+                enMenu(true),
+                cursor(0, 0),
+                partida(0, 0),
+                texturas("archivos.txt"),
+                tablero(64, 15, 10),
+                rendUi(&tablero),
+                movimiento(3, 3, &tablero, persNJ)
 {
 
     window.setFramerateLimit(60);
@@ -42,6 +42,7 @@ void Juego::ejecutar()
     while (window.isOpen())
     {
         procesarEventos();
+        procesarIA();
         actualizar();
         renderizar();
     }
@@ -111,7 +112,7 @@ void Juego::procesarEventos()
                         }
                     }
                 }
-                if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
+                if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER )
                 {
                     personaje *P = GetPersonajeSeleccionado();
                     if (P != nullptr && !P->getYaActuo())
@@ -119,13 +120,13 @@ void Juego::procesarEventos()
                         personajeSeleccionado = P;
                         /***********************ES UN MENSAJE POR CONSOLA QUE ME DICE LA INFORMACION DEL PERSONAJE SELECCIONADO(agregen mas informacion si la necesitan)*************************/
                         std::cout << "Seleccionaste personaje ID = " << P->getId()
-                                  << " | Tipo = " << tipoToString(P->getTipo())
-                                  << " | Pos(" << P->getPosx() << ", " << P->getPosy() << ")"
-                                  << " |TURNO(" << partida.getTurno() << "," << partida.getRonda() << ")"
-                                  << " |Hp = " << P->getMaxHpReal() << "/" << P ->getHpReal() 
-                                  << " |Fr = " << P->getFuerzaReal()
-                                  << " |Def = " << P->getDefensaReal() << "."
-                                  << std::endl;
+                                << " | Tipo = " << tipoToString(P->getTipo())
+                                << " | Pos(" << P->getPosx() << ", " << P->getPosy() << ")"
+                                << " |TURNO(" << partida.getTurno() << "," << partida.getRonda() << ")"
+                                << " |Hp = " << P->getMaxHpReal() << "/" << P ->getHpReal() 
+                                << " |Fr = " << P->getFuerzaReal()
+                                << " |Def = " << P->getDefensaReal() << "."
+                                << std::endl;
                         /*************************************************************************************************************************************************************************/
                         /*for(int i = 0; i <pers.size(); i++){
                                 if(&pers[i] == P){
@@ -147,7 +148,7 @@ void Juego::procesarEventos()
                 }
                 // Si se selecciona un personaje, el estado pasa a PersonajeSeleccionado.
             }
-            if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
+            if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO )
             {
                 if (teclaPresionada == ARRIBA)
                 {
@@ -252,7 +253,20 @@ void Juego::procesarEventos()
         }
     }
 }
+void Juego::procesarIA(){
+    if(enMenu)
+    {
+        return;
+    }
+    if(partida.getTurno() == 1)
+    {
+    int pasos = ia.detectarEnemigoCercano(pers, persNJ);
+    /*for(int i = 0 ; i < persNJ.size(); i++){
 
+    }*/
+    partida.pasarTurno();
+    }
+}
 // ACTUALIZAR: Integracion total del Manager y Personajes.
 void Juego::actualizar()
 {
@@ -325,6 +339,8 @@ int Juego::cargarMapa(const char *nomArch)
     fclose(archMapa);
     return 0;
 }
+
+
 
 void Juego::moverPersonajeSeleccionado()
 {
@@ -442,32 +458,7 @@ void Juego::resetearAccionesJugador()
 
 void Juego::agregarPersonaje(TIPO_PERSONAJE tipoPJ, int x, int y, CLASE_PERSONAJE clase)
 {
- personaje nuevo(&tablero, pers.size(), tipoPJ);
-
-    claseTrabajo* stats = nullptr;
-
-    switch (clase)
-    {
-        case CLASE_GUERRERO:
-            stats = new Guerrero();
-            break;
-
-        case CLASE_ARQUERO:
-            stats = new Arquero();
-            break;
-
-        case CLASE_MEDICO:
-            stats = new Medico();
-            break;
-    }
-
-    // Copiar estadísticas al personaje
-    nuevo.setFuerza(stats->getFuerza());
-    nuevo.setDef(stats->getDefensa());
-    nuevo.setMaxHp(stats->getMaxHp());
-    nuevo.setHp(stats->getHp());
-
-    delete stats;
+    personaje nuevo(&tablero, pers.size(), tipoPJ);
 
     manager.Asignarpersonajes(nuevo, tipoPJ, x, y);
 
@@ -549,17 +540,8 @@ void Juego::SpawnPersonaje(){
       persNJ[i].setFuerza(fuerza);
       persNJ[i].setDef(defensa);
     }
-    /*
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 1, 1, CLASE_GUERRERO);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 2, 1, CLASE_ARQUERO);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 3, 1, CLASE_MEDICO);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 4, 1, CLASE_GUERRERO);
-    agregarPersonaje(TIPO_PERSONAJE::JUGADOR, 5, 1,CLASE_ARQUERO);
-    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 1, 3);
-    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 2, 3);
-    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 3, 3);
-    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 4, 3);
-    agregarPersonajeNJ(TIPO_PERSONAJE::NO_JUGADOR, 5, 3);
-    */
+
     personajes.cerrar();
 }
+
+

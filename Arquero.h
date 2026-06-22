@@ -7,7 +7,7 @@ class Arquero : public claseTrabajo {
 public:
     Arquero() {
         fuerza = 9;
-        defensa = 3;
+        defensa = 1;
         maxHp = 28;
         hp = 28;
         mov = 5;

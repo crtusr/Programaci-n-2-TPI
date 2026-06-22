@@ -39,6 +39,7 @@ private:
     void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
     void resetearAccionesJugador();
+    void procesarIA();
 
     void procesarEventos();
     void actualizar();
