@@ -78,6 +78,7 @@ public:
     int getdanio(int pos);
     int getdistancia();
     int gettipodeataque();
+    string getnombreataque(int nom);
     int getopciondeataque(){return opc;} // temporal asta que menu elija el ataque
 
 void ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
