@@ -18,6 +18,17 @@ Sprite Ataque::getsprite()
     int Ataque::getdanio(int pos){return daniosimpactos[pos];}
     int Ataque::getdistancia(){return distancia;}
     int Ataque::gettipodeataque(){return tipodeataque;}
+    string Ataque::getnombreataque(int nom){
+    string nombre("ataque1");
+    switch(nom){
+    case 1: nombre ="ataque1";break;
+    case 2: nombre ="ataque2";break;
+    case 3: nombre ="ataque3";break;
+    case 4: nombre ="ataque4";break;
+    case 5: nombre ="curacion1";break;
+    }
+   return nombre;
+    }
 
 void Ataque::ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
 {

@@ -29,13 +29,13 @@ void AdminArchivo::leerLinea(char *str)
   if(arch == nullptr)
     return;
   char leido = 0;
-  fread(&leido, 1, 1, arch);
-  for(int i = 0; leido != '\n' && leido != '\r'; i++)
+  int leyoAlgo = fread(&leido, 1, 1, arch);
+  for(int i = 0; leido != '\n' && leido != '\r' && leyoAlgo; i++)
   {
     str[i] = leido;
     fread(&leido, 1, 1, arch);
   }
-  while(leido != '\n')
+  while(leido != '\n' && leyoAlgo)
     fread(&leido, 1, 1, arch);
 }
 
