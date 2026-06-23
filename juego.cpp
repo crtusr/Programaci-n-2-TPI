@@ -11,14 +11,14 @@
 using namespace std;
 
 // CONSTRUCTOR: Inicializa el Cursor, la Partida y carga los archivos dinámicos.
-Juego::Juego(const char* archivoMapa, const char* archivoPersonajes) :
+Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
 
-    cursor(0, 0),
-    partida(0, 0),
-    texturas("archivos.txt"),
-    tablero(64, 0, 0),
-    rendUi(&tablero),
-    movimiento(3, 3, &tablero, persNJ)
+                                                                       cursor(0, 0),
+                                                                       partida(0, 0),
+                                                                       texturas("archivos.txt"),
+                                                                       tablero(64, 0, 0),
+                                                                       rendUi(&tablero),
+                                                                       movimiento(3, 3, &tablero, persNJ)
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -39,7 +39,7 @@ Juego::Juego(const char* archivoMapa, const char* archivoPersonajes) :
     personajeSeleccionado = nullptr;
 }
 
-bool Juego::ejecutar(sf::RenderWindow& window)
+bool Juego::ejecutar(sf::RenderWindow &window)
 {
     // Ajustamos la cámara al tamaño del tablero justo antes de empezar a jugar
     sf::FloatRect newSize(sf::Vector2f(0, 0),
@@ -60,7 +60,7 @@ bool Juego::ejecutar(sf::RenderWindow& window)
     return nivelSuperado;
 }
 
-void Juego::procesarEventos(sf::RenderWindow& window)
+void Juego::procesarEventos(sf::RenderWindow &window)
 {
     while (const std::optional<sf::Event> event = window.pollEvent())
     {
@@ -127,19 +127,23 @@ void Juego::procesarEventos(sf::RenderWindow& window)
             {
                 if (teclaPresionada == ARRIBA)
                 {
-                    if (cursor.getYPos() > 0) cursor.mover(ARRIBA);
+                    if (cursor.getYPos() > 0)
+                        cursor.mover(ARRIBA);
                 }
                 else if (teclaPresionada == ABAJO)
                 {
-                    if (cursor.getYPos() < tablero.getMaxY() - 1) cursor.mover(ABAJO);
+                    if (cursor.getYPos() < tablero.getMaxY() - 1)
+                        cursor.mover(ABAJO);
                 }
                 else if (teclaPresionada == IZQUIERDA)
                 {
-                    if (cursor.getXPos() > 0) cursor.mover(IZQUIERDA);
+                    if (cursor.getXPos() > 0)
+                        cursor.mover(IZQUIERDA);
                 }
                 else if (teclaPresionada == DERECHA)
                 {
-                    if (cursor.getXPos() < tablero.getMaxX() - 1) cursor.mover(DERECHA);
+                    if (cursor.getXPos() < tablero.getMaxX() - 1)
+                        cursor.mover(DERECHA);
                 }
             }
             else if (Estado == PREPARAR_ATAQUE)
@@ -153,10 +157,10 @@ void Juego::procesarEventos(sf::RenderWindow& window)
                     Estado = ANIMACION_DAÑO;
                     cont = 0;
 
-                    for(int i = 0; i < ataque.getcantidadimpactos(); i++)
+                    for (int i = 0; i < ataque.getcantidadimpactos(); i++)
                     {
-                       Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
-                       combate.pelea();
+                        Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
+                        combate.pelea();
                     }
 
                     personajeSeleccionado->setYaActuo(true);
@@ -174,8 +178,10 @@ void Juego::procesarEventos(sf::RenderWindow& window)
             }
             if (Estado == MENU_INGAME && menuAccion != nullptr)
             {
-                if (teclaPresionada == ARRIBA) menuAccion->moveUp();
-                else if (teclaPresionada == ABAJO) menuAccion->moveDown();
+                if (teclaPresionada == ARRIBA)
+                    menuAccion->moveUp();
+                else if (teclaPresionada == ABAJO)
+                    menuAccion->moveDown();
                 else if (teclaPresionada == ENTER)
                 {
                     int opcion = menuAccion->getPressedItem();
@@ -203,7 +209,7 @@ void Juego::procesarEventos(sf::RenderWindow& window)
                     }
 
                     // ACTUALIZADO: Condicional de borrado de menú
-                    if(Estado != MENU_INGAME)
+                    if (Estado != MENU_INGAME)
                     {
                         delete menuAccion;
                         menuAccion = nullptr;
@@ -215,20 +221,38 @@ void Juego::procesarEventos(sf::RenderWindow& window)
         }
     }
 }
-void Juego::procesarIA(){
-    if(partida.getTurno() == 1)
+void Juego::procesarIA()
+{
+    if (partida.getTurno() == 1)
     {
-    int pasos = ia.detectarEnemigoCercano(pers, persNJ);
-    /*for(int i = 0 ; i < persNJ.size(); i++){
-
-    }*/
-    partida.pasarTurno();
+        if (ia.getContIA()>=persNJ.size())
+        {
+            ia.resetContIA();
+            partida.pasarTurno();
+            return;
+        }
+    
+    int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
+    idIA = ia.getContIA() -1;
+    /*if (idIA < 0 || idIA >= persNJ.size()) 
+    {
+    std::cout 
+            << "idIA fuera de rango: " << idIA 
+            << " size=" << persNJ.size() << std::endl;
+            ia.resetContIA();
+            partida.pasarTurno();
+            return;
+    }
+    movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+    movimiento.calcularMovimiento(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+    manager.resetCaminoIndice();
+    Estado = ANIMACION_BLOQUEANTE;*/
     }
 }
 // ACTUALIZAR: Integracion total del Manager y Personajes.
 void Juego::actualizar()
 {
-    if(Estado == ANIMACION_BLOQUEANTE)
+    if (Estado == ANIMACION_BLOQUEANTE)
     {
         if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
         {
@@ -242,10 +266,14 @@ void Juego::actualizar()
             personajeSeleccionado->setYaMovio(true);
         }
     }
-    if(todasLasUnidadesActuaron())
+    if (todasLasUnidadesActuaron())
     {
         partida.pasarTurno();
         resetearAccionesJugador();
+    }
+    if(partida.getTurno() == 1)
+    {
+    manager.moverpersonaje(persNJ[idIA], movimiento.getCamino());
     }
     if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
     {
@@ -309,34 +337,7 @@ int Juego::cargarMapa(const char *nomArch)
     return 0;
 }
 
-
-
-void Juego::moverPersonajeSeleccionado()
-{
-    if (personajeSeleccionado == nullptr)
-        return;
-    const int *camino = movimiento.getCamino();
-    int x = personajeSeleccionado->getPosx();
-    int y = personajeSeleccionado->getPosy();
-    for (int i = 0; i < profundidadMax && camino[i] != -1; i++)
-    {
-        switch (camino[i])
-        {
-        case ARRIBA:    y -= 1; break;
-        case ABAJO:     y += 1; break;
-        case IZQUIERDA: x -= 1; break;
-        case DERECHA:   x += 1; break;
-        }
-    }
-    personajeSeleccionado->setposx(x * 64);
-    personajeSeleccionado->setposy(y * 64);
-    personajeSeleccionado->setsprite(*texturas.getPersonaje(0));
-    personajeSeleccionado->setYaActuo(true);
-    Estado = CURSOR_LIBRE;
-    personajeSeleccionado = nullptr;
-}
-
-void Juego::renderizar(sf::RenderWindow& window)
+void Juego::renderizar(sf::RenderWindow &window)
 {
     window.clear(sf::Color::Blue);
 
@@ -345,8 +346,8 @@ void Juego::renderizar(sf::RenderWindow& window)
     manager.actualizarpersonaje(pers);
     manager.actualizarpersonaje(persNJ);
     manager.mostrarpersonaje(pers, window);
-    animacion.mostrarvida(window,pers);
-    animacion.mostrarvida(window,persNJ);
+    animacion.mostrarvida(window, pers);
+    animacion.mostrarvida(window, persNJ);
 
     for (personaje &nose : persNJ)
         window.draw(nose.getsprite());
@@ -370,11 +371,11 @@ void Juego::renderizar(sf::RenderWindow& window)
         menuAccion->draw(window);
     }
 
-    if(Estado == ANIMACION_DAÑO)
+    if (Estado == ANIMACION_DAÑO)
     {
         animacion.mostraranimacion(window);
         cont++;
-        if(cont > 80)
+        if (cont > 80)
         {
             Estado = CURSOR_LIBRE;
             cont = 0;
@@ -400,7 +401,8 @@ bool Juego::todasLasUnidadesActuaron()
 {
     for (unsigned int i = 0; i < pers.size(); i++)
     {
-        if (!pers[i].getYaActuo()) return false;
+        if (!pers[i].getYaActuo())
+            return false;
     }
     return true;
 }
@@ -429,7 +431,7 @@ void Juego::agregarPersonajeNJ(TIPO_PERSONAJE tipoPJ, int x, int y)
     persNJ.push_back(nuevo);
 };
 
-void Juego::SpawnPersonaje(const char* archivoPersonajes)
+void Juego::SpawnPersonaje(const char *archivoPersonajes)
 {
     AdminArchivo personajes(archivoPersonajes);
     int x, y, trabajo, maxHp, fuerza, defensa;
@@ -438,7 +440,7 @@ void Juego::SpawnPersonaje(const char* archivoPersonajes)
     personajes.abrir();
     int cantPJ = personajes.leerNumero();
 
-    for(int i = 0; i < cantPJ; i++)
+    for (int i = 0; i < cantPJ; i++)
     {
         personajes.avanzarHastaChar(separador);
         x = personajes.leerNumero();
@@ -469,7 +471,7 @@ void Juego::SpawnPersonaje(const char* archivoPersonajes)
 
     int cantPNJ = personajes.leerNumero();
 
-    for(int i = 0; i < cantPNJ; i++)
+    for (int i = 0; i < cantPNJ; i++)
     {
         personajes.avanzarHastaChar(separador);
         x = personajes.leerNumero();
@@ -499,5 +501,3 @@ void Juego::SpawnPersonaje(const char* archivoPersonajes)
     }
     personajes.cerrar();
 }
-
-

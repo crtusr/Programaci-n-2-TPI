@@ -42,7 +42,6 @@ private:
     void SpawnPersonaje(const char* archivoPersonajes); // Recibe el txt
     void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
     void agregarPersonajeNJ(TIPO_PERSONAJE tipo, int x, int y);
-    void moverPersonajeSeleccionado();
     bool todasLasUnidadesActuaron();
     void resetearAccionesJugador();
     void procesarIA();
@@ -80,6 +79,7 @@ private:
     Ataque ataque;
     Animacion animacion;
     int cont = 0;
+    int idIA = 0;
 };
 
 #endif // JUEGO_H

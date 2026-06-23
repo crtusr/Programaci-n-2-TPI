@@ -3,7 +3,7 @@
 
 
 IA::IA(){
-int cont = 0;
+contIA = 0;
 }
 
 void IA::registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
@@ -31,32 +31,39 @@ void IA::registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
 
 int IA::detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
 {
+    int intentos = 0;
+    while(enemigos[contIA].getYaActuo())
+    {
+        contIA++;
+        if(contIA >= enemigos.size()){contIA = 0;}
+
+        intentos++;
+        if(intentos>= enemigos.size()){return -1;}
+    }
+    
+
     int MenosPasos = 999;
     int idMasCercano;
-    for (int i = 0; i <enemigos.size(); i++)
-    {
-        if(!enemigos[i].getYaActuo())
-        {
-            for (int j = 0; j < aliados.size(); j++)
+
+            for (int i = 0; i < aliados.size(); i++)
             {
-                int pasos = abs(aliados[j].getPosx() - enemigos[i].getPosx()) + abs(aliados[j].getPosy() - enemigos[i].getPosy());
+                int pasos = abs(aliados[i].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[i].getPosy() - enemigos[contIA].getPosy());
                 if(pasos < MenosPasos)
                 {
                     MenosPasos = pasos;
-                    idMasCercano = aliados[j].getId();
+                    idMasCercano = aliados[i].getId();
                 }
             }
-        }
-    }
+        
     cout << "pasos: " << MenosPasos <<", "<<"id: "<< idMasCercano << endl;
-    if(MenosPasos == 999)
-    {
-        return -1;
-    }
-    else
-    {
-        return MenosPasos;
-    }
+    contIA++;
+    
+    return idMasCercano;
 }
+
+int IA::getContIA() { return contIA; }
+
+void IA::resetContIA() {contIA = 0;}
+
 
 
