@@ -225,19 +225,19 @@ void Juego::procesarIA()
 {
     if (partida.getTurno() == 1)
     {
-    int intentos = 0;
-    while(persNJ[idIA].getYaActuo())
-    {
-        ia.inContIA();
-        if(idIA >= persNJ.size()){ia.resetContIA();}
-
-        intentos++;
-        if(intentos >= persNJ.size())
+        int intentos = 0;
+        while(persNJ[idIA].getYaActuo())
         {
-            partida.pasarTurno();
-            return;
+            ia.inContIA();
+            if(idIA >= persNJ.size()){ia.resetContIA();}
+
+            intentos++;
+            if(intentos >= persNJ.size())
+            {
+                partida.pasarTurno();
+                return;
+            }
         }
-    }
         if (ia.getContIA()>=persNJ.size())
         {
             ia.resetContIA();
@@ -246,23 +246,23 @@ void Juego::procesarIA()
             return;
         }
     
-    int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
-    idIA = ia.getContIA();
-    if (idIA < 0 || idIA >= persNJ.size()) 
-    {
-    std::cout 
-            << "idIA fuera de rango: " << idIA 
-            << " size=" << persNJ.size() << std::endl;
-            ia.resetContIA();
-            partida.pasarTurno();
-            return;
-    }
-    movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
-    movimiento.calcularMovimiento(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
-    movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
-    manager.resetCaminoIndice();
-    
-    Estado = ANIMACION_BLOQUEANTE;
+        int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
+        idIA = ia.getContIA();
+        if (idIA < 0 || idIA >= persNJ.size()) 
+        {
+            std::cout 
+                << "idIA fuera de rango: " << idIA 
+                << " size=" << persNJ.size() << std::endl;
+                ia.resetContIA();
+                partida.pasarTurno();
+                return;
+        }
+        movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
+        movimiento.calcularMovimiento(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+        movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+        manager.resetCaminoIndice();
+        
+        Estado = ANIMACION_BLOQUEANTE;
     }
 }
 // ACTUALIZAR: Integracion total del Manager y Personajes.
