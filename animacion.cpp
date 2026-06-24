@@ -7,8 +7,24 @@
 using namespace std;
 using namespace sf;
 
- void Animacion::asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque){
+ void Animacion::asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager){
 int cont=0;
+anim_frame=0;
+switch(ataque.getopciondeataque()){
+case 1:
+pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);anim_frame=-40;break;
+case 2:
+pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);anim_frame=-40;break;
+case 3:
+pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);anim_frame=-40;break;
+case 4:
+pers_atk[manager.getactual()].setaccion(ATAQUE_ARCO);anim_frame=-40;break;
+case 5:
+pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);anim_frame=-40;break;
+}
+
+
+pers_atk[manager.getactual()].setframe(0);
 
 for(int i=0; i<6; i++){
   if(!anim_activa[i]&&cont<ataque.getcantidadimpactos()){
@@ -18,6 +34,7 @@ for(int i=0; i<6; i++){
     case DANIO:
     v_posx[i]=pers_def[ataque.getimpacto(cont)].getPosxPxl();
     v_posy[i]=pers_def[ataque.getimpacto(cont)].getPosyPxl();
+
     break;
     case CURACION:
     v_posx[i]=pers_atk[ataque.getimpacto(cont)].getPosxPxl();
@@ -28,8 +45,8 @@ for(int i=0; i<6; i++){
     cont++;
   }
 }
-anim_frame=0;
 }
+
 void Animacion::mostraranimacion(RenderWindow& window){
     int x;
     int y;
