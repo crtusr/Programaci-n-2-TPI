@@ -79,7 +79,7 @@ public:
     int getdistancia();
     int gettipodeataque();
     string getnombreataque(int nom);
-    int getopciondeataque(){return opc;} // temporal asta que menu elija el ataque
+    int getopciondeataque();
 
 void ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
