@@ -401,7 +401,7 @@ void Juego::renderizar(sf::RenderWindow &window)
     {
         animacion.mostraranimacion(window);
         cont++;
-        if (cont > 80)
+        if (cont > 100)
         {
             Estado = CURSOR_LIBRE;
             cont = 0;
