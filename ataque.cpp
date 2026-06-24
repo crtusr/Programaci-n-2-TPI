@@ -18,6 +18,7 @@ Sprite Ataque::getsprite()
     int Ataque::getdanio(int pos){return daniosimpactos[pos];}
     int Ataque::getdistancia(){return distancia;}
     int Ataque::gettipodeataque(){return tipodeataque;}
+    int Ataque::getopciondeataque(){return opc;}
     string Ataque::getnombreataque(int nom){
     string nombre("ataque1");
     switch(nom){
