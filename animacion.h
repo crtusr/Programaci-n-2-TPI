@@ -36,7 +36,7 @@ public:
         sf::Vector2i(64, 64)         // tama�o del recorte
     ));
     }
-void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque);
+void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager);
 void mostraranimacion(RenderWindow& window);
 void mostrarvida(RenderWindow& window,vector<personaje>& pers);
 };
