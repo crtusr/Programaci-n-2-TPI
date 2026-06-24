@@ -51,7 +51,8 @@ bool Juego::ejecutar(sf::RenderWindow &window)
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
         procesarEventos(window);
-        procesarIA();
+        if(Estado != ANIMACION_BLOQUEANTE)
+          procesarIA();
         actualizar();
         renderizar(window);
     }
@@ -73,6 +74,10 @@ void Juego::procesarEventos(sf::RenderWindow &window)
         {
             sf::FloatRect newSize(sf::Vector2f(0, 0), sf::Vector2f(resized->size.x, resized->size.y));
             window.setView(sf::View(newSize));
+        }
+        else if (partida.getTurno() == 1)
+        {
+            return;
         }
         else if (const auto *key = event->getIf<sf::Event::KeyPressed>())
         {
@@ -223,47 +228,37 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 }
 void Juego::procesarIA()
 {
-    if (partida.getTurno() == 1)
+    if (partida.getTurno() == 0)
     {
-        int intentos = 0;
-        while(persNJ[idIA].getYaActuo())
-        {
-            ia.inContIA();
-            if(idIA >= persNJ.size()){ia.resetContIA();}
-
-            intentos++;
-            if(intentos >= persNJ.size())
-            {
-                partida.pasarTurno();
-                return;
-            }
-        }
-        if (ia.getContIA()>=persNJ.size())
-        {
-            ia.resetContIA();
-            partida.pasarTurno();
-            
-            return;
-        }
-    
-        int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
-        idIA = ia.getContIA();
-        if (idIA < 0 || idIA >= persNJ.size()) 
-        {
-            std::cout 
-                << "idIA fuera de rango: " << idIA 
-                << " size=" << persNJ.size() << std::endl;
-                ia.resetContIA();
-                partida.pasarTurno();
-                return;
-        }
-        movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
-        movimiento.calcularMovimiento(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
-        movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
-        manager.resetCaminoIndice();
-        
-        Estado = ANIMACION_BLOQUEANTE;
+        return;
     }
+    while(persNJ[idIA].getYaActuo())
+    {
+        ia.inContIA();
+        if(idIA >= persNJ.size()){ia.resetContIA();}
+    }
+    if (ia.getContIA()>=persNJ.size())
+    {
+        ia.resetContIA();
+        return;
+    }
+
+    int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
+    idIA = ia.getContIA();
+    if (idIA < 0 || idIA >= persNJ.size()) 
+    {
+        std::cout 
+            << "idIA fuera de rango: " << idIA 
+            << " size=" << persNJ.size() << std::endl;
+            ia.resetContIA();
+            return;
+    }
+    movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
+    movimiento.calcularMovimiento(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+    movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+    manager.resetCaminoIndice();
+    
+    Estado = ANIMACION_BLOQUEANTE;
 }
 // ACTUALIZAR: Integracion total del Manager y Personajes.
 void Juego::actualizar()
@@ -295,10 +290,15 @@ void Juego::actualizar()
         }
     }
    
-    if (todasLasUnidadesActuaron())
+    if (partida.getTurno() == 0 && todasLasUnidadesActuaron(pers))
     {
         partida.pasarTurno();
-        resetearAccionesJugador();
+        resetearAccionesJugador(pers);
+    }
+    if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ))
+    {
+        partida.pasarTurno();
+        resetearAccionesJugador(persNJ);
     }
     
     if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
@@ -423,22 +423,22 @@ personaje *Juego::GetPersonajeSeleccionado()
     return nullptr;
 }
 
-bool Juego::todasLasUnidadesActuaron()
+bool Juego::todasLasUnidadesActuaron(std::vector<personaje>& faccion)
 {
-    for (unsigned int i = 0; i < pers.size(); i++)
+    for (unsigned int i = 0; i < faccion.size(); i++)
     {
-        if (!pers[i].getYaActuo())
+        if (!faccion[i].getYaActuo())
             return false;
     }
     return true;
 }
 
-void Juego::resetearAccionesJugador()
+void Juego::resetearAccionesJugador(std::vector<personaje>& faccion)
 {
-    for (unsigned int i = 0; i < pers.size(); i++)
+    for (unsigned int i = 0; i < faccion.size(); i++)
     {
-        pers[i].setYaActuo(false);
-        pers[i].setYaMovio(false);
+        faccion[i].setYaActuo(false);
+        faccion[i].setYaMovio(false);
     }
 }
 

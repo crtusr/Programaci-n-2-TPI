@@ -42,8 +42,8 @@ private:
     void SpawnPersonaje(const char* archivoPersonajes); // Recibe el txt
     void agregarPersonaje(TIPO_PERSONAJE tipo, int x, int y);
     void agregarPersonajeNJ(TIPO_PERSONAJE tipo, int x, int y);
-    bool todasLasUnidadesActuaron();
-    void resetearAccionesJugador();
+    bool todasLasUnidadesActuaron(std::vector<personaje>& faccion);
+    void resetearAccionesJugador(std::vector<personaje>& faccion);
     void procesarIA();
 
     // Estas funciones ahora necesitan la ventana prestada
