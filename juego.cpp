@@ -158,7 +158,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 if (teclaPresionada == ENTER)
                 {
                     // ACTUALIZADO: Nueva lógica de animación de lucas.
-                    animacion.asignaranimacion(pers, persNJ, ataque);
+                    animacion.asignaranimacion(pers, persNJ, ataque,manager);
                     Estado = ANIMACION_DAÑO;
                     cont = 0;
 
