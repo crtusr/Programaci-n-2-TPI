@@ -225,16 +225,30 @@ void Juego::procesarIA()
 {
     if (partida.getTurno() == 1)
     {
+    int intentos = 0;
+    while(persNJ[idIA].getYaActuo())
+    {
+        ia.inContIA();
+        if(idIA >= persNJ.size()){ia.resetContIA();}
+
+        intentos++;
+        if(intentos >= persNJ.size())
+        {
+            partida.pasarTurno();
+            return;
+        }
+    }
         if (ia.getContIA()>=persNJ.size())
         {
             ia.resetContIA();
             partida.pasarTurno();
+            
             return;
         }
     
     int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
-    idIA = ia.getContIA() -1;
-    /*if (idIA < 0 || idIA >= persNJ.size()) 
+    idIA = ia.getContIA();
+    if (idIA < 0 || idIA >= persNJ.size()) 
     {
     std::cout 
             << "idIA fuera de rango: " << idIA 
@@ -243,10 +257,12 @@ void Juego::procesarIA()
             partida.pasarTurno();
             return;
     }
-    movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+    movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
     movimiento.calcularMovimiento(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+    movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
     manager.resetCaminoIndice();
-    Estado = ANIMACION_BLOQUEANTE;*/
+    
+    Estado = ANIMACION_BLOQUEANTE;
     }
 }
 // ACTUALIZAR: Integracion total del Manager y Personajes.
@@ -254,27 +270,37 @@ void Juego::actualizar()
 {
     if (Estado == ANIMACION_BLOQUEANTE)
     {
-        if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
+        if(partida.getTurno() == 0)
         {
-            Estado = MENU_INGAME;
+            if (!manager.moverpersonaje(*personajeSeleccionado, movimiento.getCamino()))
+            {
+                Estado = MENU_INGAME;
 
-            if (menuAccion != nullptr)
-                delete menuAccion;
+                if (menuAccion != nullptr)
+                    delete menuAccion;
 
             // Creamos el menú pasándole las coordenadas del personaje en píxeles (+64 a la derecha)
-            menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
-            personajeSeleccionado->setYaMovio(true);
+                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+                personajeSeleccionado->setYaMovio(true);
+            }
+        }
+        if(partida.getTurno() == 1)
+        {
+            if (!manager.moverpersonaje(persNJ[idIA], movimiento.getCamino()))
+            {
+                persNJ[idIA].setYaActuo(true);
+                ia.inContIA();
+                Estado = CURSOR_LIBRE;
+            }
         }
     }
+   
     if (todasLasUnidadesActuaron())
     {
         partida.pasarTurno();
         resetearAccionesJugador();
     }
-    if(partida.getTurno() == 1)
-    {
-    manager.moverpersonaje(persNJ[idIA], movimiento.getCamino());
-    }
+    
     if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
     {
         nivelSuperado = true;

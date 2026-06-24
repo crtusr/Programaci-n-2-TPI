@@ -19,8 +19,9 @@ public:
     void registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y);
 
     int detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
-
+    
     int getContIA();
+    void inContIA();
     void resetContIA();
     /*void moverseAlEnemigo(personaje& enemigo);*/
 };

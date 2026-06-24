@@ -1,9 +1,15 @@
-1
+2
 posX;7
 posY;4
 trabajo;1
 maxHp;5
 fuerza;2 
+defensa;1
+posX;8
+posY;5
+trabajo;1
+maxHp;5
+fuerza;2
 defensa;1
 1
 posX;3

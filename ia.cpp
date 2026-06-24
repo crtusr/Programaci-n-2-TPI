@@ -31,16 +31,6 @@ void IA::registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
 
 int IA::detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
 {
-    int intentos = 0;
-    while(enemigos[contIA].getYaActuo())
-    {
-        contIA++;
-        if(contIA >= enemigos.size()){contIA = 0;}
-
-        intentos++;
-        if(intentos>= enemigos.size()){return -1;}
-    }
-    
 
     int MenosPasos = 999;
     int idMasCercano;
@@ -56,13 +46,12 @@ int IA::detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<pers
             }
         
     cout << "pasos: " << MenosPasos <<", "<<"id: "<< idMasCercano << endl;
-    contIA++;
-    
     return idMasCercano;
 }
 
 int IA::getContIA() { return contIA; }
 
+void IA::inContIA() {contIA++;}
 void IA::resetContIA() {contIA = 0;}
 
 
