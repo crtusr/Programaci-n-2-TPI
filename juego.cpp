@@ -51,7 +51,7 @@ bool Juego::ejecutar(sf::RenderWindow &window)
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
         procesarEventos(window);
-        if(Estado != ANIMACION_BLOQUEANTE)
+        if(partida.getTurno() == 1 && Estado != ANIMACION_BLOQUEANTE)
           procesarIA();
         actualizar();
         renderizar(window);
@@ -158,7 +158,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 if (teclaPresionada == ENTER)
                 {
                     // ACTUALIZADO: Nueva lógica de animación de lucas.
-                    animacion.asignaranimacion(pers, persNJ, ataque);
+                    animacion.asignaranimacion(pers, persNJ, ataque, manager);
                     Estado = ANIMACION_DAÑO;
                     cont = 0;
 
