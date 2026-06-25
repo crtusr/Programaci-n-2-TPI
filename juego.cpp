@@ -51,7 +51,7 @@ bool Juego::ejecutar(sf::RenderWindow &window)
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
         procesarEventos(window);
-        if(Estado != ANIMACION_BLOQUEANTE)
+        if(Estado != ANIMACION_BLOQUEANTE && partida.getTurno() == 1)
             procesarIA();
         actualizar();
         renderizar(window);
@@ -228,37 +228,25 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 }
 void Juego::procesarIA()
 {
-    idIA = ia.getContIA();
-    if (partida.getTurno() == 0)
-    {
-        return;
-    }
-    while(persNJ[ia.getContIA()].getYaActuo())
-    {
-        ia.inContIA();
-        if(ia.getContIA() >= persNJ.size())
-          ia.resetContIA();
 
-    }
+    while(persNJ[ia.getContIA()].getYaActuo() && ia.getContIA() < persNJ.size())
+        ia.inContIA();
+
     if (ia.getContIA()>=persNJ.size())
-    {
-        ia.resetContIA();
         return;
-    }
 
     int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
     
-    if (idIA < 0 || idIA >= persNJ.size()) 
+    if (ia.getContIA() < 0 || ia.getContIA() >= persNJ.size()) 
     {
         std::cout 
-            << "idIA fuera de rango: " << idIA 
+            << "idIA fuera de rango: " << ia.getContIA() 
             << " size=" << persNJ.size() << std::endl;
-            ia.resetContIA();
             return;
     }
     movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
-    movimiento.calcularMovimiento(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
-    movimiento.buscarCamino(persNJ[idIA].getPosx(), persNJ[idIA].getPosy(), persNJ[idIA].getMovReal());
+    movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
+    movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
     
     Estado = ANIMACION_BLOQUEANTE;
@@ -284,9 +272,9 @@ void Juego::actualizar()
         }
         if(partida.getTurno() == 1)
         {
-            if (!manager.moverpersonaje(persNJ[idIA], movimiento.getCamino()))
+            if (!manager.moverpersonaje(persNJ[ia.getContIA()], movimiento.getCamino()))
             {
-                persNJ[idIA].setYaActuo(true);
+                persNJ[ia.getContIA()].setYaActuo(true);
                 ia.inContIA();
                 Estado = CURSOR_LIBRE;
             }
@@ -301,6 +289,7 @@ void Juego::actualizar()
     if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ) && Estado == CURSOR_LIBRE)
     {
         partida.pasarTurno();
+        ia.resetContIA();
         resetearAccionesJugador(persNJ);
     }
     
