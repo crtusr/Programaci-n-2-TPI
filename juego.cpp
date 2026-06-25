@@ -232,10 +232,12 @@ void Juego::procesarIA()
     {
         return;
     }
-    while(persNJ[idIA].getYaActuo())
+    while(persNJ[ia.getContIA()].getYaActuo())
     {
         ia.inContIA();
-        if(idIA >= persNJ.size()){ia.resetContIA();}
+        if(ia.getContIA() >= persNJ.size())
+          ia.resetContIA();
+
     }
     if (ia.getContIA()>=persNJ.size())
     {
