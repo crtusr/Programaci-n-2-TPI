@@ -12,15 +12,15 @@ int cont=0;
 anim_frame=0;
 switch(ataque.getopciondeataque()){
 case 1:
-pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);anim_frame=-40;break;
+pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);break;
 case 2:
-pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);anim_frame=-40;break;
+pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);break;
 case 3:
-pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);anim_frame=-40;break;
+pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);break;
 case 4:
-pers_atk[manager.getactual()].setaccion(ATAQUE_ARCO);anim_frame=-40;break;
+pers_atk[manager.getactual()].setaccion(ATAQUE_ARCO);break;
 case 5:
-pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);anim_frame=-40;break;
+pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);break;
 }
 
 
