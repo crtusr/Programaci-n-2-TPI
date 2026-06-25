@@ -51,8 +51,8 @@ bool Juego::ejecutar(sf::RenderWindow &window)
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
         procesarEventos(window);
-        if(partida.getTurno() == 1 && Estado != ANIMACION_BLOQUEANTE)
-          procesarIA();
+        if(Estado != ANIMACION_BLOQUEANTE)
+            procesarIA();
         actualizar();
         renderizar(window);
     }
@@ -228,6 +228,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 }
 void Juego::procesarIA()
 {
+    idIA = ia.getContIA();
     if (partida.getTurno() == 0)
     {
         return;
@@ -246,7 +247,7 @@ void Juego::procesarIA()
     }
 
     int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
-    idIA = ia.getContIA();
+    
     if (idIA < 0 || idIA >= persNJ.size()) 
     {
         std::cout 
@@ -291,23 +292,21 @@ void Juego::actualizar()
             }
         }
     }
-    if(Estado == CURSOR_LIBRE)
-    { 
-        if (partida.getTurno() == 0 && todasLasUnidadesActuaron(pers))
-        {
-            partida.pasarTurno();
-            resetearAccionesJugador(pers);
-        }
-        if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ))
-        {
-            partida.pasarTurno();
-            resetearAccionesJugador(persNJ);
-        }
+   
+    if (partida.getTurno() == 0 && todasLasUnidadesActuaron(pers) && Estado == CURSOR_LIBRE)
+    {
+        partida.pasarTurno();
+        resetearAccionesJugador(pers);
+    }
+    if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ) && Estado == CURSOR_LIBRE)
+    {
+        partida.pasarTurno();
+        resetearAccionesJugador(persNJ);
+    }
     
-        if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
-        {
-            nivelSuperado = true;
-        }
+    if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
+    {
+        nivelSuperado = true;
     }
 }
 
