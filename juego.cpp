@@ -289,21 +289,23 @@ void Juego::actualizar()
             }
         }
     }
-   
-    if (partida.getTurno() == 0 && todasLasUnidadesActuaron(pers))
-    {
-        partida.pasarTurno();
-        resetearAccionesJugador(pers);
-    }
-    if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ))
-    {
-        partida.pasarTurno();
-        resetearAccionesJugador(persNJ);
-    }
+    if(Estado == CURSOR_LIBRE)
+    { 
+        if (partida.getTurno() == 0 && todasLasUnidadesActuaron(pers))
+        {
+            partida.pasarTurno();
+            resetearAccionesJugador(pers);
+        }
+        if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ))
+        {
+            partida.pasarTurno();
+            resetearAccionesJugador(persNJ);
+        }
     
-    if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
-    {
-        nivelSuperado = true;
+        if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
+        {
+            nivelSuperado = true;
+        }
     }
 }
 
