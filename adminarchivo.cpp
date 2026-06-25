@@ -33,10 +33,11 @@ void AdminArchivo::leerLinea(char *str)
   for(int i = 0; leido != '\n' && leido != '\r' && leyoAlgo; i++)
   {
     str[i] = leido;
-    fread(&leido, 1, 1, arch);
+    leyoAlgo = fread(&leido, 1, 1, arch);
+    
   }
   while(leido != '\n' && leyoAlgo)
-    fread(&leido, 1, 1, arch);
+    leyoAlgo = fread(&leido, 1, 1, arch);
 }
 
 int AdminArchivo::avanzarHastaChar(char start)
