@@ -61,7 +61,9 @@ void Animacion::mostraranimacion(RenderWindow& window){
     if(anim_frame>20){x=2;}
     if(anim_frame>30){x=3;}
     if(anim_frame>40){x=4;}
-    if(anim_frame>40){x=5;}
+    if(anim_frame>50){x=5;}
+
+    sprite.setTexture(textura);
     sprite.setTextureRect(sf::IntRect(sf::Vector2i(64*x,64*y),sf::Vector2i(64,64)));
 
     for(int i=0; i<6; i++){
@@ -78,7 +80,7 @@ anim_frame++;
 
 void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers){
 
-  for(int i=0;i<pers.size();i++){
+  for(size_t i=0;i<pers.size();i++){
     string salud = to_string(pers[i].getHpReal());
     text.setString(salud);
     text.setPosition(Vector2f(pers[i].getPosxPxl()+10,pers[i].getPosyPxl()-10));
@@ -104,6 +106,8 @@ if(ataque.getopciondeataque()==2&&atk_activo==true){
     if(atk_frame>30){x=3;}
     if(atk_frame>40){x=4;}
     if(atk_frame>50){x=5;}
+
+        spt_ataque2.setTexture(tex_ataque2);
         spt_ataque2.setPosition(sf::Vector2f(pers.getPosxPxl()-64,pers.getPosyPxl()-64));
         spt_ataque2.setTextureRect(sf::IntRect(sf::Vector2i(192*x, 192*y),sf::Vector2i(192, 192)));
         window.draw(spt_ataque2);
@@ -123,11 +127,13 @@ if(ataque.getopciondeataque()==3&&atk_activo==true){
     if(atk_frame>20){x=2;}
     if(atk_frame>30){x=3;}
     if(atk_frame>40){x=4;}
-    if(atk_frame>60){x=5;}
+    if(atk_frame>48){x=5;}
     if(atk_frame>65){x=6;}
     if(atk_frame>70){x=7;}
     if(atk_frame>80){x=8;}
     if(atk_frame>90){x=9;}
+
+        spt_ataque3.setTexture(tex_ataque3);
         spt_ataque3.setPosition(sf::Vector2f(pers.getPosxPxl()+aux_x-64,pers.getPosyPxl()+aux_y-64));
         spt_ataque3.setTextureRect(sf::IntRect(sf::Vector2i(192*x, 192*0),sf::Vector2i(192, 192)));
         window.draw(spt_ataque3);

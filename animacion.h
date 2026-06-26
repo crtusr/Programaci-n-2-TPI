@@ -25,6 +25,19 @@ Font font;
 Text text;
 int tipodeataque;
 
+// Declaracion de variables nuevas
+Texture tex_ataque2;
+    Sprite spt_ataque2;
+
+    Texture tex_ataque3;
+    Sprite spt_ataque3;
+
+    Texture tex_ataque4;
+    Sprite spt_ataque4;
+
+    Texture tex_curacion1;
+    Sprite spt_curacion1;
+
 public:
         Animacion() : sprite(textura),text(font," ",20),spt_ataque2(tex_ataque2),spt_ataque3(tex_ataque3),spt_ataque4(tex_ataque4),spt_curacion1(tex_curacion1)
     {
