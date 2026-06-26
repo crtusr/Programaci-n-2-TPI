@@ -392,6 +392,7 @@ void Juego::renderizar(sf::RenderWindow &window)
     if (Estado == ANIMACION_DAÑO)
     {
         animacion.mostraranimacion(window);
+        animacion.mostrarataque(pers[manager.getactual()],window,ataque);
         cont++;
         if (cont > 100)
         {
