@@ -10,19 +10,21 @@ using namespace sf;
  void Animacion::asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager){
 int cont=0;
 anim_frame=0;
+atk_frame=0;
 switch(ataque.getopciondeataque()){
 case 1:
 pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);break;
 case 2:
-pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);break;
+pers_atk[manager.getactual()].setaccion(ATAQUE_ESPADA);
+atk_activo=true;break;
 case 3:
-pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);break;
+pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);
+atk_activo=true;aux_x=0;aux_y=0;break;
 case 4:
 pers_atk[manager.getactual()].setaccion(ATAQUE_ARCO);break;
 case 5:
 pers_atk[manager.getactual()].setaccion(ATAQUE_GRANADA);break;
 }
-
 
 pers_atk[manager.getactual()].setframe(0);
 
@@ -83,4 +85,54 @@ void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers){
     text.setFillColor(Color::Black);
     window.draw(text);
   }
+}
+
+void Animacion::mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque){
+    int x;
+    int y;
+
+if(ataque.getopciondeataque()==2&&atk_activo==true){
+    switch(pers.getdireccion()){
+    case ARRIBA:    y=0; break;
+    case DERECHA:   y=3; break;
+    case ABAJO:     y=2; break;
+    case IZQUIERDA: y=1; break;
+   }
+    if(atk_frame>0){x=0;}
+    if(atk_frame>10){x=1;}
+    if(atk_frame>20){x=2;}
+    if(atk_frame>30){x=3;}
+    if(atk_frame>40){x=4;}
+    if(atk_frame>50){x=5;}
+        spt_ataque2.setPosition(sf::Vector2f(pers.getPosxPxl()-64,pers.getPosyPxl()-64));
+        spt_ataque2.setTextureRect(sf::IntRect(sf::Vector2i(192*x, 192*y),sf::Vector2i(192, 192)));
+        window.draw(spt_ataque2);
+    }
+
+if(ataque.getopciondeataque()==3&&atk_activo==true){
+        if(atk_frame<=48){
+    switch(pers.getdireccion()){
+    case ARRIBA:    aux_y-=4; break;
+    case DERECHA:   aux_x+=4; break;
+    case ABAJO:     aux_y+=4; break;
+    case IZQUIERDA: aux_x-=4; break;
+     }
+    }
+    if(atk_frame>0){x=0;}
+    if(atk_frame>10){x=1;}
+    if(atk_frame>20){x=2;}
+    if(atk_frame>30){x=3;}
+    if(atk_frame>40){x=4;}
+    if(atk_frame>60){x=5;}
+    if(atk_frame>65){x=6;}
+    if(atk_frame>70){x=7;}
+    if(atk_frame>80){x=8;}
+    if(atk_frame>90){x=9;}
+        spt_ataque3.setPosition(sf::Vector2f(pers.getPosxPxl()+aux_x-64,pers.getPosyPxl()+aux_y-64));
+        spt_ataque3.setTextureRect(sf::IntRect(sf::Vector2i(192*x, 192*0),sf::Vector2i(192, 192)));
+        window.draw(spt_ataque3);
+    }
+
+   if(atk_frame>90){atk_activo=false;}
+   atk_frame++;
 }
