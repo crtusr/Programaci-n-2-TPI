@@ -19,11 +19,12 @@ Sprite sprite;
 Texture textura;
 Font font;
 Text text;
+int tipodeataque;
 
 public:
         Animacion() : sprite(textura),text(font," ",20)
     {
-        if (!textura.loadFromFile("imagen/Sprite-000_gplpe1.png")) {
+        if (!textura.loadFromFile("imagen/sprite_impactos.png")) {
             std::cerr << "Error al cargar textura\n";
         }
             if (!font.openFromFile("assets/Roboto-VariableFont_wdth,wght.ttf")) {
