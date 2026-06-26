@@ -10,6 +10,10 @@ using namespace sf;
 class Animacion{
 
 private:
+int aux_x=0;
+int aux_y=0;
+int atk_frame = 0;
+bool atk_activo = false;
 int anim_frame = 0;
 bool anim_activa[6] = {};
 int v_posx[6];
@@ -22,24 +26,37 @@ Text text;
 int tipodeataque;
 
 public:
-        Animacion() : sprite(textura),text(font," ",20)
+        Animacion() : sprite(textura),text(font," ",20),spt_ataque2(tex_ataque2),spt_ataque3(tex_ataque3),spt_ataque4(tex_ataque4),spt_curacion1(tex_curacion1)
     {
         if (!textura.loadFromFile("imagen/sprite_impactos.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+                if (!tex_ataque2.loadFromFile("imagen/sprite-atk2.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+                if (!tex_ataque3.loadFromFile("imagen/sprite_bomba_1-sheet.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+                if (!tex_ataque4.loadFromFile("imagen/flecha.png")) {
+            std::cerr << "Error al cargar textura\n";
+        }
+                if (!tex_curacion1.loadFromFile("imagen/sprite_bomba_heler_.png")) {
             std::cerr << "Error al cargar textura\n";
         }
             if (!font.openFromFile("assets/Roboto-VariableFont_wdth,wght.ttf")) {
             std::cerr << "Error al cargar fuente\n";
         }
     sprite.setTexture(textura);
-    sprite.setPosition(sf::Vector2f(0,0));
-    sprite.setTextureRect(sf::IntRect(
-        sf::Vector2i(64*0,64*0),      // posici�n inicial dentro del spritesheet---Vector2i:pertenece a la libreria de SFLM y contiene 2 vectores
-        sf::Vector2i(64, 64)         // tama�o del recorte
-    ));
+    spt_ataque2.setTexture(tex_ataque2);
+    spt_ataque3.setTexture(tex_ataque3);
+    spt_ataque4.setTexture(tex_ataque4);
+    spt_curacion1.setTexture(tex_curacion1);
+
     }
 void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager);
 void mostraranimacion(RenderWindow& window);
 void mostrarvida(RenderWindow& window,vector<personaje>& pers);
+void mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
 };
 
 #endif // ANIMACION_H_INCLUDED;
