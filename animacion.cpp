@@ -41,20 +41,25 @@ for(int i=0; i<6; i++){
     v_posy[i]=pers_atk[ataque.getimpacto(cont)].getPosyPxl();
     break;
     }
-
+    tipodeataque=ataque.gettipodeataque();
     cont++;
   }
 }
 }
 
 void Animacion::mostraranimacion(RenderWindow& window){
-    int x;
-    int y;
-    if(anim_frame==0){x=0;y=0;}
-    if(anim_frame>10){x=3;y=0;}
-    if(anim_frame>20){x=4;y=0;}
-    if(anim_frame>30){x=5;y=0;}
-    if(anim_frame>40){x=6;y=0;}
+
+    int x=0;
+    int y=0;
+    if(tipodeataque==DANIO){y=0;}
+     if(tipodeataque==CURACION){y=1;}
+
+    if(anim_frame>0){x=0;}
+    if(anim_frame>10){x=1;}
+    if(anim_frame>20){x=2;}
+    if(anim_frame>30){x=3;}
+    if(anim_frame>40){x=4;}
+    if(anim_frame>40){x=5;}
     sprite.setTextureRect(sf::IntRect(sf::Vector2i(64*x,64*y),sf::Vector2i(64,64)));
 
     for(int i=0; i<6; i++){
