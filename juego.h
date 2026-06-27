@@ -52,7 +52,7 @@ private:
     void renderizar(sf::RenderWindow& window);
 
     int cargarMapa(const char* nomArch);
-
+    void declararAtaque();
     // Atributos de UI In-game
     Menu* menuAccion;
     Menu *menuSubOpciones;

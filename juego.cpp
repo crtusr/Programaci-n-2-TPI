@@ -623,3 +623,16 @@ void Juego::SpawnPersonaje(const char *archivoPersonajes)
     if(personajes.cerrar() != 0)
       std::cout << "no se cerro personajesX.txt" << std::endl;
 }
+
+void Juego::declararAtaque()
+{
+    animacion.asignaranimacion(pers, persNJ, ataque, manager);
+    Estado = ANIMACION_DAÑO;
+    cont = 0;
+
+    for (int i = 0; i < ataque.getcantidadimpactos(); i++)
+    {
+        Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
+        combate.pelea();
+    }
+}
