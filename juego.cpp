@@ -9,7 +9,7 @@
 #include <iostream>
 
 using namespace std;
-
+// para un pull
 // CONSTRUCTOR: Inicializa el Cursor, la Partida y carga los archivos dinámicos.
 Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
 
