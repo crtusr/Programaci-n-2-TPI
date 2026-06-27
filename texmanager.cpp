@@ -7,9 +7,13 @@
 TexManager::TexManager(const char *archivos)
 {
   AdminArchivo archivo(archivos);
-  int nTexCeldas, nTexPers;
+  int nTexCeldas, nTexPers, err;
   char dirArchivo[64] = {0};
-  archivo.abrir();
+  err = archivo.abrir();
+  if(err)
+  {
+    printf("Error abriendo Archivos.txt %d", err);
+  }
   nTexCeldas = archivo.leerNumero();
   nTexPers = archivo.leerNumero();
   for(int i = 0; i < nTexCeldas; i++)
@@ -31,7 +35,8 @@ TexManager::TexManager(const char *archivos)
     }
     memset(dirArchivo, 0, 64);
   }
-  archivo.cerrar();
+  if(archivo.cerrar() != 0)
+    printf("No se cerro archivos.txt\n");
 }
 sf::Texture *TexManager::getPersonaje(int num)
 {

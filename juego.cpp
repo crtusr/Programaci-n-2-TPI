@@ -554,10 +554,12 @@ void Juego::agregarPersonajeNJ(TIPO_PERSONAJE tipoPJ, int x, int y)
 void Juego::SpawnPersonaje(const char *archivoPersonajes)
 {
     AdminArchivo personajes(archivoPersonajes);
-    int x, y, trabajo, maxHp, fuerza, defensa;
+    int x, y, trabajo, maxHp, fuerza, defensa, err;
     const char separador = ';';
 
-    personajes.abrir();
+    err = personajes.abrir();
+    if(err)
+      std::cout << "Error abriendo personajesX.txt: " << err << std::endl;
     int cantPJ = personajes.leerNumero();
 
     for (int i = 0; i < cantPJ; i++)
@@ -619,5 +621,6 @@ void Juego::SpawnPersonaje(const char *archivoPersonajes)
         persNJ[i].setFuerza(fuerza);
         persNJ[i].setDef(defensa);
     }
-    personajes.cerrar();
+    if(personajes.cerrar() != 0)
+      std::cout << "no se cerro personajesX.txt" << std::endl;
 }
