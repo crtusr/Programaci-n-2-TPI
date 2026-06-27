@@ -303,8 +303,12 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 void Juego::procesarIA()
 {
 
-    while(persNJ[ia.getContIA()].getYaActuo() && ia.getContIA() < persNJ.size() && persNJ[ia.getContIA()].getMaxHpReal() == 0)
-        ia.inContIA();
+    while(ia.getContIA() < persNJ.size() && (persNJ[ia.getContIA()].getYaActuo() || persNJ[ia.getContIA()].getHpReal() == 0))
+    {
+      if(persNJ[ia.getContIA()].getHpReal() == 0)
+          persNJ[ia.getContIA()].setYaActuo(true);
+      ia.inContIA();
+    }
 
     if (ia.getContIA()>=persNJ.size())
         return;

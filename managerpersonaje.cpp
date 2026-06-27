@@ -161,16 +161,17 @@ void managerpersonaje::moverpersonaje(personaje& pers)
 
 
 
-void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) {
-       unsigned int i;
-        for(i=0;i<pers.size();i++)
+void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& window) 
+{
+    unsigned int i;
+    for(i=0;i<pers.size();i++)
+    {
+        if(pers[i].getaccion()==MUERTO||pers[i].getHpReal()>0)
         {
-            if(pers[i].getaccion()==MUERTO||pers[i].getHpReal()>0)
-            {
-             window.draw(pers[i].getsprite());
-            }
+          window.draw(pers[i].getsprite());
         }
     }
+}
 
 void managerpersonaje::secuencia(personaje& pers)
 {
@@ -275,11 +276,12 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 
     //------------------------
 
-       if(pers[i].getaccion()==ATAQUE_ESPADA)
+    if(pers[i].getaccion()==ATAQUE_ESPADA)
     {
       int ladoCelda = pers[i].getladocelda();
       int nDeFilaSprite = 0, nDeColumnaSprite = 64*0+32;
-      switch(pers[i].getdireccion()){
+      switch(pers[i].getdireccion())
+      {
         case ARRIBA: nDeFilaSprite = 54*64+32; break;
         case DERECHA: nDeFilaSprite = 60*64+32; break;
         case ABAJO: nDeFilaSprite = 58*64+32; break;
@@ -294,13 +296,14 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       pers[i].setsubrectsprite( nDeColumnaSprite,nDeFilaSprite,
                               ladoCelda, ladoCelda);
       pers[i].sumarframe();
-      if(pers[i].getframe()>70){
-      pers[i].setframe(0);
-      pers[i].setaccion(0);
+      if(pers[i].getframe()>70)
+      {
+        pers[i].setframe(0);
+        pers[i].setaccion(0);
       }
     }
     //------------------------
-        if(pers[i].getaccion()==ATAQUE_ARCO)
+    if(pers[i].getaccion()==ATAQUE_ARCO)
     {
       int ladoCelda = pers[i].getladocelda();
       int nDeFilaSprite = 0, nDeColumnaSprite = 64*0;
@@ -323,13 +326,14 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       pers[i].setsubrectsprite( nDeColumnaSprite,nDeFilaSprite,
                               ladoCelda, ladoCelda);
       pers[i].sumarframe();
-      if(pers[i].getframe()>70){
-      pers[i].setframe(0);
-      pers[i].setaccion(0);
+      if(pers[i].getframe()>70)
+      {
+        pers[i].setframe(0);
+        pers[i].setaccion(0);
       }
     }
     //------------------------
-            if(pers[i].getaccion()==ATAQUE_GRANADA)
+    if(pers[i].getaccion()==ATAQUE_GRANADA)
     {
       int ladoCelda = pers[i].getladocelda();
       int nDeFilaSprite = 0, nDeColumnaSprite = 64*0;
@@ -354,7 +358,7 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       }
     }
         //-----------------------
-        if(pers[i].getaccion()==BUFEO_ARMADURA)
+    if(pers[i].getaccion()==BUFEO_ARMADURA)
     {
       int ladoCelda = pers[i].getladocelda();
       int nDeFilaSprite = 0, nDeColumnaSprite = 64*0;
@@ -388,9 +392,9 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 
 
 
-      if(pers[i].getaccion()==MUERTO)
+    if(pers[i].getaccion()==MUERTO)
     {
-        int x=0;
+      int x=0;
       if(pers[i].getframe()>40){x = 64*4;}
       if(pers[i].getframe()>80){x = 64*5;}
       if(pers[i].getframe()>300){x = 64*8;}
