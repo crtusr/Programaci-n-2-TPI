@@ -251,12 +251,8 @@ int managerpersonaje::comprobarLugarTablero(int x,int y,vector<personaje>& pers)
 
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
-  for(size_t i=0;i<pers.size();i++)
+  for(int i=0;i<pers.size();i++)
   {
-    if(pers[i].getHpReal() == 0)
-    {
-      continue;
-    }
     if(pers[i].getaccion()==0)
     {
       int ladoCelda = pers[i].getladocelda();
@@ -275,6 +271,8 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
     }
 
 
+    //------------------------
+
        if(pers[i].getaccion()==ATAQUE_ESPADA)
     {
       int ladoCelda = pers[i].getladocelda();
@@ -285,7 +283,6 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
         case ABAJO: nDeFilaSprite = 58*64+32; break;
         case IZQUIERDA: nDeFilaSprite = 56*64+32; break;
       }
-    //  if(pers[i].getframe()>0){nDeColumnaSprite = 64*0+32;}
       if(pers[i].getframe()>8){nDeColumnaSprite = 64*2+32;}
       if(pers[i].getframe()>16){nDeColumnaSprite = 64*4+32;}
       if(pers[i].getframe()>24){nDeColumnaSprite = 64*6+32;}
@@ -300,7 +297,7 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       pers[i].setaccion(0);
       }
     }
-
+    //------------------------
         if(pers[i].getaccion()==ATAQUE_ARCO)
     {
       int ladoCelda = pers[i].getladocelda();
@@ -311,7 +308,6 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
         case ABAJO: nDeFilaSprite = 18*64; break;
         case IZQUIERDA: nDeFilaSprite = 17*64; break;
       }
-    // if(pers[i].getframe()>0){nDeColumnaSprite = 64*0;}
       if(pers[i].getframe()>6){nDeColumnaSprite = 64*1;}
       if(pers[i].getframe()>12){nDeColumnaSprite = 64*2;}
       if(pers[i].getframe()>18){nDeColumnaSprite = 64*3;}
@@ -322,7 +318,6 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       if(pers[i].getframe()>48){nDeColumnaSprite = 64*8;}
       if(pers[i].getframe()>56){nDeColumnaSprite = 64*9;}
       if(pers[i].getframe()>62){nDeColumnaSprite = 64*10;}
-     // if(pers[i].getframe()>50){nDeColumnaSprite = 64*6;}
       pers[i].setsubrectsprite( nDeColumnaSprite,nDeFilaSprite,
                               ladoCelda, ladoCelda);
       pers[i].sumarframe();
@@ -331,7 +326,7 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       pers[i].setaccion(0);
       }
     }
-
+    //------------------------
             if(pers[i].getaccion()==ATAQUE_GRANADA)
     {
       int ladoCelda = pers[i].getladocelda();
@@ -342,14 +337,12 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
         case ABAJO: nDeFilaSprite = 14*64; break;
         case IZQUIERDA: nDeFilaSprite = 13*64; break;
       }
-    // if(pers[i].getframe()>0){nDeColumnaSprite = 64*0;}
       if(pers[i].getframe()>8){nDeColumnaSprite = 64*0;}
       if(pers[i].getframe()>16){nDeColumnaSprite = 64*1;}
       if(pers[i].getframe()>24){nDeColumnaSprite = 64*2;}
       if(pers[i].getframe()>32){nDeColumnaSprite = 64*3;}
       if(pers[i].getframe()>40){nDeColumnaSprite = 64*4;}
       if(pers[i].getframe()>50){nDeColumnaSprite = 64*5;}
-     // if(pers[i].getframe()>50){nDeColumnaSprite = 64*6;}
       pers[i].setsubrectsprite( nDeColumnaSprite,nDeFilaSprite,
                               ladoCelda, ladoCelda);
       pers[i].sumarframe();
@@ -358,8 +351,44 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       pers[i].setaccion(0);
       }
     }
+        //-----------------------
+        if(pers[i].getaccion()==BUFEO_ARMADURA)
+    {
+      int ladoCelda = pers[i].getladocelda();
+      int nDeFilaSprite = 0, nDeColumnaSprite = 64*0;
+      switch(pers[i].getdireccion()){
+        case ARRIBA: nDeFilaSprite =    0*64; break;
+        case DERECHA: nDeFilaSprite =   3*64; break;
+        case ABAJO: nDeFilaSprite =     2*64; break;
+        case IZQUIERDA: nDeFilaSprite = 1*64; break;
+      }
+      if(pers[i].getframe()>10){nDeColumnaSprite = 64*0;}
+      if(pers[i].getframe()>20){nDeColumnaSprite = 64*1;}
+      if(pers[i].getframe()>30){nDeColumnaSprite = 64*2;}
+      if(pers[i].getframe()>40){nDeColumnaSprite = 64*3;}
+      if(pers[i].getframe()>50){nDeColumnaSprite = 64*4;}
+      if(pers[i].getframe()>60){nDeColumnaSprite = 64*5;}
+      if(pers[i].getframe()>70){nDeColumnaSprite = 64*6;}
+      pers[i].setsubrectsprite( nDeColumnaSprite,nDeFilaSprite,
+                              ladoCelda, ladoCelda);
+      pers[i].sumarframe();
+      if(pers[i].getframe()>70){
+      pers[i].setframe(0);
+      pers[i].setaccion(0);
+      }
+    }
+            //-----------------------
+      if(pers[i].getaccion()==MUERTO)
+    {
+        int x;
+      if(pers[i].getframe()>10){x = 64*4;}
+      if(pers[i].getframe()>20){x = 64*5;}
+      pers[i].setsubrectsprite( x,64*20,64, 64);
+      pers[i].sumarframe();
+    }
   }
  }
+
 
 
 int managerpersonaje::contarPersonajesActivos(vector<personaje>& pers)
