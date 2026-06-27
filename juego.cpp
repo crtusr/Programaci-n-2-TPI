@@ -28,6 +28,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     personajeSeleccionado = nullptr;
     teclaPresionada = 0;
     menuSubOpciones = nullptr;
+    menuAccion = nullptr;
 
     // Cargamos los archivos que nos pasó el Manager
     tablero.resize(archivoMapa);
@@ -278,7 +279,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             else if (teclaPresionada == ENTER)
             {
                 int subOpcion = menuSubOpciones->getPressedItem();
-                
+
                 if (subOpcion == 2) // Opción "Volver"
                 {
                     Estado = MENU_INGAME; // Volvemos al principal
@@ -460,8 +461,8 @@ void Juego::renderizar(sf::RenderWindow &window)
     manager.actualizarpersonaje(persNJ);
     manager.mostrarpersonaje(pers, window);
     manager.mostrarpersonaje(persNJ, window);
-    animacion.mostrarvida(window, pers);
-    animacion.mostrarvida(window, persNJ);
+    animacion.mostrarvida(window, pers,1);
+    animacion.mostrarvida(window, persNJ,2);
 /*
     for (personaje &nose : persNJ)
         window.draw(nose.getsprite());
@@ -490,15 +491,13 @@ void Juego::renderizar(sf::RenderWindow &window)
         menuSubOpciones->draw(window);
     }
 
-    if (Estado == ANIMACION_DAÑO)
+    if(Estado == ANIMACION_DAÑO)
     {
-        animacion.mostraranimacion(window);
-        animacion.mostrarataque(pers[manager.getactual()],window,ataque);
-        cont++;
-        if (cont > 100)
+        bool van1=animacion.mostraranimacion(window);
+        bool van2=animacion.mostrarataque(pers[manager.getactual()],window,ataque);
+        if(!van1&&!van2)
         {
             Estado = CURSOR_LIBRE;
-            cont = 0;
         }
     }
     window.display();

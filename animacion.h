@@ -19,6 +19,8 @@ bool anim_activa[6] = {};
 int v_posx[6];
 int v_posy[6];
 int danios[6];
+RectangleShape rectangulo;
+RectangleShape barradevida;
 Sprite sprite;
 Texture textura;
 Font font;
@@ -64,12 +66,14 @@ public:
     spt_ataque3.setTexture(tex_ataque3);
     spt_ataque4.setTexture(tex_ataque4);
     spt_curacion1.setTexture(tex_curacion1);
+    rectangulo.setSize(Vector2f(15,4));
 
     }
 void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager);
-void mostraranimacion(RenderWindow& window);
-void mostrarvida(RenderWindow& window,vector<personaje>& pers);
-void mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
+bool mostraranimacion(RenderWindow& window);
+void mostrarvida(RenderWindow& window,vector<personaje>& pers,int color);
+bool mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
+
 };
 
 #endif // ANIMACION_H_INCLUDED;

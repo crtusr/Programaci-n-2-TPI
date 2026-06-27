@@ -275,6 +275,50 @@ void Ataque::curacion1(int direccion,RenderWindow& window,vector<personaje>& per
   }
 }
 
+void Ataque::curacion2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
+{
+  tipodeataque=CURACION;
+  int cont=0;
+  cantidadimpactos=0;
+  int aux;
+  int v_dirx[9]={-64,0,64,-64,0,64,-64,0,64};
+  int v_diry[9]={-64,-64,-64,0,0,0,64,64,64};
+
+  for(int i=0;i<9;i++)
+  {
+    sprite3.setPosition(sf::Vector2f(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[i],pers_atk[manager.getactual()].getPosyPxl()+v_diry[i]));
+    sprite4.setPosition(sf::Vector2f(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[i],pers_atk[manager.getactual()].getPosyPxl()+v_diry[i]));
+    aux=manager.comprobarlugar(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[i],pers_atk[manager.getactual()].getPosyPxl()+v_diry[i],pers_atk);
+    if(aux==-1)
+    {
+      window.draw(sprite3);
+    }
+    if(aux>=0)
+    {
+      window.draw(sprite4);
+      impactos[cont]=aux;
+      cont++;
+      cantidadimpactos=cont;
+    }
+  }
+}
+
+void Ataque::bufeo1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager)
+{
+  tipodeataque=BUFEO_ARMADURA;
+  int cont=0;
+  cantidadimpactos=0;
+  int aux;
+  int v_dirx=pers_atk[manager.getactual()].getPosxPxl();
+  int v_diry=pers_atk[manager.getactual()].getPosyPxl();
+
+  sprite3.setPosition(sf::Vector2f(v_dirx,v_diry));
+  impactos[cont]=pers_atk[manager.getactual()].getId();
+  cantidadimpactos=1;
+  window.draw(sprite3);
+
+}
+
 void Ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager,int opc_atk)
 {
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){opc=1;} //esto no va a estar mas cuando menu elija el ataque
@@ -286,6 +330,10 @@ void Ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num4)){ opc=4; } //esto no va a estar mas cuando menu elija el ataque
 
   if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num5)){ opc=5; } //esto no va a estar mas cuando menu elija el ataque
+
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num6)){ opc=6; } //esto no va a estar mas cuando menu elija el ataque
+
+  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num7)){ opc=7; } //esto no va a estar mas cuando menu elija el ataque
 
   switch(opc_atk)
   {
@@ -303,6 +351,12 @@ void Ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>
       break;
           case 5:
       curacion1(direccion,window,pers_atk,pers_def,manager);
+      break;
+         case 6:
+      curacion2(direccion,window,pers_atk,pers_def,manager);
+      break;
+        case 7:
+      bufeo1(direccion,window,pers_atk,pers_def,manager);
       break;
   }
 }
