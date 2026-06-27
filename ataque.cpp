@@ -321,19 +321,13 @@ void Ataque::bufeo1(int direccion,RenderWindow& window,vector<personaje>& pers_a
 
 void Ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager,int opc_atk)
 {
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){opc=1;} //esto no va a estar mas cuando menu elija el ataque
-
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)){ opc=2; } //esto no va a estar mas cuando menu elija el ataque
-
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3)){ opc=3; } //esto no va a estar mas cuando menu elija el ataque
-
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num4)){ opc=4; } //esto no va a estar mas cuando menu elija el ataque
-
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num5)){ opc=5; } //esto no va a estar mas cuando menu elija el ataque
-
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num6)){ opc=6; } //esto no va a estar mas cuando menu elija el ataque
-
-  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num7)){ opc=7; } //esto no va a estar mas cuando menu elija el ataque
+//  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)){opc=1;} //esto no va a estar mas cuando menu elija el ataque
+//  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)){ opc=2; } //esto no va a estar mas cuando menu elija el ataque
+//  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3)){ opc=3; } //esto no va a estar mas cuando menu elija el ataque
+//  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num4)){ opc=4; } //esto no va a estar mas cuando menu elija el ataque
+//  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num5)){ opc=5; } //esto no va a estar mas cuando menu elija el ataque
+//  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num6)){ opc=6; } //esto no va a estar mas cuando menu elija el ataque
+//  if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num7)){ opc=7; } //esto no va a estar mas cuando menu elija el ataque
 
   switch(opc_atk)
   {
