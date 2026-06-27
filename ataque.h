@@ -87,6 +87,8 @@ void ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vect
 void ataque3(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void ataque4(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void curacion1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
+void curacion2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
+void bufeo1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void prepararataque(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager,int opc_atk);
 };
 #endif // ATAQUE_H_INCLUDED
