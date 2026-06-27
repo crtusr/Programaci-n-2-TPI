@@ -13,12 +13,12 @@ using namespace std;
 // CONSTRUCTOR: Inicializa el Cursor, la Partida y carga los archivos dinámicos.
 Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
 
-                                                                       cursor(0, 0),
-                                                                       partida(0, 0),
-                                                                       texturas("archivos.txt"),
-                                                                       tablero(64, 0, 0),
-                                                                       rendUi(&tablero),
-                                                                       movimiento(3, 3, &tablero, persNJ)
+    cursor(0, 0),
+    partida(0, 0),
+    texturas("archivos.txt"),
+    tablero(64, 0, 0),
+    rendUi(&tablero),
+    movimiento(3, 3, &tablero, persNJ)
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -26,6 +26,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     Estado = CURSOR_LIBRE;
     personajeSeleccionado = nullptr;
     teclaPresionada = 0;
+    menuSubOpciones = nullptr;
 
     // Cargamos los archivos que nos pasó el Manager
     tablero.resize(archivoMapa);
@@ -97,7 +98,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 {
                     movimiento.setDestino(cursor.getXPos(), cursor.getYPos());
                     if (!movimiento.Alcanzable(cursor.getXPos(), cursor.getYPos()) ||
-                        managerpersonaje::comprobarLugarTablero(cursor.getXPos(), cursor.getYPos(), pers) != -1)
+                            managerpersonaje::comprobarLugarTablero(cursor.getXPos(), cursor.getYPos(), pers) != -1)
                     {
                         Estado = CURSOR_LIBRE;
                         teclaPresionada = NULO;
@@ -111,119 +112,189 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                         Estado = ANIMACION_BLOQUEANTE;
                     }
                 }
-            }
-            if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
-            {
-                personaje *P = GetPersonajeSeleccionado();
-                if (P != nullptr && !P->getYaActuo())
+                // --- NUEVO: BOTÓN CANCELAR MOVIMIENTO ---
+                else if (teclaPresionada == RETROCESO || teclaPresionada == F)
                 {
-                    personajeSeleccionado = P;
                     Estado = MENU_INGAME;
                     teclaPresionada = NULO;
+                }
+                // Aca tambien va la logica del menu dinamico.
+                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+            }
+        }
+        if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
+        {
+            personaje *P = GetPersonajeSeleccionado();
+            if (P != nullptr && !P->getYaActuo())
+            {
+                personajeSeleccionado = P;
+                Estado = MENU_INGAME;
+                teclaPresionada = NULO;
 
-                    if (menuAccion != nullptr)
-                        delete menuAccion;
+                if (menuAccion != nullptr)
+                    delete menuAccion;
 
+                // 1. Obtenemos el trabajo del personaje seleccionado
+                claseTrabajo* trabajoActual = P->getTrabajo();
+
+                // 2. Extraemos su ID.
+                int idClase = (trabajoActual != nullptr) ? trabajoActual->getIdTrabajo() : 0;
+
+                // 3. El Switch Dinámico de Menús
+                switch (idClase)
+                {
+                case 1: // Arquero / Tirador
+                    menuAccion = new Menu(P->getPosxPxl() + 64, P->getPosyPxl(), {"Mover", "Disparar", "Esperar", "Cancelar"});
+                    break;
+
+                case 2: // Médico
+                    menuAccion = new Menu(P->getPosxPxl() + 64, P->getPosyPxl(), {"Mover", "Curar", "Esperar", "Cancelar"});
+                    break;
+
+                default: // Guerrero (0) o cualquier otra clase no definida
                     menuAccion = new Menu(P->getPosxPxl() + 64, P->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+                    break;
                 }
             }
+        }
 
-            if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
+        if (Estado == CURSOR_LIBRE || Estado == PERSONAJE_SELECCIONADO)
+        {
+            if (teclaPresionada == ARRIBA)
             {
-                if (teclaPresionada == ARRIBA)
-                {
-                    if (cursor.getYPos() > 0)
-                        cursor.mover(ARRIBA);
-                }
-                else if (teclaPresionada == ABAJO)
-                {
-                    if (cursor.getYPos() < tablero.getMaxY() - 1)
-                        cursor.mover(ABAJO);
-                }
-                else if (teclaPresionada == IZQUIERDA)
-                {
-                    if (cursor.getXPos() > 0)
-                        cursor.mover(IZQUIERDA);
-                }
-                else if (teclaPresionada == DERECHA)
-                {
-                    if (cursor.getXPos() < tablero.getMaxX() - 1)
-                        cursor.mover(DERECHA);
-                }
+                if (cursor.getYPos() > 0)
+                    cursor.mover(ARRIBA);
             }
-            else if (Estado == PREPARAR_ATAQUE)
+            else if (teclaPresionada == ABAJO)
             {
-                manager.cambiardireccion(pers, teclaPresionada);
+                if (cursor.getYPos() < tablero.getMaxY() - 1)
+                    cursor.mover(ABAJO);
+            }
+            else if (teclaPresionada == IZQUIERDA)
+            {
+                if (cursor.getXPos() > 0)
+                    cursor.mover(IZQUIERDA);
+            }
+            else if (teclaPresionada == DERECHA)
+            {
+                if (cursor.getXPos() < tablero.getMaxX() - 1)
+                    cursor.mover(DERECHA);
+            }
+        }
+        else if (Estado == PREPARAR_ATAQUE)
+        {
+            manager.cambiardireccion(pers, teclaPresionada);
 
-                if (teclaPresionada == ENTER)
+            if (teclaPresionada == ENTER)
+            {
+                // ACTUALIZADO: Nueva lógica de animación de lucas.
+                animacion.asignaranimacion(pers, persNJ, ataque, manager);
+                Estado = ANIMACION_DAÑO;
+                cont = 0;
+
+                for (int i = 0; i < ataque.getcantidadimpactos(); i++)
                 {
-                    // ACTUALIZADO: Nueva lógica de animación de lucas.
-                    animacion.asignaranimacion(pers, persNJ, ataque, manager);
-                    Estado = ANIMACION_DAÑO;
-                    cont = 0;
+                    Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
+                    combate.pelea();
+                }
 
-                    for (int i = 0; i < ataque.getcantidadimpactos(); i++)
+                personajeSeleccionado->setYaActuo(true);
+                personajeSeleccionado = nullptr;
+            }
+            else if ((teclaPresionada == RETROCESO || teclaPresionada == F))
+            {
+                Estado = MENU_INGAME;
+                teclaPresionada = NULO;
+                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+            }
+        }
+        if (Estado == MENU_INGAME && menuAccion != nullptr)
+        {
+            if (teclaPresionada == ARRIBA)
+                menuAccion->moveUp();
+            else if (teclaPresionada == ABAJO)
+                menuAccion->moveDown();
+            else if (teclaPresionada == ENTER)
+            {
+                // AQUÍ declaramos la variable opcion
+                int opcion = menuAccion->getPressedItem();
+
+                if (opcion == 0 && personajeSeleccionado->getYaMovio() == false) // Mover
+                {
+                    Estado = PERSONAJE_SELECCIONADO;
+                    movimiento.calcularMovimiento(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), personajeSeleccionado->getMovReal());
+                }
+                else if (opcion == 1) // Habilidades / Ataques
+                {
+                    Estado = SUBMENU_ATAQUES;
+                    claseTrabajo* trabajoAct = personajeSeleccionado->getTrabajo();
+                    int idC = (trabajoAct != nullptr) ? trabajoAct->getIdTrabajo() : 0;
+                    int subX = personajeSeleccionado->getPosxPxl() + 192;
+                    int subY = personajeSeleccionado->getPosyPxl();
+
+                    if (menuSubOpciones != nullptr) delete menuSubOpciones;
+
+                    switch (idC)
                     {
-                        Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
-                        combate.pelea();
+                    case 1:
+                        menuSubOpciones = new Menu(subX, subY, {"Flecha Comun", "Granada", "Volver"});
+                        break;
+                    case 2:
+                        menuSubOpciones = new Menu(subX, subY, {"Curacion", "Curar Area", "Volver"});
+                        break;
+                    default:
+                        menuSubOpciones = new Menu(subX, subY, {"Golpe Espada", "Corte Fuerte", "Volver"});
+                        break;
                     }
-
+                }
+                else if (opcion == 2) // Esperar
+                {
                     personajeSeleccionado->setYaActuo(true);
-                    personajeSeleccionado = nullptr;
-                }
-                else if ((teclaPresionada == RETROCESO || teclaPresionada == F))
-                {
-                    if (personajeSeleccionado != nullptr)
-                    {
-                        personajeSeleccionado->setYaActuo(true);
-                    }
                     Estado = CURSOR_LIBRE;
                     personajeSeleccionado = nullptr;
                 }
-            }
-            if (Estado == MENU_INGAME && menuAccion != nullptr)
-            {
-                if (teclaPresionada == ARRIBA)
-                    menuAccion->moveUp();
-                else if (teclaPresionada == ABAJO)
-                    menuAccion->moveDown();
-                else if (teclaPresionada == ENTER)
+                else if (opcion == 3) // Cancelar
                 {
-                    int opcion = menuAccion->getPressedItem();
+                    Estado = CURSOR_LIBRE;
+                    personajeSeleccionado = nullptr;
+                }
 
-                    if (opcion == 0 && personajeSeleccionado->getYaMovio() == false) // Mover
-                    {
-                        Estado = PERSONAJE_SELECCIONADO;
-                        movimiento.calcularMovimiento(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), personajeSeleccionado->getMovReal());
-                    }
-                    else if (opcion == 1) // Atacar
-                    {
-                        pers[manager.getactual()].setdireccion(DERECHA);
-                        Estado = PREPARAR_ATAQUE;
-                    }
-                    else if (opcion == 2) // Esperar
-                    {
-                        personajeSeleccionado->setYaActuo(true);
-                        Estado = CURSOR_LIBRE;
-                        personajeSeleccionado = nullptr;
-                    }
-                    else if (opcion == 3) // Cancelar
-                    {
-                        Estado = CURSOR_LIBRE;
-                        personajeSeleccionado = nullptr;
-                    }
-
-                    // ACTUALIZADO: Condicional de borrado de menú
-                    if (Estado != MENU_INGAME)
-                    {
-                        delete menuAccion;
-                        menuAccion = nullptr;
-                    }
+                // Borramos solo si no estamos en submenú
+                if (Estado != MENU_INGAME && Estado != SUBMENU_ATAQUES)
+                {
+                    delete menuAccion;
+                    menuAccion = nullptr;
                 }
             }
-
-            teclaPresionada = NULO;
         }
+        // --- AGREGA ESTO AQUÍ: Control del Submenú ---
+        else if (Estado == SUBMENU_ATAQUES && menuSubOpciones != nullptr)
+        {
+            if (teclaPresionada == ARRIBA)
+                menuSubOpciones->moveUp();
+            else if (teclaPresionada == ABAJO)
+                menuSubOpciones->moveDown();
+            else if (teclaPresionada == ENTER)
+            {
+                int subOpcion = menuSubOpciones->getPressedItem();
+
+                if (subOpcion == 2) // Opción "Volver"
+                {
+                    Estado = MENU_INGAME; // Volvemos al principal
+                    delete menuSubOpciones;
+                    menuSubOpciones = nullptr;
+                }
+                else
+                {
+                    // Aca hay que definir que qué hace cada ataque
+                    std::cout << "Ataque seleccionado: " << subOpcion << std::endl;
+                    // Por ahora, para probar que funciona:
+                    Estado = PREPARAR_ATAQUE; // Saltamos a la selección de objetivo.
+                }
+            }
+        }
+        // ---------------------------------------------
+        teclaPresionada = NULO;
     }
 }
 void Juego::procesarIA()
@@ -236,19 +307,19 @@ void Juego::procesarIA()
         return;
 
     int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
-    
-    if (ia.getContIA() < 0 || ia.getContIA() >= persNJ.size()) 
+
+    if (ia.getContIA() < 0 || ia.getContIA() >= persNJ.size())
     {
-        std::cout 
-            << "idIA fuera de rango: " << ia.getContIA() 
-            << " size=" << persNJ.size() << std::endl;
-            return;
+        std::cout
+                << "idIA fuera de rango: " << ia.getContIA()
+                << " size=" << persNJ.size() << std::endl;
+        return;
     }
     movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
     movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
-    
+
     Estado = ANIMACION_BLOQUEANTE;
 }
 // ACTUALIZAR: Integracion total del Manager y Personajes.
@@ -265,8 +336,23 @@ void Juego::actualizar()
                 if (menuAccion != nullptr)
                     delete menuAccion;
 
-            // Creamos el menú pasándole las coordenadas del personaje en píxeles (+64 a la derecha)
-                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+                // --- NUEVO: Menú dinámico al terminar de moverse ---
+                claseTrabajo* trabajoAct = personajeSeleccionado->getTrabajo();
+                int idC = (trabajoAct != nullptr) ? trabajoAct->getIdTrabajo() : 0;
+
+                switch (idC)
+                {
+                case 1: // Arquero
+                    menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Disparar", "Esperar", "Cancelar"});
+                    break;
+                case 2: // Médico
+                    menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Curar", "Esperar", "Cancelar"});
+                    break;
+                default: // Guerrero o Default
+                    menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+                    break;
+                }
+
                 personajeSeleccionado->setYaMovio(true);
             }
         }
@@ -280,7 +366,7 @@ void Juego::actualizar()
             }
         }
     }
-   
+
     if (partida.getTurno() == 0 && todasLasUnidadesActuaron(pers) && Estado == CURSOR_LIBRE)
     {
         partida.pasarTurno();
@@ -292,13 +378,12 @@ void Juego::actualizar()
         ia.resetContIA();
         resetearAccionesJugador(persNJ);
     }
-    
+
     if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
     {
         nivelSuperado = true;
     }
 }
-
 int Juego::cargarMapa(const char *nomArch)
 {
     const int tamFila = tablero.getMaxX();
@@ -387,6 +472,11 @@ void Juego::renderizar(sf::RenderWindow &window)
     if (Estado == MENU_INGAME && menuAccion != nullptr)
     {
         menuAccion->draw(window);
+    }
+
+    if (Estado == SUBMENU_ATAQUES && menuSubOpciones != nullptr)
+    {
+        menuSubOpciones->draw(window);
     }
 
     if (Estado == ANIMACION_DAÑO)

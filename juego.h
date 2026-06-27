@@ -54,7 +54,8 @@ private:
     int cargarMapa(const char* nomArch);
 
     // Atributos de UI In-game
-    Menu* menuAccion = nullptr;
+    Menu* menuAccion;
+    Menu *menuSubOpciones;
     int teclaPresionada;
 
     // Recursos

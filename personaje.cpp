@@ -47,7 +47,9 @@ int personaje::getMovReal()
 {
   return mov + trabajo->getMov();
 }
-
+claseTrabajo* personaje::getTrabajo() {
+    return trabajo;
+}
 
 int personaje::getdireccion() { return direccion; }
 int personaje::getaccion() { return accion; }
@@ -56,7 +58,7 @@ int personaje::getframe() { return frame; }
 int personaje::getladocelda() { return ladoCelda; }
 
 bool personaje::getYaActuo() { return yaActuo; }
-bool personaje::getYaMovio() 
+bool personaje::getYaMovio()
 {
     return yaMovio;
 }
@@ -109,9 +111,9 @@ void personaje::setsubrectsprite(int x1, int y1, int x2, int y2) {
 }
 
 void personaje::setYaActuo(bool valor) { yaActuo = valor; }
-void personaje::setYaMovio(bool valor) 
+void personaje::setYaMovio(bool valor)
 {
-    yaMovio = valor; 
+    yaMovio = valor;
 }
 
 void personaje::setTipo(TIPO_PERSONAJE nuevoTipo) { tipoPJ = nuevoTipo; }

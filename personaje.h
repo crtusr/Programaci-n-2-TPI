@@ -15,8 +15,8 @@ class personaje {
 private:
   bool yaActuo;
   bool yaMovio;
-  int id; // Agregar un identificador único para cada personaje
-    TIPO_PERSONAJE tipoPJ; // Agregar un atributo para el tipo de personaje (jugador o no jugador)
+  int id; // Agregar un identificador único para cada personaj
+  TIPO_PERSONAJE tipoPJ; // Agregar un atributo para el tipo de personaje (jugador o no jugador)
   int posx;
   int posy;
   int direccion = 0;
@@ -66,7 +66,7 @@ public:
     ));
 
     }
-  
+
 
     // Getters
     int getHp();
@@ -84,6 +84,7 @@ public:
     int getMaxHpReal();
     int getMovReal();
     int getId(); // Getter para el identificador único
+    claseTrabajo* getTrabajo();
     TIPO_PERSONAJE getTipo(); // Getter para el tipo de personaje
     bool getYaActuo(); // Getter para el estado de acción del personaje
     bool getYaMovio();

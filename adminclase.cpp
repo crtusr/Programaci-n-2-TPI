@@ -12,8 +12,11 @@ AdminClase::AdminClase()
   }
   //como dije está hardcodeado pero se tendria que poder poner con un setter
   clase[0] = new Guerrero;
+  clase[0]->setIdTrabajo(0); // 0 = Guerrero
   clase[1] = new Arquero;
+  clase[1]->setIdTrabajo(1); // 1 = Arquero;
   clase[2] = new Medico;
+  clase[2]->setIdTrabajo(2); // 2 = Medico
 
 }
 claseTrabajo *AdminClase::getClase(int idClase)
