@@ -460,8 +460,8 @@ void Juego::renderizar(sf::RenderWindow &window)
     manager.actualizarpersonaje(persNJ);
     manager.mostrarpersonaje(pers, window);
     manager.mostrarpersonaje(persNJ, window);
-    animacion.mostrarvida(window, pers);
-    animacion.mostrarvida(window, persNJ);
+    animacion.mostrarvida(window, pers,1);
+    animacion.mostrarvida(window, persNJ,2);
 /*
     for (personaje &nose : persNJ)
         window.draw(nose.getsprite());
