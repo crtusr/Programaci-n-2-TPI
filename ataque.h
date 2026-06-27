@@ -80,6 +80,7 @@ public:
     int gettipodeataque();
     string getnombreataque(int nom);
     int getopciondeataque();
+    void setOpcionDeAtaque(int opcion);
 
 void ataque1(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);
 void ataque2(int direccion,RenderWindow& window,vector<personaje>& pers_atk,vector<personaje>& pers_def,managerpersonaje& manager);

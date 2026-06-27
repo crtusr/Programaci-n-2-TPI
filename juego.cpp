@@ -18,7 +18,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     texturas("archivos.txt"),
     tablero(64, 0, 0),
     rendUi(&tablero),
-    movimiento(3, 3, &tablero, persNJ)
+    movimiento(3, 3, &tablero, &persNJ)
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -34,7 +34,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     cargarMapa(archivoMapa);
     SpawnPersonaje(archivoPersonajes);
 
-    movimiento.setEnemigos(persNJ);
+    movimiento.setEnemigos(&persNJ);
 
     Estado = CURSOR_LIBRE;
     personajeSeleccionado = nullptr;
@@ -371,12 +371,14 @@ void Juego::actualizar()
     {
         partida.pasarTurno();
         resetearAccionesJugador(pers);
+        movimiento.setEnemigos(&pers);
     }
     if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ) && Estado == CURSOR_LIBRE)
     {
         partida.pasarTurno();
         ia.resetContIA();
         resetearAccionesJugador(persNJ);
+        movimiento.setEnemigos(&persNJ);
     }
 
     if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)

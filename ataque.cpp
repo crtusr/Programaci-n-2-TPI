@@ -19,6 +19,7 @@ Sprite Ataque::getsprite()
     int Ataque::getdistancia(){return distancia;}
     int Ataque::gettipodeataque(){return tipodeataque;}
     int Ataque::getopciondeataque(){return opc;}
+    void Ataque::setOpcionDeAtaque(int opcion) {opc = opcion;}
     string Ataque::getnombreataque(int nom){
     string nombre("ataque1");
     switch(nom){

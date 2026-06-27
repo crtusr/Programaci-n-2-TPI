@@ -5,7 +5,7 @@
 #include <iostream>
 #include "managerpersonaje.h"
 
-SisMov::SisMov(int x, int y, Grilla *g, std::vector<personaje> &e) : enemigos(e)
+SisMov::SisMov(int x, int y, Grilla *g, std::vector<personaje> *e) : enemigos(e)
 {
   enemigos = e;
   xPos = x;
@@ -36,7 +36,7 @@ void SisMov::setDestino(int x, int y)
   return;
 }
 
-void SisMov::setEnemigos(std::vector<personaje> &e)
+void SisMov::setEnemigos(std::vector<personaje> *e)
 {
   enemigos = e;
 }
@@ -146,7 +146,7 @@ bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
   camino[profundidad] = -1;
   if (y + 1 < bordeInferior && mov >= costoCeldaInferior)
   {
-    if (managerpersonaje::comprobarLugarTablero(x, y + 1, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x, y + 1, *enemigos) == -1)
     {
       camino[profundidad] = ABAJO;
       if (buscarCaminoPriv(x, y + 1, mov - costoCeldaInferior, profundidad + 1))
@@ -155,7 +155,7 @@ bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
   }
   if (x - 1 >= 0 && mov >= costoCeldaIzquierda)
   {
-    if (managerpersonaje::comprobarLugarTablero(x - 1, y, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x - 1, y, *enemigos) == -1)
     {
       camino[profundidad] = IZQUIERDA;
       if (buscarCaminoPriv(x - 1, y, mov - costoCeldaIzquierda, profundidad + 1))
@@ -164,7 +164,7 @@ bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
   }
   if (y - 1 >= 0 && mov >= costoCeldaSuperior)
   {
-    if (managerpersonaje::comprobarLugarTablero(x, y - 1, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x, y - 1, *enemigos) == -1)
     {
       camino[profundidad] = ARRIBA;
       if (buscarCaminoPriv(x, y - 1, mov - costoCeldaSuperior, profundidad + 1))
@@ -173,7 +173,7 @@ bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
   }
   if (x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
   {
-    if (managerpersonaje::comprobarLugarTablero(x + 1, y, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x + 1, y, *enemigos) == -1)
     {
       camino[profundidad] = DERECHA;
       if (buscarCaminoPriv(x + 1, y, mov - costoCeldaDerecha, profundidad + 1))
@@ -221,16 +221,16 @@ void SisMov::movRango(int x, int y, int mov)
     valido[x + (y * bordeDerecho)] = true;
   }
   if (y + 1 < bordeInferior && mov >= costoCeldaInferior)
-    if (managerpersonaje::comprobarLugarTablero(x, y + 1, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x, y + 1, *enemigos) == -1)
       movRango(x, y + 1, mov - costoCeldaInferior);
   if (x - 1 >= 0 && mov >= costoCeldaIzquierda)
-    if (managerpersonaje::comprobarLugarTablero(x - 1, y, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x - 1, y, *enemigos) == -1)
       movRango(x - 1, y, mov - costoCeldaIzquierda);
   if (y - 1 >= 0 && mov >= costoCeldaSuperior)
-    if (managerpersonaje::comprobarLugarTablero(x, y - 1, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x, y - 1, *enemigos) == -1)
       movRango(x, y - 1, mov - costoCeldaSuperior);
   if (x + 1 < bordeDerecho && mov >= costoCeldaDerecha)
-    if (managerpersonaje::comprobarLugarTablero(x + 1, y, enemigos) == -1)
+    if (managerpersonaje::comprobarLugarTablero(x + 1, y, *enemigos) == -1)
       movRango(x + 1, y, mov - costoCeldaDerecha);
 }
 
