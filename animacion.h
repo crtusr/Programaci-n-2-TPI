@@ -73,8 +73,7 @@ void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,At
 bool mostraranimacion(RenderWindow& window);
 void mostrarvida(RenderWindow& window,vector<personaje>& pers,int color);
 bool mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
-void mostrarvida(RenderWindow& window,vector<personaje>& pers);
-void mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
+
 };
 
 #endif // ANIMACION_H_INCLUDED;
