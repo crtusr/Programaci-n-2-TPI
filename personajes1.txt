@@ -17,7 +17,7 @@ trabajo;1
 maxHp;5
 fuerza;20
 defensa;1
-2
+1
 posX;9
 posY;9
 trabajo;0

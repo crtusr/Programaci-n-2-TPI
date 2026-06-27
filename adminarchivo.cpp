@@ -28,15 +28,24 @@ void AdminArchivo::leerLinea(char *str)
 {
   if(arch == nullptr)
     return;
+  int i;
   char leido = 0;
   int leyoAlgo = fread(&leido, 1, 1, arch);
-  for(int i = 0; leido != '\n' && leido != '\r' && leyoAlgo; i++)
+  for(i = 0; leido != '\n' && leido != '\r' && leyoAlgo && i < 60; i++)
   {
     str[i] = leido;
     leyoAlgo = fread(&leido, 1, 1, arch);
   }
-  while(leido != '\n' && leyoAlgo)
+  str[i] = '\0';
+  while((leido == '\n' || leido == '\r') && leyoAlgo)
+  {
     leyoAlgo = fread(&leido, 1, 1, arch);
+    if(leido != '\n' && leido != '\r' && leyoAlgo)
+    {
+      fseek(arch, -1 ,SEEK_CUR);
+      break;
+    }
+  }
 }
 
 int AdminArchivo::avanzarHastaChar(char start)
