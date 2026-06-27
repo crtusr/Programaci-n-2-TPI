@@ -18,7 +18,8 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     texturas("archivos.txt"),
     tablero(64, 0, 0),
     rendUi(&tablero),
-    movimiento(3, 3, &tablero, &persNJ)
+    movimiento(3, 3, &tablero, &persNJ),
+    ia(&tablero)
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -316,7 +317,13 @@ void Juego::procesarIA()
                 << " size=" << persNJ.size() << std::endl;
         return;
     }
-    movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
+
+    std::pair<int, int> coordenadas = ia.casillaValida(idMasCercano, pers, persNJ); 
+
+    int coordenadaX = coordenadas.first;
+    int coordenadaY = coordenadas.second;
+
+    movimiento.setDestino(coordenadaX, coordenadaY);
     movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();

@@ -14,12 +14,13 @@ private:
     personaje *personajeIA;
     int contIA;
 public:
-    IA();
+    IA(Grilla *t);
 
     void registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y);
 
     int detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
-    
+    std::pair<int, int> casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
+
     int getContIA();
     void inContIA();
     void resetContIA();
