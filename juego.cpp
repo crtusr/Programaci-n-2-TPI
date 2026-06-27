@@ -490,15 +490,13 @@ void Juego::renderizar(sf::RenderWindow &window)
         menuSubOpciones->draw(window);
     }
 
-    if (Estado == ANIMACION_DAÑO)
+    if(Estado == ANIMACION_DAÑO)
     {
-        animacion.mostraranimacion(window);
-        animacion.mostrarataque(pers[manager.getactual()],window,ataque);
-        cont++;
-        if (cont > 100)
+        bool van1=animacion.mostraranimacion(window);
+        bool van2=animacion.mostrarataque(pers[manager.getactual()],window,ataque);
+        if(!van1&&!van2)
         {
             Estado = CURSOR_LIBRE;
-            cont = 0;
         }
     }
     window.display();
