@@ -165,7 +165,10 @@ void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& wi
        unsigned int i;
         for(i=0;i<pers.size();i++)
         {
-            window.draw(pers[i].getsprite());
+            if(pers[i].getaccion()==MUERTO||pers[i].getHpReal()>0)
+            {
+             window.draw(pers[i].getsprite());
+            }
         }
     }
 
