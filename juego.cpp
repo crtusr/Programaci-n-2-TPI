@@ -27,6 +27,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     personajeSeleccionado = nullptr;
     teclaPresionada = 0;
     menuSubOpciones = nullptr;
+    menuAccion = nullptr;
 
     // Cargamos los archivos que nos pasó el Manager
     tablero.resize(archivoMapa);
@@ -277,7 +278,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             else if (teclaPresionada == ENTER)
             {
                 int subOpcion = menuSubOpciones->getPressedItem();
-                
+
                 if (subOpcion == 2) // Opción "Volver"
                 {
                     Estado = MENU_INGAME; // Volvemos al principal
