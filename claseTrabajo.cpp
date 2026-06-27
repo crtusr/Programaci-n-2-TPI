@@ -16,6 +16,12 @@ int claseTrabajo::getDefensa(){return defensa;}
 int claseTrabajo::getMov(){return mov;}
 int claseTrabajo::getIdTrabajo() {return idTrabajo;}
 void claseTrabajo::setIdTrabajo(int id) {idTrabajo = id;}
-
+int claseTrabajo::getOptAtk(int indice) 
+{
+  if(indice < 6)
+    return optAtk[indice];
+  else
+    return -1;
+}
 
 

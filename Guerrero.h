@@ -11,6 +11,8 @@ public:
         maxHp = 40;
         hp = 40;
         mov = 3;
+        optAtk[0] = SIMPLE;
+        optAtk[1] = ANCHO;
     }
 };
 

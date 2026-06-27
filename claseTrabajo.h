@@ -1,6 +1,8 @@
 #ifndef CLASETRABAJO_H
 #define CLASETRABAJO_H
 
+#include"constantes.h"
+
 class claseTrabajo {
 protected:
     int idTrabajo; // NUEVO: Identificador de la clase.
@@ -9,7 +11,7 @@ protected:
     int fuerza;
     int defensa;
     int mov;
-
+    int optAtk[6];
 public:
     claseTrabajo();
 
@@ -21,6 +23,7 @@ public:
     int getFuerza();
     int getDefensa();
     int getMov();
+    int getOptAtk(int indice);
 };
 
 #endif

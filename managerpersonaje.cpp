@@ -165,7 +165,8 @@ void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& wi
        unsigned int i;
         for(i=0;i<pers.size();i++)
         {
-           window.draw(pers[i].getsprite());
+          if(pers[i].getHpReal() > 0)
+            window.draw(pers[i].getsprite());
         }
     }
 
@@ -228,7 +229,7 @@ int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
     unsigned int i;
     for(i=0;i<pers.size();i++){
 
-        if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y))
+        if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y && pers[i].getHpReal() > 0))
         {
             return pers[i].getId();
         }
@@ -240,7 +241,7 @@ int managerpersonaje::comprobarLugarTablero(int x,int y,vector<personaje>& pers)
 {
     for(unsigned int i = 0; i < pers.size(); i++)
     {
-        if((pers[i].getPosx() == x) && (pers[i].getPosy() == y))
+        if((pers[i].getPosx() == x) && (pers[i].getPosy() == y && pers[i].getHpReal() > 0))
         {
             return pers[i].getId();
         }
@@ -250,8 +251,12 @@ int managerpersonaje::comprobarLugarTablero(int x,int y,vector<personaje>& pers)
 
 void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
 {
-  for(int i=0;i<pers.size();i++)
+  for(size_t i=0;i<pers.size();i++)
   {
+    if(pers[i].getHpReal() == 0)
+    {
+      continue;
+    }
     if(pers[i].getaccion()==0)
     {
       int ladoCelda = pers[i].getladocelda();

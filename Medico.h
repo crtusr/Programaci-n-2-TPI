@@ -11,6 +11,8 @@ public:
         maxHp = 35;
         hp = 35;
         mov = 4;
+        optAtk[0] = CURA;
+        optAtk[1] = GRANADA;
     }
 };
 

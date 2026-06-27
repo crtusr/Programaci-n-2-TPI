@@ -236,15 +236,15 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 
                     switch (idC)
                     {
-                    case 1:
-                        menuSubOpciones = new Menu(subX, subY, {"Flecha Comun", "Granada", "Volver"});
-                        break;
-                    case 2:
-                        menuSubOpciones = new Menu(subX, subY, {"Curacion", "Curar Area", "Volver"});
-                        break;
-                    default:
-                        menuSubOpciones = new Menu(subX, subY, {"Golpe Espada", "Corte Fuerte", "Volver"});
-                        break;
+                        case 1:
+                            menuSubOpciones = new Menu(subX, subY, {"Flecha Comun", "Granada", "Volver"});
+                            break;
+                        case 2:
+                            menuSubOpciones = new Menu(subX, subY, {"Curacion", "Curar Area", "Volver"});
+                            break;
+                        default:
+                            menuSubOpciones = new Menu(subX, subY, {"Golpe Espada", "Corte Fuerte", "Volver"});
+                            break;
                     }
                 }
                 else if (opcion == 2) // Esperar
@@ -277,7 +277,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             else if (teclaPresionada == ENTER)
             {
                 int subOpcion = menuSubOpciones->getPressedItem();
-
+                
                 if (subOpcion == 2) // Opción "Volver"
                 {
                     Estado = MENU_INGAME; // Volvemos al principal
@@ -286,6 +286,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 }
                 else
                 {
+                    ataque.setOpcionDeAtaque(personajeSeleccionado->getTrabajo()->getOptAtk(subOpcion));
                     // Aca hay que definir que qué hace cada ataque
                     std::cout << "Ataque seleccionado: " << subOpcion << std::endl;
                     // Por ahora, para probar que funciona:
@@ -300,7 +301,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 void Juego::procesarIA()
 {
 
-    while(persNJ[ia.getContIA()].getYaActuo() && ia.getContIA() < persNJ.size())
+    while(persNJ[ia.getContIA()].getYaActuo() && ia.getContIA() < persNJ.size() && persNJ[ia.getContIA()].getMaxHpReal() == 0)
         ia.inContIA();
 
     if (ia.getContIA()>=persNJ.size())
@@ -451,12 +452,13 @@ void Juego::renderizar(sf::RenderWindow &window)
     manager.actualizarpersonaje(pers);
     manager.actualizarpersonaje(persNJ);
     manager.mostrarpersonaje(pers, window);
+    manager.mostrarpersonaje(persNJ, window);
     animacion.mostrarvida(window, pers);
     animacion.mostrarvida(window, persNJ);
-
+/*
     for (personaje &nose : persNJ)
         window.draw(nose.getsprite());
-
+*/
     if (Estado == PREPARAR_ATAQUE)
     {
         // ACTUALIZADO: Nuevo parámetro del ataque agregado

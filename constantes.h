@@ -76,6 +76,16 @@ enum TIPO_DE_ATAQUE
   CURACION
 };
 
+enum ATAQUE
+{
+  DUMMY,
+  SIMPLE,
+  ANCHO,
+  GRANADA,
+  PROYECTIL,
+  CURA
+};
+
 const int profundidadMax = 16;
 
 #endif

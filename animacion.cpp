@@ -81,6 +81,8 @@ anim_frame++;
 void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers){
 
   for(size_t i=0;i<pers.size();i++){
+    if(pers[i].getHpReal() == 0)
+      continue;
     string salud = to_string(pers[i].getHpReal());
     text.setString(salud);
     text.setPosition(Vector2f(pers[i].getPosxPxl()+10,pers[i].getPosyPxl()-10));
