@@ -165,8 +165,10 @@ void managerpersonaje::mostrarpersonaje(vector<personaje>& pers,RenderWindow& wi
        unsigned int i;
         for(i=0;i<pers.size();i++)
         {
-          if(pers[i].getHpReal() > 0)
-            window.draw(pers[i].getsprite());
+            if(pers[i].getaccion()==MUERTO||pers[i].getHpReal()>0)
+            {
+             window.draw(pers[i].getsprite());
+            }
         }
     }
 
@@ -378,11 +380,20 @@ void managerpersonaje::actualizarpersonaje(vector<personaje>& pers)
       }
     }
             //-----------------------
+      if(pers[i].getHpReal()<=0&&pers[i].getaccion()!=MUERTO)
+      {
+          pers[i].setaccion(MUERTO);
+          pers[i].setframe(0);
+      }
+
+
+
       if(pers[i].getaccion()==MUERTO)
     {
-        int x;
-      if(pers[i].getframe()>10){x = 64*4;}
-      if(pers[i].getframe()>20){x = 64*5;}
+        int x=0;
+      if(pers[i].getframe()>40){x = 64*4;}
+      if(pers[i].getframe()>80){x = 64*5;}
+      if(pers[i].getframe()>300){x = 64*8;}
       pers[i].setsubrectsprite( x,64*20,64, 64);
       pers[i].sumarframe();
     }

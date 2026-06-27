@@ -112,8 +112,9 @@ return true;
 }
 
 void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers,int color){
-
   for(int i=0;i<pers.size();i++){
+   if(pers[i].getaccion()!=MUERTO||pers[i].getframe()<40)
+   {
     rectangulo.setPosition(Vector2f(pers[i].getPosxPxl()+25,pers[i].getPosyPxl()+58));
     if(color==1){rectangulo.setFillColor(Color::Blue);}
     if(color==2){rectangulo.setFillColor(Color::Red);}
@@ -133,6 +134,7 @@ void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers,int col
     window.draw(barradevida);
     window.draw(rectangulo);
     window.draw(text);
+    }
   }
 }
 
