@@ -18,7 +18,8 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     texturas("archivos.txt"),
     tablero(64, 0, 0),
     rendUi(&tablero),
-    movimiento(3, 3, &tablero, &persNJ)
+    movimiento(3, 3, &tablero, &persNJ),
+    ia(&tablero)
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -317,7 +318,13 @@ void Juego::procesarIA()
                 << " size=" << persNJ.size() << std::endl;
         return;
     }
-    movimiento.setDestino(pers[idMasCercano].getPosx()-1, pers[idMasCercano].getPosy());
+
+    std::pair<int, int> coordenadas = ia.casillaValida(idMasCercano, pers, persNJ); 
+
+    int coordenadaX = coordenadas.first;
+    int coordenadaY = coordenadas.second;
+
+    movimiento.setDestino(coordenadaX, coordenadaY);
     movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
@@ -454,8 +461,8 @@ void Juego::renderizar(sf::RenderWindow &window)
     manager.actualizarpersonaje(persNJ);
     manager.mostrarpersonaje(pers, window);
     manager.mostrarpersonaje(persNJ, window);
-    animacion.mostrarvida(window, pers);
-    animacion.mostrarvida(window, persNJ);
+    animacion.mostrarvida(window, pers,1);
+    animacion.mostrarvida(window, persNJ,2);
 /*
     for (personaje &nose : persNJ)
         window.draw(nose.getsprite());
@@ -484,15 +491,13 @@ void Juego::renderizar(sf::RenderWindow &window)
         menuSubOpciones->draw(window);
     }
 
-    if (Estado == ANIMACION_DAÑO)
+    if(Estado == ANIMACION_DAÑO)
     {
-        animacion.mostraranimacion(window);
-        animacion.mostrarataque(pers[manager.getactual()],window,ataque);
-        cont++;
-        if (cont > 100)
+        bool van1=animacion.mostraranimacion(window);
+        bool van2=animacion.mostrarataque(pers[manager.getactual()],window,ataque);
+        if(!van1&&!van2)
         {
             Estado = CURSOR_LIBRE;
-            cont = 0;
         }
     }
     window.display();
