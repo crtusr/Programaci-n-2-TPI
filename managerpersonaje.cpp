@@ -229,7 +229,7 @@ int managerpersonaje::comprobarlugar(int x,int y,vector<personaje> pers)
     unsigned int i;
     for(i=0;i<pers.size();i++){
 
-        if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y && pers[i].getHpReal() > 0))
+        if((pers[i].getPosxPxl()==x)&&(pers[i].getPosyPxl()==y)&&(pers[i].getHpReal()>0))
         {
             return pers[i].getId();
         }
