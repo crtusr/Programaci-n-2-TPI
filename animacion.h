@@ -21,6 +21,7 @@ int v_posy[6];
 int danios[6];
 RectangleShape rectangulo;
 RectangleShape barradevida;
+RectangleShape fondodevida;
 RectangleShape barraoscura;
 Sprite sprite;
 Texture textura;
@@ -72,6 +73,8 @@ public:
     rectangulo.setSize(Vector2f(15,4));
     barraoscura.setSize(Vector2f(1500,1000));
     barraoscura.setFillColor(Color::Black);
+    fondodevida.setSize(Vector2f(55,5));
+    fondodevida.setFillColor(Color::Red);
 
     }
 void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager);
