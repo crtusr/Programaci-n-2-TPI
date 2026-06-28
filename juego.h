@@ -58,6 +58,7 @@ private:
     // Atributos de UI In-game
     Menu* menuAccion;
     Menu *menuSubOpciones;
+    Menu *menuPausa;
     int teclaPresionada;
 
     // Recursos
