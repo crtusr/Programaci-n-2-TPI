@@ -94,7 +94,11 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 {
                     Estado = PAUSA;
                     std::vector<std::string> opcionesPausa = {"Continuar", "Volver al Menu Principal"};
-                    menuPausa = new Menu(400, 300, opcionesPausa);
+                    // --- NUEVO CÁLCULO DINÁMICO ---
+                    float mitadAncho = (tablero.getMaxX() * tablero.getTamCeldaPixeles()) / 2.0f;
+                    float mitadAlto = (tablero.getMaxY() * tablero.getTamCeldaPixeles()) / 2.0f;
+
+                    menuPausa = new Menu(mitadAncho, mitadAlto, opcionesPausa);
                 }
                 else
                 {
@@ -136,8 +140,8 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                     Estado = MENU_INGAME;
                     teclaPresionada = NULO;
                 }
-                // Aca tambien va la logica del menu dinamico.
-                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+            // Menu dinamico.
+                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 140, personajeSeleccionado->getPosyPxl() - 50, {"Mover", "Atacar", "Esperar", "Cancelar"});
             }
         }
         if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
@@ -162,15 +166,15 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 switch (idClase)
                 {
                 case 1: // Arquero / Tirador
-                    menuAccion = new Menu(P->getPosxPxl() + 64, P->getPosyPxl(), {"Mover", "Disparar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(P->getPosxPxl() + 140, P->getPosyPxl() - 50, {"Mover", "Disparar", "Esperar", "Cancelar"});
                     break;
 
                 case 2: // Médico
-                    menuAccion = new Menu(P->getPosxPxl() + 64, P->getPosyPxl(), {"Mover", "Curar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(P->getPosxPxl() + 140, P->getPosyPxl() - 50, {"Mover", "Curar", "Esperar", "Cancelar"});
                     break;
 
                 default: // Guerrero (0) o cualquier otra clase no definida
-                    menuAccion = new Menu(P->getPosxPxl() + 64, P->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(P->getPosxPxl() + 140, P->getPosyPxl() - 50, {"Mover", "Atacar", "Esperar", "Cancelar"});
                     break;
                 }
             }
@@ -284,7 +288,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 }
             }
         }
-        // --- AGREGA ESTO AQUÍ: Control del Submenú ---
+        // --- Control del Submenú ---
         else if (Estado == SUBMENU_ATAQUES && menuSubOpciones != nullptr)
         {
             if (teclaPresionada == ARRIBA)
@@ -394,7 +398,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
             EstadoIA = ENEMIGO_LEJOS;
         }*/
     }
-    
+
     if(EstadoIA == DALE_MATRACA)
     {
           int direccion = -1;

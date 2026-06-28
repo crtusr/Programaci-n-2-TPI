@@ -4,7 +4,7 @@
 // EL CONSTRUCTOR
 ManagerJuego::ManagerJuego() :
     window(sf::VideoMode({1024, 768}), "Project Tactics"),
-    menuInicio(450, 250, {"Jugar", "Opciones", "Salir"})
+    menuInicio(512, 384, {"Jugar", "Opciones", "Salir"})
 {
     window.setFramerateLimit(60);
 }
