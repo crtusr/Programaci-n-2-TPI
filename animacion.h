@@ -21,6 +21,7 @@ int v_posy[6];
 int danios[6];
 RectangleShape rectangulo;
 RectangleShape barradevida;
+RectangleShape barraoscura;
 Sprite sprite;
 Texture textura;
 Font font;
@@ -67,6 +68,9 @@ public:
     spt_ataque4.setTexture(tex_ataque4);
     spt_curacion1.setTexture(tex_curacion1);
     rectangulo.setSize(Vector2f(15,4));
+    barraoscura.setSize(Vector2f(1500,1000));
+    barraoscura.setFillColor(Color::Black);
+    bool trancicion(RenderWindow& window);
 
     }
 void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager);
