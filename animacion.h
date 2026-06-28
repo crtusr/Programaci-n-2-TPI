@@ -21,11 +21,13 @@ int v_posy[6];
 int danios[6];
 RectangleShape rectangulo;
 RectangleShape barradevida;
+RectangleShape barraoscura;
 Sprite sprite;
 Texture textura;
 Font font;
 Text text;
 int tipodeataque;
+int frame_trancicion = 0;
 
 // Declaracion de variables nuevas
 Texture tex_ataque2;
@@ -67,13 +69,15 @@ public:
     spt_ataque4.setTexture(tex_ataque4);
     spt_curacion1.setTexture(tex_curacion1);
     rectangulo.setSize(Vector2f(15,4));
+    barraoscura.setSize(Vector2f(1500,1000));
+    barraoscura.setFillColor(Color::Black);
 
     }
 void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager);
 bool mostraranimacion(RenderWindow& window);
 void mostrarvida(RenderWindow& window,vector<personaje>& pers,int color);
 bool mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
-
+bool trancicion(RenderWindow& window);
 };
 
 #endif // ANIMACION_H_INCLUDED;

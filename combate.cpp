@@ -9,6 +9,12 @@ Combate::Combate(Grilla *g, personaje *at, personaje *def)
   celdaDef = (CeldaTerrestre *)g->getCelda(defendiente->getPosx(), defendiente->getPosy());
 }
 
+void Combate::curacion()
+{
+  defendiente->sumarHP(atacante->getFuerzaReal());
+  return;
+}
+
 void Combate::pelea()
 {
   srand(time(NULL));

@@ -255,3 +255,18 @@ if(ataque.getopciondeataque()==5&&atk_activo==true){
    return true;
 }
 
+bool Animacion::trancicion(RenderWindow& window)
+{
+  frame_trancicion+=20;
+  int x=frame_trancicion;
+  if(frame_trancicion<=2000&&frame_trancicion>1000){x=1000;}
+  if(frame_trancicion>2000){x-=1000;}
+  barraoscura.setPosition(Vector2f(0,-1100+x));
+  if(frame_trancicion>=4000)
+  {
+    frame_trancicion=0;
+    return false;
+  }
+  window.draw(barraoscura);
+  return true;
+}

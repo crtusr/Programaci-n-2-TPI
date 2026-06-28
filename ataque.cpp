@@ -331,27 +331,27 @@ void Ataque::prepararataque(int direccion,RenderWindow& window,vector<personaje>
 
   switch(opc_atk)
   {
-    case 1:
-      ataque1(direccion,window,pers_atk,pers_def,manager);
-      break;
-    case 2:
-      ataque2(direccion,window,pers_atk,pers_def,manager);
-      break;
-          case 3:
-      ataque3(direccion,window,pers_atk,pers_def,manager);
-      break;
-          case 4:
-      ataque4(direccion,window,pers_atk,pers_def,manager);
-      break;
-          case 5:
-      curacion1(direccion,window,pers_atk,pers_def,manager);
-      break;
-         case 6:
-      curacion2(direccion,window,pers_atk,pers_def,manager);
-      break;
-        case 7:
-      bufeo1(direccion,window,pers_atk,pers_def,manager);
-      break;
+      case SIMPLE:
+          ataque1(direccion,window,pers_atk,pers_def,manager);
+          break;
+      case ANCHO:
+          ataque2(direccion,window,pers_atk,pers_def,manager);
+          break;
+      case GRANADA:
+          ataque3(direccion,window,pers_atk,pers_def,manager);
+          break;
+      case PROYECTIL:
+          ataque4(direccion,window,pers_atk,pers_def,manager);
+          break;
+      case CURA:
+          curacion1(direccion,window,pers_atk,pers_def,manager);
+          break;
+      case CURA_GRANDE:
+          curacion2(direccion,window,pers_atk,pers_def,manager);
+          break;
+      case 7:
+          bufeo1(direccion,window,pers_atk,pers_def,manager);
+          break;
   }
 }
 
