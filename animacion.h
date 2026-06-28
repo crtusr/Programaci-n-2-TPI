@@ -27,6 +27,7 @@ Texture textura;
 Font font;
 Text text;
 int tipodeataque;
+int frame_trancicion = 0;
 
 // Declaracion de variables nuevas
 Texture tex_ataque2;
