@@ -1,7 +1,7 @@
 #include "render_interfaz_mapa.h"
 
 RenderInterfazMapa::RenderInterfazMapa(Grilla *g) : 
-  cursorTex("imagen/cursor.bmp"),
+  cursorTex("imagen/cursor.png"),
   cursorSprite(cursorTex)
 {
   grilla = g;

@@ -21,6 +21,7 @@ public:
 private:
     int selectedItemIndex; // Guarda el número de la opción resaltada
     sf::Font font;         // La fuente.
+    sf::RectangleShape fondoPanel;
     std::vector<sf::Text> menu;
 };
 
