@@ -12,7 +12,7 @@ public:
         hp = 35;
         mov = 4;
         optAtk[0] = CURA;
-        optAtk[1] = GRANADA;
+        optAtk[1] = CURA_GRANDE;
     }
 };
 
