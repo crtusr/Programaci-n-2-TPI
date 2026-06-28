@@ -359,7 +359,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
 
     if (ia.getContIA()>=persNJ.size())
         return;
-
+    manager.setActual(ia.getContIA());
 
 
     if (EstadoIA == DECIDIENDO)
@@ -409,7 +409,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
           persNJ[ia.getContIA()].setdireccion(direccion);
           ataque.setOpcionDeAtaque(SIMPLE);
           ataque.prepararataque(direccion, window, persNJ, pers, manager, SIMPLE);
-          declararAtaque(persNJ, pers, &pers[ia.getContIA()]);
+          declararAtaque(persNJ, pers, &persNJ[ia.getContIA()]);
           persNJ[ia.getContIA()].setYaActuo(true);
           return;
     }
@@ -434,6 +434,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
 
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
+    persNJ[ia.getContIA()].setYaMovio(true);
 
     Estado = ANIMACION_BLOQUEANTE;
 }
@@ -475,7 +476,6 @@ void Juego::actualizar()
         {
             if (!manager.moverpersonaje(persNJ[ia.getContIA()], movimiento.getCamino()))
             {
-                persNJ[ia.getContIA()].setYaMovio(true);
                 Estado = CURSOR_LIBRE;
             }
         }
