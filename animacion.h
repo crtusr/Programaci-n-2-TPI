@@ -28,6 +28,7 @@ Font font;
 Text text;
 int tipodeataque;
 int frame_trancicion = 0;
+bool trancicion=false;
 
 // Declaracion de variables nuevas
 Texture tex_ataque2;
@@ -77,7 +78,8 @@ void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,At
 bool mostraranimacion(RenderWindow& window);
 void mostrarvida(RenderWindow& window,vector<personaje>& pers,int color);
 bool mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
-bool trancicion(RenderWindow& window);
+void animartrancicion(RenderWindow& window);
+void iniciartrancicion();
 };
 
 #endif // ANIMACION_H_INCLUDED;
