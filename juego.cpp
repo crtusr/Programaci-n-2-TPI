@@ -190,15 +190,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             if (teclaPresionada == ENTER)
             {
                 // ACTUALIZADO: Nueva lógica de animación de lucas.
-                animacion.asignaranimacion(pers, persNJ, ataque, manager);
-                Estado = ANIMACION_DAÑO;
-                cont = 0;
-
-                for (int i = 0; i < ataque.getcantidadimpactos(); i++)
-                {
-                    Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
-                    combate.pelea();
-                }
+                declararAtaque(pers, persNJ, personajeSeleccionado);
 
                 personajeSeleccionado->setYaActuo(true);
                 personajeSeleccionado = nullptr;
@@ -628,15 +620,15 @@ void Juego::SpawnPersonaje(const char *archivoPersonajes)
       std::cout << "no se cerro personajesX.txt" << std::endl;
 }
 
-void Juego::declararAtaque()
+void Juego::declararAtaque(vector<personaje>& atk,vector<personaje>& def, personaje *actual)
 {
-    animacion.asignaranimacion(pers, persNJ, ataque, manager);
+    animacion.asignaranimacion(atk, def, ataque, manager);
     Estado = ANIMACION_DAÑO;
     cont = 0;
 
     for (int i = 0; i < ataque.getcantidadimpactos(); i++)
     {
-        Combate combate(&tablero, personajeSeleccionado, &persNJ[ataque.getimpactos()[i]]);
+        Combate combate(&tablero, actual, &def[ataque.getimpactos()[i]]);
         combate.pelea();
     }
 }
