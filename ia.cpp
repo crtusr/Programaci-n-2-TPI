@@ -49,7 +49,7 @@ std::pair<int, int> IA::detectarEnemigoCercano(std::vector<personaje>& aliados, 
     return std::make_pair(persMasCercano[0], persMasCercano[1]);
 }
 
-std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
+std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos, SisMov& movimiento)
 {
     int dirX[4] = { 0, 0, -1, 1 };
     int dirY[4] = { -1, 1, 0, 0 };
@@ -92,13 +92,14 @@ std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, s
             {
                 int pasos = std::abs(x - enemigos[contIA].getPosx()) + std::abs(y - enemigos[contIA].getPosy());
             
-                if (pasos < menosPasos) 
+                if (pasos < menosPasos && movimiento.Alcanzable(x, y)) 
                 {
                     menosPasos = pasos;
                     casillaValida[0] = x;
                     casillaValida[1] = y;
                 }
             }
+
         }
     }
 
@@ -109,10 +110,10 @@ std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliado
 {
     int pasos = abs(aliados[pj].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[pj].getPosy() - enemigos[contIA].getPosy());
 
-    /*while (pasos > 0)
+    while (pasos > 0)
     {
-        
-    }*/
+    
+    }
 }
 
 

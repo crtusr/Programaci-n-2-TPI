@@ -305,8 +305,8 @@ void Juego::procesarIA()
     EstadoIA = DECIDIENDO;
     std::pair<int, int> persMasCercano; 
 
-    int idMasCercano = persMasCercano.first;
-    int cantPasos = persMasCercano.second;
+    int idMasCercano;
+    int cantPasos;
 
     std::pair<int, int> coordenadas;
     int coordenadaX; 
@@ -322,39 +322,48 @@ void Juego::procesarIA()
     if (ia.getContIA()>=persNJ.size())
         return;
 
+        
 
     if (EstadoIA == DECIDIENDO)
     {
         persMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
+        idMasCercano = persMasCercano.first;
+        cantPasos = persMasCercano.second;
 
-        if(cantPasos <= persNJ[ia.getContIA()].getMovReal())
+        movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
+
+        std::pair<int, int> coordenadasA = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
+        int coordenadaAX = coordenadasA.first;
+        int coordenadaAY = coordenadasA.second;
+
+        if(movimiento.Alcanzable(coordenadaAX, coordenadaAY))
         {
             EstadoIA = ENEMIGO_EN_RANGO;
         }
-        else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
+        /*else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
         {
             EstadoIA = ENEMIGO_CERCA;
         }
         else 
         {
             EstadoIA = ENEMIGO_LEJOS;
-        }
+        }*/
     }
 
     if(EstadoIA == ENEMIGO_EN_RANGO)
     {
-        coordenadas = ia.casillaValida(idMasCercano, pers, persNJ);
+        coordenadas = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
     }
 
-    if (EstadoIA == ENEMIGO_CERCA)
+    /*if (EstadoIA == ENEMIGO_CERCA)
     {
 
         coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
-    }
+    }*/
 
     
 
@@ -367,7 +376,7 @@ void Juego::procesarIA()
     }
 
     movimiento.setDestino(coordenadaX, coordenadaY);
-    movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
+    
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
 

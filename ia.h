@@ -20,7 +20,7 @@ public:
     void registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y);
 
     std::pair<int, int> detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
-    std::pair<int, int> casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
+    std::pair<int, int> casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos,SisMov& movimiento);
     std::pair<int, int> acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
 
     int getContIA();
