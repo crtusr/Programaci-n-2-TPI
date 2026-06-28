@@ -29,6 +29,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     teclaPresionada = 0;
     menuSubOpciones = nullptr;
     menuAccion = nullptr;
+    menuPausa = nullptr;
 
     // Cargamos los archivos que nos pasó el Manager
     tablero.resize(archivoMapa);
@@ -55,8 +56,8 @@ bool Juego::ejecutar(sf::RenderWindow &window)
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
         procesarEventos(window);
-        if(Estado != ANIMACION_BLOQUEANTE && partida.getTurno() == 1)
-            procesarIA();
+        if(Estado != ANIMACION_BLOQUEANTE && Estado != ANIMACION_DAÑO && partida.getTurno() == 1)
+            procesarIA(window);
         actualizar();
         renderizar(window);
     }
@@ -85,13 +86,25 @@ void Juego::procesarEventos(sf::RenderWindow &window)
         }
         else if (const auto *key = event->getIf<sf::Event::KeyPressed>())
         {
-            // 1. PRIMERO: Comprobamos si quiere salir al menú con ESC
             if (key->code == sf::Keyboard::Key::Escape)
             {
-                jugadorQuiereSalir = true;
-                return; // Rompemos la función aquí mismo para salir al instante
+                if (Estado != PAUSA)
+                {
+                    Estado = PAUSA;
+                    std::vector<std::string> opcionesPausa = {"Continuar", "Volver al Menu Principal"};
+                    menuPausa = new Menu(400, 300, opcionesPausa);
+                }
+                else
+                {
+                    Estado = CURSOR_LIBRE;
+                    if (menuPausa != nullptr)
+                    {
+                        delete menuPausa;
+                menuPausa = nullptr;
+                    }
+                }
+                return;
             }
-
             // 2. SEGUNDO: Si no apretó ESC, procesamos el movimiento y las demás teclas
             teclaPresionada = procesar.tecla(key->code);
 
@@ -296,33 +309,58 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 }
             }
         }
-        // ---------------------------------------------
+                // --- NUEVO: Control del Menú de Pausa ---
+        else if (Estado == PAUSA && menuPausa != nullptr)
+        {
+            if (teclaPresionada == ARRIBA)
+                menuPausa->moveUp();
+            else if (teclaPresionada == ABAJO)
+                menuPausa->moveDown();
+            else if (teclaPresionada == ENTER)
+            {
+                int seleccion = menuPausa->getPressedItem();
+
+                if (seleccion == 0) // Opción "Continuar"
+                {
+                    Estado = CURSOR_LIBRE;
+                    delete menuPausa;
+                    menuPausa = nullptr;
+                }
+                else if (seleccion == 1) // Opción "Volver al Menú Principal"
+                {
+                    jugadorQuiereSalir = true; // Esto le avisa al juego que debe salir
+
+                    delete menuPausa;
+                    menuPausa = nullptr;
+                }
+            }
+        }
         teclaPresionada = NULO;
     }
 }
-void Juego::procesarIA()
+void Juego::procesarIA(sf::RenderWindow &window)
 {
     EstadoIA = DECIDIENDO;
-    std::pair<int, int> persMasCercano; 
+    std::pair<int, int> persMasCercano;
 
     int idMasCercano;
     int cantPasos;
 
     std::pair<int, int> coordenadas;
-    int coordenadaX; 
-    int coordenadaY; 
+    int coordenadaX;
+    int coordenadaY;
 
     while(ia.getContIA() < persNJ.size() && (persNJ[ia.getContIA()].getYaActuo() || persNJ[ia.getContIA()].getHpReal() == 0))
     {
         if(persNJ[ia.getContIA()].getHpReal() == 0)
-        persNJ[ia.getContIA()].setYaActuo(true);
+          persNJ[ia.getContIA()].setYaActuo(true);
         ia.inContIA();
     }
 
     if (ia.getContIA()>=persNJ.size())
         return;
 
-        
+
 
     if (EstadoIA == DECIDIENDO)
     {
@@ -336,7 +374,11 @@ void Juego::procesarIA()
         int coordenadaAX = coordenadasA.first;
         int coordenadaAY = coordenadasA.second;
 
-        if(movimiento.Alcanzable(coordenadaAX, coordenadaAY))
+        if(cantPasos == 1)
+        {
+            EstadoIA = DALE_MATRACA;
+        }
+        else if(movimiento.Alcanzable(coordenadaAX, coordenadaAY))
         {
             EstadoIA = ENEMIGO_EN_RANGO;
         }
@@ -349,7 +391,29 @@ void Juego::procesarIA()
             EstadoIA = ENEMIGO_LEJOS;
         }*/
     }
-
+    
+    if(EstadoIA == DALE_MATRACA)
+    {
+          int direccion = -1;
+          if(persNJ[ia.getContIA()].getPosx() - pers[idMasCercano].getPosx() == 1)
+            direccion = IZQUIERDA;
+          else if(persNJ[ia.getContIA()].getPosx() - pers[idMasCercano].getPosx() == -1)
+            direccion = DERECHA;
+          else if(persNJ[ia.getContIA()].getPosy() - pers[idMasCercano].getPosy() == 1)
+            direccion = ARRIBA;
+          else if(persNJ[ia.getContIA()].getPosy() - pers[idMasCercano].getPosy() == -1)
+            direccion = ABAJO;
+          if(direccion == -1)
+            cout << "no funciono" << endl;
+          persNJ[ia.getContIA()].setdireccion(direccion);
+          ataque.setOpcionDeAtaque(SIMPLE);
+          ataque.prepararataque(direccion, window, persNJ, pers, manager, SIMPLE);
+          declararAtaque(persNJ, pers, &pers[ia.getContIA()]);
+          persNJ[ia.getContIA()].setYaActuo(true);
+          return;
+    }
+    else if(persNJ[ia.getContIA()].getYaMovio())
+      persNJ[ia.getContIA()].setYaActuo(true);
     if(EstadoIA == ENEMIGO_EN_RANGO)
     {
         coordenadas = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
@@ -360,23 +424,13 @@ void Juego::procesarIA()
     if (EstadoIA == ENEMIGO_CERCA)
     {
 
-        coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ);
+        coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ, movimiento);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
     }
 
-    
-
-    if (ia.getContIA() < 0 || ia.getContIA() >= persNJ.size())
-    {
-        std::cout
-                << "idIA fuera de rango: " << ia.getContIA()
-                << " size=" << persNJ.size() << std::endl;
-        return;
-    }
-
     movimiento.setDestino(coordenadaX, coordenadaY);
-    
+
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
 
@@ -420,8 +474,7 @@ void Juego::actualizar()
         {
             if (!manager.moverpersonaje(persNJ[ia.getContIA()], movimiento.getCamino()))
             {
-                persNJ[ia.getContIA()].setYaActuo(true);
-                ia.inContIA();
+                persNJ[ia.getContIA()].setYaMovio(true);
                 Estado = CURSOR_LIBRE;
             }
         }
@@ -544,12 +597,25 @@ void Juego::renderizar(sf::RenderWindow &window)
 
     if(Estado == ANIMACION_DAÑO)
     {
-        bool van1=animacion.mostraranimacion(window);
-        bool van2=animacion.mostrarataque(pers[manager.getactual()],window,ataque);
+        bool van1 = animacion.mostraranimacion(window);
+        bool van2;
+        if(partida.getTurno() == 0)
+        {
+          van2 = animacion.mostrarataque(pers[manager.getactual()],window,ataque);
+        }
+        else if(partida.getTurno() == 1)
+        {
+          van2 = animacion.mostrarataque(persNJ[ia.getContIA()],window,ataque);
+        }
+
         if(!van1&&!van2)
         {
             Estado = CURSOR_LIBRE;
         }
+    }
+    if (Estado == PAUSA && menuPausa != nullptr)
+    {
+        menuPausa->draw(window);
     }
     window.display();
 }
@@ -558,7 +624,7 @@ personaje *Juego::GetPersonajeSeleccionado()
 {
     for (unsigned int i = 0; i < pers.size(); i++)
     {
-        if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos())
+        if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos() && pers[i].getHpReal() > 0)
         {
             manager.setActual(i);
             return &pers[i];
@@ -571,7 +637,7 @@ bool Juego::todasLasUnidadesActuaron(std::vector<personaje>& faccion)
 {
     for (unsigned int i = 0; i < faccion.size(); i++)
     {
-        if (!faccion[i].getYaActuo())
+        if (faccion[i].getHpReal() != 0 && !faccion[i].getYaActuo())
             return false;
     }
     return true;

@@ -45,7 +45,7 @@ private:
     void agregarPersonajeNJ(TIPO_PERSONAJE tipo, int x, int y);
     bool todasLasUnidadesActuaron(std::vector<personaje>& faccion);
     void resetearAccionesJugador(std::vector<personaje>& faccion);
-    void procesarIA();
+    void procesarIA(sf::RenderWindow &window);
 
     // Estas funciones ahora necesitan la ventana prestada
     void procesarEventos(sf::RenderWindow& window);
@@ -58,6 +58,7 @@ private:
     // Atributos de UI In-game
     Menu* menuAccion;
     Menu *menuSubOpciones;
+    Menu *menuPausa;
     int teclaPresionada;
 
     // Recursos

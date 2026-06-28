@@ -37,6 +37,8 @@ std::pair<int, int> IA::detectarEnemigoCercano(std::vector<personaje>& aliados, 
 
             for (int i = 0; i < aliados.size(); i++)
             {
+                if(aliados[i].getHpReal() == 0)
+                  continue;
                 int pasos = abs(aliados[i].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[i].getPosy() - enemigos[contIA].getPosy());
                 if(pasos < persMasCercano[1])
                 {
@@ -106,7 +108,7 @@ std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, s
     return std::make_pair (casillaValida[0], casillaValida[1]);
 }
 
-std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
+std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos, SisMov& movimiento)
 {
     int pasos = abs(aliados[pj].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[pj].getPosy() - enemigos[contIA].getPosy());
 
