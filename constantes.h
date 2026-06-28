@@ -58,7 +58,7 @@ enum ACCION_PERSONAJE
   RECIBIR_ATAQUE,
   BLOQUEAR_ATAQUE,
   MUERTO
-};
+};        
 
 enum class TIPO_PERSONAJE {
     JUGADOR,

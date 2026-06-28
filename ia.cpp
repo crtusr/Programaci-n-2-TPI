@@ -2,9 +2,10 @@
 #include <cmath>
 
 
-IA::IA(Grilla *t){
+IA::IA(Grilla *t, managerpersonaje *p){
 contIA = 0;
 tablero = t;
+manager = p;
 }
 
 void IA::registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
@@ -30,24 +31,22 @@ void IA::registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y)
     );
 }
 
-int IA::detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
+std::pair<int, int> IA::detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
 {
-
-    int MenosPasos = 999;
-    int idMasCercano;
+    int persMasCercano[2] = {-1, 999};
 
             for (int i = 0; i < aliados.size(); i++)
             {
                 int pasos = abs(aliados[i].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[i].getPosy() - enemigos[contIA].getPosy());
-                if(pasos < MenosPasos)
+                if(pasos < persMasCercano[1])
                 {
-                    MenosPasos = pasos;
-                    idMasCercano = aliados[i].getId();
+                    persMasCercano[1] = pasos;
+                    persMasCercano[0] = aliados[i].getId();
                 }
             }
         
-    cout << "pasos: " << MenosPasos <<", "<<"id: "<< idMasCercano << endl;
-    return idMasCercano;
+    cout << "pasos: " << persMasCercano[1] <<", "<<"id: "<< persMasCercano[0] << endl;
+    return std::make_pair(persMasCercano[0], persMasCercano[1]);
 }
 
 std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
@@ -106,6 +105,15 @@ std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, s
     return std::make_pair (casillaValida[0], casillaValida[1]);
 }
 
+std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
+{
+    int pasos = abs(aliados[pj].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[pj].getPosy() - enemigos[contIA].getPosy());
+
+    /*while (pasos > 0)
+    {
+        
+    }*/
+}
 
 
 int IA::getContIA() { return contIA; }

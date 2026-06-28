@@ -31,6 +31,7 @@ public:
 
 private:
     ESTADO_JUEGO Estado;
+    ESTADO_IA EstadoIA;
     personaje* personajeSeleccionado;
     personaje* personajeTemporal;
 

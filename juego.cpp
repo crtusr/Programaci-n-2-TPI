@@ -19,7 +19,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     tablero(64, 0, 0),
     rendUi(&tablero),
     movimiento(3, 3, &tablero, &persNJ),
-    ia(&tablero)
+    ia(&tablero, &manager)
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -302,18 +302,61 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 }
 void Juego::procesarIA()
 {
+    EstadoIA = DECIDIENDO;
+    std::pair<int, int> persMasCercano; 
+
+    int idMasCercano = persMasCercano.first;
+    int cantPasos = persMasCercano.second;
+
+    std::pair<int, int> coordenadas;
+    int coordenadaX; 
+    int coordenadaY; 
 
     while(ia.getContIA() < persNJ.size() && (persNJ[ia.getContIA()].getYaActuo() || persNJ[ia.getContIA()].getHpReal() == 0))
     {
-      if(persNJ[ia.getContIA()].getHpReal() == 0)
-          persNJ[ia.getContIA()].setYaActuo(true);
-      ia.inContIA();
+        if(persNJ[ia.getContIA()].getHpReal() == 0)
+        persNJ[ia.getContIA()].setYaActuo(true);
+        ia.inContIA();
     }
 
     if (ia.getContIA()>=persNJ.size())
         return;
 
-    int idMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
+
+    if (EstadoIA == DECIDIENDO)
+    {
+        persMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
+
+        if(cantPasos <= persNJ[ia.getContIA()].getMovReal())
+        {
+            EstadoIA = ENEMIGO_EN_RANGO;
+        }
+        else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
+        {
+            EstadoIA = ENEMIGO_CERCA;
+        }
+        else 
+        {
+            EstadoIA = ENEMIGO_LEJOS;
+        }
+    }
+
+    if(EstadoIA == ENEMIGO_EN_RANGO)
+    {
+        coordenadas = ia.casillaValida(idMasCercano, pers, persNJ);
+        coordenadaX = coordenadas.first;
+        coordenadaY = coordenadas.second;
+    }
+
+    if (EstadoIA == ENEMIGO_CERCA)
+    {
+
+        coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ);
+        coordenadaX = coordenadas.first;
+        coordenadaY = coordenadas.second;
+    }
+
+    
 
     if (ia.getContIA() < 0 || ia.getContIA() >= persNJ.size())
     {
@@ -322,11 +365,6 @@ void Juego::procesarIA()
                 << " size=" << persNJ.size() << std::endl;
         return;
     }
-
-    std::pair<int, int> coordenadas = ia.casillaValida(idMasCercano, pers, persNJ); 
-
-    int coordenadaX = coordenadas.first;
-    int coordenadaY = coordenadas.second;
 
     movimiento.setDestino(coordenadaX, coordenadaY);
     movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());

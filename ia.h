@@ -12,14 +12,16 @@ class IA
 private:
     Grilla* tablero;
     personaje *personajeIA;
+    managerpersonaje* manager;
     int contIA;
 public:
-    IA(Grilla *t);
+    IA(Grilla *t, managerpersonaje *p);
 
     void registrarPNJ(personaje& pers, TIPO_PERSONAJE tipo, int x, int y);
 
-    int detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
+    std::pair<int, int> detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
     std::pair<int, int> casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
+    std::pair<int, int> acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
 
     int getContIA();
     void inContIA();
