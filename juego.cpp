@@ -29,6 +29,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     teclaPresionada = 0;
     menuSubOpciones = nullptr;
     menuAccion = nullptr;
+    menuPausa = nullptr;
 
     // Cargamos los archivos que nos pasó el Manager
     tablero.resize(archivoMapa);
@@ -85,13 +86,25 @@ void Juego::procesarEventos(sf::RenderWindow &window)
         }
         else if (const auto *key = event->getIf<sf::Event::KeyPressed>())
         {
-            // 1. PRIMERO: Comprobamos si quiere salir al menú con ESC
             if (key->code == sf::Keyboard::Key::Escape)
             {
-                jugadorQuiereSalir = true;
-                return; // Rompemos la función aquí mismo para salir al instante
+                if (Estado != PAUSA)
+                {
+                    Estado = PAUSA;
+                    std::vector<std::string> opcionesPausa = {"Continuar", "Volver al Menu Principal"};
+                    menuPausa = new Menu(400, 300, opcionesPausa);
+                }
+                else
+                {
+                    Estado = CURSOR_LIBRE;
+                    if (menuPausa != nullptr)
+                    {
+                        delete menuPausa;
+                menuPausa = nullptr;
+                    }
+                }
+                return;
             }
-
             // 2. SEGUNDO: Si no apretó ESC, procesamos el movimiento y las demás teclas
             teclaPresionada = procesar.tecla(key->code);
 
@@ -296,21 +309,46 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 }
             }
         }
-        // ---------------------------------------------
+                // --- NUEVO: Control del Menú de Pausa ---
+        else if (Estado == PAUSA && menuPausa != nullptr)
+        {
+            if (teclaPresionada == ARRIBA)
+                menuPausa->moveUp();
+            else if (teclaPresionada == ABAJO)
+                menuPausa->moveDown();
+            else if (teclaPresionada == ENTER)
+            {
+                int seleccion = menuPausa->getPressedItem();
+
+                if (seleccion == 0) // Opción "Continuar"
+                {
+                    Estado = CURSOR_LIBRE;
+                    delete menuPausa;
+                    menuPausa = nullptr;
+                }
+                else if (seleccion == 1) // Opción "Volver al Menú Principal"
+                {
+                    jugadorQuiereSalir = true; // Esto le avisa al juego que debe salir
+
+                    delete menuPausa;
+                    menuPausa = nullptr;
+                }
+            }
+        }
         teclaPresionada = NULO;
     }
 }
 void Juego::procesarIA(sf::RenderWindow &window)
 {
     EstadoIA = DECIDIENDO;
-    std::pair<int, int> persMasCercano; 
+    std::pair<int, int> persMasCercano;
 
     int idMasCercano;
     int cantPasos;
 
     std::pair<int, int> coordenadas;
-    int coordenadaX; 
-    int coordenadaY; 
+    int coordenadaX;
+    int coordenadaY;
 
     while(ia.getContIA() < persNJ.size() && (persNJ[ia.getContIA()].getYaActuo() || persNJ[ia.getContIA()].getHpReal() == 0))
     {
@@ -322,7 +360,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
     if (ia.getContIA()>=persNJ.size())
         return;
 
-        
+
 
     if (EstadoIA == DECIDIENDO)
     {
@@ -349,7 +387,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
         {
             EstadoIA = ENEMIGO_CERCA;
         }
-        else 
+        else
         {
             EstadoIA = ENEMIGO_LEJOS;
         }*/
@@ -393,7 +431,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
     }*/
 
     movimiento.setDestino(coordenadaX, coordenadaY);
-    
+
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
 
@@ -575,6 +613,10 @@ void Juego::renderizar(sf::RenderWindow &window)
         {
             Estado = CURSOR_LIBRE;
         }
+    }
+    if (Estado == PAUSA && menuPausa != nullptr)
+    {
+        menuPausa->draw(window);
     }
     window.display();
 }
