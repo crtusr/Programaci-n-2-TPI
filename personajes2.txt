@@ -26,13 +26,13 @@ fuerza;2
 defensa;1
 posX;4
 posY;4
-trabajo;1
+trabajo;0
 maxHp;3
 fuerza;1
 defensa;0
 posX;5
 posY;4
-trabajo;2
+trabajo;0
 maxHp;0
 fuerza;0
 defensa;0

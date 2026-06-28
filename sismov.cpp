@@ -187,6 +187,8 @@ bool SisMov::buscarCaminoPriv(int x, int y, int mov, int profundidad)
 void SisMov::buscarCamino(int x, int y, int mov)
 {
   resetCamino();
+  if(xPos < 0 || yPos < 0 || xPos >= bordeDerecho || yPos >= bordeInferior)
+    return;
   if (!valido[xPos + (yPos * bordeDerecho)])
   {
     return;

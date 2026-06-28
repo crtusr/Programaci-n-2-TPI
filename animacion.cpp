@@ -115,9 +115,9 @@ void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers,int col
   for(int i=0;i<pers.size();i++){
    if(pers[i].getaccion()!=MUERTO||pers[i].getframe()<40)
    {
-    rectangulo.setPosition(Vector2f(pers[i].getPosxPxl()+25,pers[i].getPosyPxl()+58));
-    if(color==1){rectangulo.setFillColor(Color::Blue);}
-    if(color==2){rectangulo.setFillColor(Color::Red);}
+    rectangulo.setPosition(Vector2f(pers[i].getPosxPxl()+25,pers[i].getPosyPxl()+56));
+    if(color==1){rectangulo.setFillColor(sf::Color(0, 0, 255, 160));}
+    if(color==2){rectangulo.setFillColor(sf::Color(255, 0, 0, 160));}
     float aux1=pers[i].getHpReal();
     float aux2=pers[i].getMaxHpReal();
     float auxf = aux1/aux2;
@@ -139,6 +139,7 @@ void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers,int col
     }
   }
 }
+
 
 bool Animacion::mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque){
     int x;

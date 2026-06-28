@@ -20,6 +20,7 @@
 #include "texmanager.h"
 #include "animacion.h"
 #include "adminclase.h"
+#include "adminmusica.h"
 
 class Juego {
 public:
@@ -34,7 +35,7 @@ private:
     ESTADO_IA EstadoIA;
     personaje* personajeSeleccionado;
     personaje* personajeTemporal;
-
+    AdminMusica musica;
     // Banderas para controlar el flujo del nivel
     bool nivelSuperado;
     bool jugadorQuiereSalir;

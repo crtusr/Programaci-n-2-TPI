@@ -19,7 +19,8 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     tablero(64, 0, 0),
     rendUi(&tablero),
     movimiento(3, 3, &tablero, &persNJ),
-    ia(&tablero, &manager)
+    ia(&tablero, &manager),
+    musica("music/jugadores.mp3", "music/enemigos.mp3")
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -41,6 +42,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
 
     Estado = CURSOR_LIBRE;
     personajeSeleccionado = nullptr;
+    musica.reproducirTemaJugadores();
 }
 
 bool Juego::ejecutar(sf::RenderWindow &window)
@@ -359,7 +361,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
 
     if (ia.getContIA()>=persNJ.size())
         return;
-
+    manager.setActual(ia.getContIA());
 
 
     if (EstadoIA == DECIDIENDO)
@@ -411,7 +413,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
           persNJ[ia.getContIA()].setdireccion(direccion);
           ataque.setOpcionDeAtaque(SIMPLE);
           ataque.prepararataque(direccion, window, persNJ, pers, manager, SIMPLE);
-          declararAtaque(persNJ, pers, &pers[ia.getContIA()]);
+          declararAtaque(persNJ, pers, &persNJ[ia.getContIA()]);
           persNJ[ia.getContIA()].setYaActuo(true);
           return;
     }
@@ -438,6 +440,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
 
     movimiento.buscarCamino(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
     manager.resetCaminoIndice();
+    persNJ[ia.getContIA()].setYaMovio(true);
 
     Estado = ANIMACION_BLOQUEANTE;
 }
@@ -479,7 +482,6 @@ void Juego::actualizar()
         {
             if (!manager.moverpersonaje(persNJ[ia.getContIA()], movimiento.getCamino()))
             {
-                persNJ[ia.getContIA()].setYaMovio(true);
                 Estado = CURSOR_LIBRE;
             }
         }
@@ -490,6 +492,7 @@ void Juego::actualizar()
         partida.pasarTurno();
         resetearAccionesJugador(pers);
         movimiento.setEnemigos(&pers);
+        musica.reproducirTemaEnemigos();
     }
     if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ) && Estado == CURSOR_LIBRE)
     {
@@ -497,6 +500,7 @@ void Juego::actualizar()
         ia.resetContIA();
         resetearAccionesJugador(persNJ);
         movimiento.setEnemigos(&persNJ);
+        musica.reproducirTemaJugadores();
     }
 
     if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
