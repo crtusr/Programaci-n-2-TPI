@@ -340,11 +340,11 @@ void Juego::procesarIA()
         {
             EstadoIA = ENEMIGO_EN_RANGO;
         }
-        /*else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
+        else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
         {
             EstadoIA = ENEMIGO_CERCA;
         }
-        else 
+        /*else 
         {
             EstadoIA = ENEMIGO_LEJOS;
         }*/
@@ -357,13 +357,13 @@ void Juego::procesarIA()
         coordenadaY = coordenadas.second;
     }
 
-    /*if (EstadoIA == ENEMIGO_CERCA)
+    if (EstadoIA == ENEMIGO_CERCA)
     {
 
         coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
-    }*/
+    }
 
     
 

@@ -10,7 +10,7 @@ class Arquero : public claseTrabajo {
         defensa = 1;
         maxHp = 28;
         hp = 28;
-        mov = 5;
+        mov = 4;
         optAtk[0] = PROYECTIL;
         optAtk[1] = GRANADA;
     }
