@@ -111,54 +111,31 @@ std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, s
 std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos, SisMov& movimiento)
 {
 
-    
-    
+    int pasos;
+    int menosPasos = 999;
 
-    int pasos = abs(aliados[pj].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[pj].getPosy() - enemigos[contIA].getPosy());
+    int Xmenor = -1;
+    int Ymenor = -1;
 
-        int coordenadaX = aliados[pj].getPosx();
-        int coordenadaY = aliados[pj].getPosy();
-
-
-    while (pasos > 1)
+    for(int i = 0; i < tablero->getMaxY(); i++)
     {
-        int pasosDisp = enemigos[contIA].getMovReal();
-        int nuevoX = enemigos[contIA].getPosx();
-        int nuevoY = enemigos[contIA].getPosy();
-
-        while (pasosDisp > 0)
+        for(int j = 0; j < tablero->getMaxX(); j++)
         {
-            if (nuevoX == coordenadaX && nuevoY == coordenadaY) 
+            if(movimiento.Alcanzable(j, i))
+            {
+                pasos = abs(aliados[pj].getPosx() - j) + abs(aliados[pj].getPosy() - i);
+
+                if (pasos < menosPasos) 
                 {
-                    break; 
+                    menosPasos = pasos;
+                    Xmenor = j;
+                    Ymenor = i;
                 }
-
-            if (nuevoX != coordenadaX) 
-            {
-                nuevoX += (coordenadaX > nuevoX) ? 1 : -1;
-                pasosDisp--;
-            }
-        // Luego movimiento en Y
-            if (pasosDisp > 0 && nuevoY != coordenadaY) 
-            {
-                nuevoY += (coordenadaY > nuevoY) ? 1 : -1;
-                pasosDisp--;
             }
         }
-
-        while (managerpersonaje::comprobarLugarTablero(nuevoX, nuevoY, aliados) != -1 ||managerpersonaje::comprobarLugarTablero(nuevoX, nuevoY, enemigos) != -1)
-        {
-
-            if (nuevoX != enemigos[contIA].getPosx()) nuevoX += (enemigos[contIA].getPosx() > nuevoX) ? 1 : -1;
-            else if (nuevoY != enemigos[contIA].getPosy()) nuevoY += (enemigos[contIA].getPosy() > nuevoY) ? 1 : -1;
-        
-
-            if (nuevoX == enemigos[contIA].getPosx() && nuevoY == enemigos[contIA].getPosy()) break; 
-        }
-
-    return {nuevoX, nuevoY};
     }
-    return {enemigos[contIA].getPosx(), enemigos[contIA].getPosy()};
+    
+    return std::make_pair(Xmenor, Ymenor);
 }
 
 

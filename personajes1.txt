@@ -30,14 +30,9 @@ trabajo;0
 maxHp;0
 fuerza;2
 defensa;1
-<<<<<<< HEAD
-
-
-=======
 posX;4
 posY;8
 trabajo;0
 maxHp;0
 fuerza;2
 defensa;1
->>>>>>> e9c7486c95227bd3dd39d9bcc7612c89f347eba8

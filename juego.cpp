@@ -382,7 +382,6 @@ void Juego::procesarIA(sf::RenderWindow &window)
         int coordenadaAX = coordenadasA.first;
         int coordenadaAY = coordenadasA.second;
 
-
         if(cantPasos == 1)
         {
             EstadoIA = DALE_MATRACA;
@@ -395,10 +394,6 @@ void Juego::procesarIA(sf::RenderWindow &window)
         {
             EstadoIA = ENEMIGO_CERCA;
         }
-        /*else 
-        {
-            EstadoIA = ENEMIGO_LEJOS;
-        }*/
     }
 
     if(EstadoIA == DALE_MATRACA)
