@@ -70,14 +70,13 @@ public:
     rectangulo.setSize(Vector2f(15,4));
     barraoscura.setSize(Vector2f(1500,1000));
     barraoscura.setFillColor(Color::Black);
-    bool trancicion(RenderWindow& window);
 
     }
 void asignaranimacion(vector<personaje>& pers_atk,vector<personaje>& pers_def,Ataque& ataque,managerpersonaje& manager);
 bool mostraranimacion(RenderWindow& window);
 void mostrarvida(RenderWindow& window,vector<personaje>& pers,int color);
 bool mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
-
+bool trancicion(RenderWindow& window);
 };
 
 #endif // ANIMACION_H_INCLUDED;
