@@ -48,12 +48,12 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
 bool Juego::ejecutar(sf::RenderWindow &window)
 {
     // Ajustamos la cámara al tamaño del tablero justo antes de empezar a jugar
+    window.setSize(sf::Vector2u(tablero.getMaxX() * tablero.getTamCeldaPixeles(),
+                                tablero.getMaxY() * tablero.getTamCeldaPixeles()));
     sf::FloatRect newSize(sf::Vector2f(0, 0),
                           sf::Vector2f(tablero.getMaxX() * tablero.getTamCeldaPixeles(),
                                        tablero.getMaxY() * tablero.getTamCeldaPixeles()));
     window.setView(sf::View(newSize));
-    pers[0].restarHp(30); // BORRAR ANTES DE ENTREGAR
-    pers[1].restarHp(30);
     // El bucle ahora depende de la ventana prestada y de nuestras banderas
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
