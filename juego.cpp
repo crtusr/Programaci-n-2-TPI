@@ -49,7 +49,8 @@ bool Juego::ejecutar(sf::RenderWindow &window)
                           sf::Vector2f(tablero.getMaxX() * tablero.getTamCeldaPixeles(),
                                        tablero.getMaxY() * tablero.getTamCeldaPixeles()));
     window.setView(sf::View(newSize));
-
+    pers[0].restarHp(30); // BORRAR ANTES DE ENTREGAR
+    pers[1].restarHp(30);
     // El bucle ahora depende de la ventana prestada y de nuestras banderas
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
@@ -190,7 +191,14 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             if (teclaPresionada == ENTER)
             {
                 // ACTUALIZADO: Nueva lógica de animación de lucas.
-                declararAtaque(pers, persNJ, personajeSeleccionado);
+                if(ataque.getopciondeataque() == CURA || ataque.getopciondeataque() == CURA_GRANDE)
+                {
+                    declararCuracion(pers, personajeSeleccionado);
+                }
+                else
+                {
+                    declararAtaque(pers, persNJ, personajeSeleccionado);
+                }
 
                 personajeSeleccionado->setYaActuo(true);
                 personajeSeleccionado = nullptr;
@@ -618,6 +626,19 @@ void Juego::SpawnPersonaje(const char *archivoPersonajes)
     }
     if(personajes.cerrar() != 0)
       std::cout << "no se cerro personajesX.txt" << std::endl;
+}
+
+void Juego::declararCuracion(vector<personaje>& propio, personaje *actual)
+{
+    animacion.asignaranimacion(propio, propio, ataque, manager);
+    Estado = ANIMACION_DAÑO;
+    cont = 0;
+
+    for (int i = 0; i < ataque.getcantidadimpactos(); i++)
+    {
+        Combate combate(&tablero, actual, &propio[ataque.getimpactos()[i]]);
+        combate.curacion();
+    }
 }
 
 void Juego::declararAtaque(vector<personaje>& atk,vector<personaje>& def, personaje *actual)

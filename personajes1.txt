@@ -13,7 +13,7 @@ fuerza;20
 defensa;1
 posX;8
 posY;7
-trabajo;1
+trabajo;2
 maxHp;5
 fuerza;20
 defensa;1

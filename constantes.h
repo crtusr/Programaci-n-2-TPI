@@ -87,7 +87,8 @@ enum ATAQUE
   ANCHO,
   GRANADA,
   PROYECTIL,
-  CURA
+  CURA,
+  CURA_GRANDE
 };
 
 const int profundidadMax = 16;

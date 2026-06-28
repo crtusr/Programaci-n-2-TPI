@@ -14,6 +14,7 @@ class Combate
     CeldaTerrestre *celdaDef;
   public:
     Combate(Grilla *g, personaje *at, personaje *def);
+    void curacion();
     void pelea();
 };
 
