@@ -19,7 +19,8 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
     tablero(64, 0, 0),
     rendUi(&tablero),
     movimiento(3, 3, &tablero, &persNJ),
-    ia(&tablero, &manager)
+    ia(&tablero, &manager),
+    musica("music/jugadores.mp3", "music/enemigos.mp3")
 {
     nivelSuperado = false;
     jugadorQuiereSalir = false;
@@ -41,6 +42,7 @@ Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
 
     Estado = CURSOR_LIBRE;
     personajeSeleccionado = nullptr;
+    musica.reproducirTemaJugadores();
 }
 
 bool Juego::ejecutar(sf::RenderWindow &window)
@@ -486,6 +488,7 @@ void Juego::actualizar()
         partida.pasarTurno();
         resetearAccionesJugador(pers);
         movimiento.setEnemigos(&pers);
+        musica.reproducirTemaEnemigos();
     }
     if (partida.getTurno() == 1 && todasLasUnidadesActuaron(persNJ) && Estado == CURSOR_LIBRE)
     {
@@ -493,6 +496,7 @@ void Juego::actualizar()
         ia.resetContIA();
         resetearAccionesJugador(persNJ);
         movimiento.setEnemigos(&persNJ);
+        musica.reproducirTemaJugadores();
     }
 
     if (!persNJ.empty() && manager.contarPersonajesActivos(persNJ) == 0)
