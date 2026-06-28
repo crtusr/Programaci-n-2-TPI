@@ -5,16 +5,20 @@ project(TPI)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System)
+# 1. Agregado "Audio" a los componentes requeridos de SFML
+find_package(SFML 3 REQUIRED COMPONENTS Graphics Window System Audio)
 
 # Todos los .cpp
 file(GLOB SRC_FILES "*.cpp")
 
 add_executable(game ${SRC_FILES})
 
-target_link_libraries(game    SFML::Graphics
+# 2. Agregado "SFML::Audio" a las librerías para linkear
+target_link_libraries(game 
+    SFML::Graphics
     SFML::Window
     SFML::System
+    SFML::Audio
 )
 
 # 🔥 IMPORTANTE: copiar assets al build

@@ -367,10 +367,11 @@ void Juego::procesarIA(sf::RenderWindow &window)
     if (EstadoIA == DECIDIENDO)
     {
         manager.setActual(ia.getContIA());
+        
         persMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
         idMasCercano = persMasCercano.first;
         cantPasos = persMasCercano.second;
-
+        
         movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
 
         std::pair<int, int> coordenadasA = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);

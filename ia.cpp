@@ -110,10 +110,15 @@ std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, s
 
 std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos, SisMov& movimiento)
 {
+
+    
+    
+
     int pasos = abs(aliados[pj].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[pj].getPosy() - enemigos[contIA].getPosy());
 
         int coordenadaX = aliados[pj].getPosx();
         int coordenadaY = aliados[pj].getPosy();
+
 
     while (pasos > 1)
     {
@@ -121,33 +126,39 @@ std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliado
         int nuevoX = enemigos[contIA].getPosx();
         int nuevoY = enemigos[contIA].getPosy();
 
-    while (pasosDisp > 0)
-    {
-        if (nuevoX != coordenadaX) 
+        while (pasosDisp > 0)
         {
-            nuevoX += (coordenadaX > nuevoX) ? 1 : -1;
-            pasosDisp--;
-        }
+            if (nuevoX == coordenadaX && nuevoY == coordenadaY) 
+                {
+                    break; 
+                }
+
+            if (nuevoX != coordenadaX) 
+            {
+                nuevoX += (coordenadaX > nuevoX) ? 1 : -1;
+                pasosDisp--;
+            }
         // Luego movimiento en Y
-        if (pasosDisp > 0 && nuevoY != coordenadaY) 
-        {
-            nuevoY += (coordenadaY > nuevoY) ? 1 : -1;
-            pasosDisp--;
+            if (pasosDisp > 0 && nuevoY != coordenadaY) 
+            {
+                nuevoY += (coordenadaY > nuevoY) ? 1 : -1;
+                pasosDisp--;
+            }
         }
-    }
 
-    while (managerpersonaje::comprobarLugarTablero(nuevoX, nuevoY, aliados) != -1 ||managerpersonaje::comprobarLugarTablero(nuevoX, nuevoY, enemigos) != -1)
-    {
+        while (managerpersonaje::comprobarLugarTablero(nuevoX, nuevoY, aliados) != -1 ||managerpersonaje::comprobarLugarTablero(nuevoX, nuevoY, enemigos) != -1)
+        {
 
-        if (nuevoX != enemigos[contIA].getPosx()) nuevoX += (enemigos[contIA].getPosx() > nuevoX) ? 1 : -1;
-        else if (nuevoY != enemigos[contIA].getPosy()) nuevoY += (enemigos[contIA].getPosy() > nuevoY) ? 1 : -1;
+            if (nuevoX != enemigos[contIA].getPosx()) nuevoX += (enemigos[contIA].getPosx() > nuevoX) ? 1 : -1;
+            else if (nuevoY != enemigos[contIA].getPosy()) nuevoY += (enemigos[contIA].getPosy() > nuevoY) ? 1 : -1;
         
 
-        if (nuevoX == enemigos[contIA].getPosx() && nuevoY == enemigos[contIA].getPosy()) break; 
-    }
+            if (nuevoX == enemigos[contIA].getPosx() && nuevoY == enemigos[contIA].getPosy()) break; 
+        }
 
     return {nuevoX, nuevoY};
     }
+    return {enemigos[contIA].getPosx(), enemigos[contIA].getPosy()};
 }
 
 
