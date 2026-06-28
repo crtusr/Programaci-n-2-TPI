@@ -70,7 +70,7 @@ public:
     spt_ataque3.setTexture(tex_ataque3);
     spt_ataque4.setTexture(tex_ataque4);
     spt_curacion1.setTexture(tex_curacion1);
-    rectangulo.setSize(Vector2f(15,4));
+    rectangulo.setSize(Vector2f(15,6));
     barraoscura.setSize(Vector2f(1500,1000));
     barraoscura.setFillColor(Color::Black);
     fondodevida.setSize(Vector2f(55,5));
