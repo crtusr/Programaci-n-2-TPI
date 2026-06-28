@@ -182,30 +182,30 @@ void Ataque::ataque4(int direccion,RenderWindow& window,vector<personaje>& pers_
   int cont=0;
   cantidadimpactos=0;
   int aux;
-  int v_dirx[9];
-  int v_diry[9];
+  int v_dirx[4];
+  int v_diry[4];
   switch(direccion)
   {
     case ARRIBA:
-      v_dirx[0]=0;v_dirx[1]=0;v_dirx[2]=0;v_dirx[3]=0;v_dirx[4]=0;v_dirx[5]=0;v_dirx[6]=0;v_dirx[7]=0;v_dirx[8]=0;
-      v_diry[0]=-64*1;v_diry[1]=-64*2;v_diry[2]=-64*3;v_diry[3]=-64*4;v_diry[4]=-64*5;v_diry[5]=-64*6;v_diry[6]=-64*7;v_diry[7]=-64*8;v_diry[8]=-64*9;
+      v_dirx[0]=0;v_dirx[1]=0;v_dirx[2]=0;v_dirx[3]=0;
+      v_diry[0]=-64*1;v_diry[1]=-64*2;v_diry[2]=-64*3;v_diry[3]=-64*3;
       break;
     case DERECHA:
-      v_dirx[0]=64*1;v_dirx[1]=64*2;v_dirx[2]=64*3;v_dirx[3]=64*4;v_dirx[4]=64*5;v_dirx[5]=64*6;v_dirx[6]=64*7;v_dirx[7]=64*8;v_dirx[8]=64*9;
-      v_diry[0]=0;v_diry[1]=0;v_diry[2]=0;v_diry[3]=0;v_diry[4]=0;v_diry[5]=0;v_diry[6]=0;v_diry[7]=0;v_diry[8]=0;
+      v_dirx[0]=64*1;v_dirx[1]=64*2;v_dirx[2]=64*3;v_dirx[3]=0;
+      v_diry[0]=0;v_diry[1]=0;v_diry[2]=0;v_diry[3]=-64*3;
       break;
     case IZQUIERDA:
-      v_dirx[0]=-64*1;v_dirx[1]=-64*2;v_dirx[2]=-64*3;v_dirx[3]=-64*4;v_dirx[4]=-64*5;v_dirx[5]=-64*6;v_dirx[6]=-64*7;v_dirx[7]=-64*8;v_dirx[8]=-64*9;
-      v_diry[0]=0;v_diry[1]=0;v_diry[2]=0;v_diry[3]=0;v_diry[4]=0;v_diry[5]=0;v_diry[6]=0;v_diry[7]=0;v_diry[8]=0;
+      v_dirx[0]=-64*1;v_dirx[1]=-64*2;v_dirx[2]=-64*3;v_dirx[3]=0;
+      v_diry[0]=0;v_diry[1]=0;v_diry[2]=0;v_diry[3]=-64*3;
       break;
     case ABAJO:
-      v_dirx[0]=0;v_dirx[1]=0;v_dirx[2]=0;v_dirx[3]=0;v_dirx[4]=0;v_dirx[5]=0;v_dirx[6]=0;v_dirx[7]=0;v_dirx[8]=0;
-      v_diry[0]=64*1;v_diry[1]=64*2;v_diry[2]=64*3;v_diry[3]=64*4;v_diry[4]=64*5;v_diry[5]=64*6;v_diry[6]=64*7;v_diry[7]=64*8;v_diry[8]=64*9;
+      v_dirx[0]=0;v_dirx[1]=0;v_dirx[2]=0;v_dirx[3]=0;
+      v_diry[0]=64*1;v_diry[1]=64*2;v_diry[2]=64*3;v_diry[3]=-64*3;
       break;
     default:
       break;
   }
-  for(int i=0;i<9;i++)
+  for(int i=0;i<3;i++)
   {
 
     sprite.setPosition(sf::Vector2f(pers_atk[manager.getactual()].getPosxPxl()+v_dirx[i],pers_atk[manager.getactual()].getPosyPxl()+v_diry[i]));
@@ -221,7 +221,7 @@ void Ataque::ataque4(int direccion,RenderWindow& window,vector<personaje>& pers_
       impactos[cont]=aux;
       cont++;
       cantidadimpactos=cont;
-      i=9;
+      i=3;
     }
     distancia++;
   }

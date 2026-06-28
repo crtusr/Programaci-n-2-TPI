@@ -37,6 +37,8 @@ std::pair<int, int> IA::detectarEnemigoCercano(std::vector<personaje>& aliados, 
 
             for (int i = 0; i < aliados.size(); i++)
             {
+                if(aliados[i].getHpReal() == 0)
+                  continue;
                 int pasos = abs(aliados[i].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[i].getPosy() - enemigos[contIA].getPosy());
                 if(pasos < persMasCercano[1])
                 {
@@ -114,6 +116,7 @@ std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliado
     {
     
     }
+    return std::make_pair(0, 0);
 }
 
 

@@ -55,8 +55,8 @@ bool Juego::ejecutar(sf::RenderWindow &window)
     while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
     {
         procesarEventos(window);
-        if(Estado != ANIMACION_BLOQUEANTE && partida.getTurno() == 1)
-            procesarIA();
+        if(Estado != ANIMACION_BLOQUEANTE && Estado != ANIMACION_DAÑO && partida.getTurno() == 1)
+            procesarIA(window);
         actualizar();
         renderizar(window);
     }
@@ -300,7 +300,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
         teclaPresionada = NULO;
     }
 }
-void Juego::procesarIA()
+void Juego::procesarIA(sf::RenderWindow &window)
 {
     EstadoIA = DECIDIENDO;
     std::pair<int, int> persMasCercano; 
@@ -315,7 +315,7 @@ void Juego::procesarIA()
     while(ia.getContIA() < persNJ.size() && (persNJ[ia.getContIA()].getYaActuo() || persNJ[ia.getContIA()].getHpReal() == 0))
     {
         if(persNJ[ia.getContIA()].getHpReal() == 0)
-        persNJ[ia.getContIA()].setYaActuo(true);
+          persNJ[ia.getContIA()].setYaActuo(true);
         ia.inContIA();
     }
 
@@ -336,10 +336,15 @@ void Juego::procesarIA()
         int coordenadaAX = coordenadasA.first;
         int coordenadaAY = coordenadasA.second;
 
-        if(movimiento.Alcanzable(coordenadaAX, coordenadaAY))
+        if(cantPasos == 1)
+        {
+            EstadoIA = DALE_MATRACA;
+        }
+        else if(movimiento.Alcanzable(coordenadaAX, coordenadaAY))
         {
             EstadoIA = ENEMIGO_EN_RANGO;
         }
+
         /*else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
         {
             EstadoIA = ENEMIGO_CERCA;
@@ -349,7 +354,29 @@ void Juego::procesarIA()
             EstadoIA = ENEMIGO_LEJOS;
         }*/
     }
-
+    
+    if(EstadoIA == DALE_MATRACA)
+    {
+          int direccion = -1;
+          if(persNJ[ia.getContIA()].getPosx() - pers[idMasCercano].getPosx() == 1)
+            direccion = IZQUIERDA;
+          else if(persNJ[ia.getContIA()].getPosx() - pers[idMasCercano].getPosx() == -1)
+            direccion = DERECHA;
+          else if(persNJ[ia.getContIA()].getPosy() - pers[idMasCercano].getPosy() == 1)
+            direccion = ARRIBA;
+          else if(persNJ[ia.getContIA()].getPosy() - pers[idMasCercano].getPosy() == -1)
+            direccion = ABAJO;
+          if(direccion == -1)
+            cout << "no funciono" << endl;
+          persNJ[ia.getContIA()].setdireccion(direccion);
+          ataque.setOpcionDeAtaque(SIMPLE);
+          ataque.prepararataque(direccion, window, persNJ, pers, manager, SIMPLE);
+          declararAtaque(persNJ, pers, &pers[ia.getContIA()]);
+          persNJ[ia.getContIA()].setYaActuo(true);
+          return;
+    }
+    else if(persNJ[ia.getContIA()].getYaMovio())
+      persNJ[ia.getContIA()].setYaActuo(true);
     if(EstadoIA == ENEMIGO_EN_RANGO)
     {
         coordenadas = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
@@ -364,16 +391,6 @@ void Juego::procesarIA()
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
     }*/
-
-    
-
-    if (ia.getContIA() < 0 || ia.getContIA() >= persNJ.size())
-    {
-        std::cout
-                << "idIA fuera de rango: " << ia.getContIA()
-                << " size=" << persNJ.size() << std::endl;
-        return;
-    }
 
     movimiento.setDestino(coordenadaX, coordenadaY);
     
@@ -420,8 +437,7 @@ void Juego::actualizar()
         {
             if (!manager.moverpersonaje(persNJ[ia.getContIA()], movimiento.getCamino()))
             {
-                persNJ[ia.getContIA()].setYaActuo(true);
-                ia.inContIA();
+                persNJ[ia.getContIA()].setYaMovio(true);
                 Estado = CURSOR_LIBRE;
             }
         }
@@ -544,8 +560,17 @@ void Juego::renderizar(sf::RenderWindow &window)
 
     if(Estado == ANIMACION_DAÑO)
     {
-        bool van1=animacion.mostraranimacion(window);
-        bool van2=animacion.mostrarataque(pers[manager.getactual()],window,ataque);
+        bool van1 = animacion.mostraranimacion(window);
+        bool van2;
+        if(partida.getTurno() == 0)
+        {
+          van2 = animacion.mostrarataque(pers[manager.getactual()],window,ataque);
+        }
+        else if(partida.getTurno() == 1)
+        {
+          van2 = animacion.mostrarataque(persNJ[ia.getContIA()],window,ataque);
+        }
+
         if(!van1&&!van2)
         {
             Estado = CURSOR_LIBRE;
@@ -558,7 +583,7 @@ personaje *Juego::GetPersonajeSeleccionado()
 {
     for (unsigned int i = 0; i < pers.size(); i++)
     {
-        if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos())
+        if (pers[i].getPosx() == cursor.getXPos() && pers[i].getPosy() == cursor.getYPos() && pers[i].getHpReal() > 0)
         {
             manager.setActual(i);
             return &pers[i];
@@ -571,7 +596,7 @@ bool Juego::todasLasUnidadesActuaron(std::vector<personaje>& faccion)
 {
     for (unsigned int i = 0; i < faccion.size(); i++)
     {
-        if (!faccion[i].getYaActuo())
+        if (faccion[i].getHpReal() != 0 && !faccion[i].getYaActuo())
             return false;
     }
     return true;
