@@ -131,6 +131,8 @@ void Animacion::mostrarvida(RenderWindow& window,vector<personaje>& pers,int col
     text.setString(salud);
     text.setPosition(Vector2f(pers[i].getPosxPxl()+10,pers[i].getPosyPxl()-6));
     text.setFillColor(Color::Black);
+    fondodevida.setPosition(Vector2f(pers[i].getPosxPxl()+7,pers[i].getPosyPxl()+10));
+    window.draw(fondodevida);
     window.draw(barradevida);
     window.draw(rectangulo);
     window.draw(text);
