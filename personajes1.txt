@@ -25,3 +25,4 @@ maxHp;5
 fuerza;2
 defensa;1
 
+

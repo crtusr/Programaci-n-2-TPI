@@ -364,6 +364,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
 
     if (EstadoIA == DECIDIENDO)
     {
+        manager.setActual(ia.getContIA());
         persMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
         idMasCercano = persMasCercano.first;
         cantPasos = persMasCercano.second;
@@ -374,15 +375,16 @@ void Juego::procesarIA(sf::RenderWindow &window)
         int coordenadaAX = coordenadasA.first;
         int coordenadaAY = coordenadasA.second;
 
+
         if(cantPasos == 1)
         {
             EstadoIA = DALE_MATRACA;
         }
-        else if(movimiento.Alcanzable(coordenadaAX, coordenadaAY))
+        else if(movimiento.Alcanzable(coordenadaAX, coordenadaAY) && !persNJ[ia.getContIA()].getYaMovio())
         {
             EstadoIA = ENEMIGO_EN_RANGO;
         }
-        else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
+        else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2 && !persNJ[ia.getContIA()].getYaMovio())
         {
             EstadoIA = ENEMIGO_CERCA;
         }
@@ -394,6 +396,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
     
     if(EstadoIA == DALE_MATRACA)
     {
+        manager.setActual(ia.getContIA());
           int direccion = -1;
           if(persNJ[ia.getContIA()].getPosx() - pers[idMasCercano].getPosx() == 1)
             direccion = IZQUIERDA;
@@ -415,7 +418,8 @@ void Juego::procesarIA(sf::RenderWindow &window)
     else if(persNJ[ia.getContIA()].getYaMovio())
       persNJ[ia.getContIA()].setYaActuo(true);
     if(EstadoIA == ENEMIGO_EN_RANGO)
-    {
+    {   
+        manager.setActual(ia.getContIA());
         coordenadas = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
@@ -423,10 +427,11 @@ void Juego::procesarIA(sf::RenderWindow &window)
 
     if (EstadoIA == ENEMIGO_CERCA)
     {
-
+        manager.setActual(ia.getContIA());
         coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ, movimiento);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
+        persNJ[ia.getContIA()].setYaMovio(true);
     }
 
     movimiento.setDestino(coordenadaX, coordenadaY);
