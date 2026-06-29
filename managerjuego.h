@@ -10,6 +10,10 @@ private:
     sf::RenderWindow window;
     Menu menuInicio;
     Animacion animacion;
+    sf::Texture texFondo;
+    sf::Sprite spriteFondo;
+    sf::Texture texTitulo;
+    sf::Sprite spriteTitulo;
 
 public:
     ManagerJuego();

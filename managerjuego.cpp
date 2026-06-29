@@ -1,15 +1,33 @@
 #include "managerjuego.h"
 #include "juego.h"
 
-// EL CONSTRUCTOR
 ManagerJuego::ManagerJuego() :
     window(sf::VideoMode({1024, 768}), "Project Tactics"),
-    menuInicio(512, 384, {"Jugar", "Salir"})
+    menuInicio(512, 350, {"Jugar", "Salir"}),
+    spriteFondo(texFondo),
+    spriteTitulo(texTitulo)
 {
     window.setFramerateLimit(60);
+
+    // Cargar fondo
+    if (texFondo.loadFromFile("assets/fondo_menu.png")) {
+        spriteFondo = sf::Sprite(texFondo);
+    } else {
+        std::cout << "ERROR: No se encontro assets/fondo_menu.png" << std::endl;
+    }
+
+    // Cargar título
+    if (texTitulo.loadFromFile("assets/titulo_jp.png")) {
+        spriteTitulo = sf::Sprite(texTitulo);
+
+        sf::FloatRect bounds = spriteTitulo.getLocalBounds();
+        spriteTitulo.setOrigin(sf::Vector2f(bounds.size.x / 2.0f, bounds.size.y / 2.0f));
+        spriteTitulo.setPosition(sf::Vector2f(512.0f, 200.0f));
+    } else {
+        std::cout << "ERROR: No se encontro assets/titulo_jp.png" << std::endl;
+    }
 }
 
-// EL MENÚ PRINCIPAL
 // EL MENÚ PRINCIPAL
 bool ManagerJuego::mostrarMenuPrincipal() {
     window.setView(window.getDefaultView());
@@ -49,15 +67,15 @@ bool ManagerJuego::mostrarMenuPrincipal() {
         }
 
         // 2. DIBUJADO DEL FONDO Y MENÚ
-        window.clear(sf::Color::Blue);
+        window.clear();
+        window.draw(spriteFondo);    // El fondo
+        window.draw(spriteTitulo);   // El título arriba del fondo
         menuInicio.draw(window);
 
         // 3. ACTUALIZACIÓN DE LA TRANSICIÓN
         if (animacion.estaEnTransicion()) {
             animacion.animartrancicion(window);
 
-            // ¡CORRECCIÓN ACÁ!: Solo forzamos la pantalla negra si QUEREMOS SALIR
-            // del menú (accionPendiente distinto de -1)
             if (accionPendiente != -1 && animacion.getFrameTransicion() >= 1000) {
 
                 window.clear(sf::Color::Black);
