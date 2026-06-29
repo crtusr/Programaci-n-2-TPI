@@ -17,6 +17,10 @@ AdminClase::AdminClase()
   clase[1]->setIdTrabajo(1); // 1 = Arquero;
   clase[2] = new Medico;
   clase[2]->setIdTrabajo(2); // 2 = Medico
+  clase[2] = new Generico;
+  clase[3]->setIdTrabajo(2); // 2 = Medico
+  clase[2] = new Wenner;
+  clase[4]->setIdTrabajo(2); // 2 = Medico
 
 }
 claseTrabajo *AdminClase::getClase(int idClase)
