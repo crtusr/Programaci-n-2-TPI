@@ -4,6 +4,8 @@
 #include"Guerrero.h"
 #include"Arquero.h"
 #include"Medico.h"
+#include"wener.h"
+#include"generico.h"
 
 //de momento voy a hardcodear las clases para ahorrar tiempo
 class AdminClase

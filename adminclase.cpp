@@ -2,9 +2,9 @@
 
 AdminClase::AdminClase()
 {
-  nClases = 3;
+  nClases = 5;
   clase = nullptr;
-  clase = new claseTrabajo*[3]{};
+  clase = new claseTrabajo*[5]{};
   if(clase == nullptr)
   {
     nClases = 0;
@@ -17,10 +17,10 @@ AdminClase::AdminClase()
   clase[1]->setIdTrabajo(1); // 1 = Arquero;
   clase[2] = new Medico;
   clase[2]->setIdTrabajo(2); // 2 = Medico
-  clase[2] = new Generico;
-  clase[3]->setIdTrabajo(2); // 2 = Medico
-  clase[2] = new Wenner;
-  clase[4]->setIdTrabajo(2); // 2 = Medico
+  clase[3] = new Generico;
+  clase[3]->setIdTrabajo(3); // 2 = Medico
+  clase[4] = new Wenner;
+  clase[4]->setIdTrabajo(4); // 2 = Medico
 
 }
 claseTrabajo *AdminClase::getClase(int idClase)
