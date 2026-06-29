@@ -25,8 +25,5 @@ target_link_libraries(game
 file(COPY imagen DESTINATION ${CMAKE_BINARY_DIR})
 file(COPY Tiles DESTINATION ${CMAKE_BINARY_DIR})
 
-# si el bmp está suelto en la raíz
-file(COPY yo.bmp DESTINATION ${CMAKE_BINARY_DIR})
-
 # mapas o txt
 file(COPY testmap.txt DESTINATION ${CMAKE_BINARY_DIR})
