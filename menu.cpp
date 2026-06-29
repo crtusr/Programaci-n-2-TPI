@@ -45,13 +45,10 @@ Menu::Menu(float x, float y, std::vector<std::string> opciones) {
 Menu::~Menu() {}
 
 void Menu::draw(sf::RenderWindow &window) {
-    sf::View vistaOriginal = window.getView();
-    window.setView(window.getDefaultView());
     window.draw(fondoPanel);
     for (size_t i = 0; i < menu.size(); i++) {
         window.draw(menu[i]);
     }
-    window.setView(vistaOriginal);
 }
 
 void Menu::moveUp() {

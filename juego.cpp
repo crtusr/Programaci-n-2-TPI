@@ -263,20 +263,25 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                     claseTrabajo* trabajoAct = personajeSeleccionado->getTrabajo();
                     int idC = (trabajoAct != nullptr) ? trabajoAct->getIdTrabajo() : 0;
 
-                    float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
+                    // --- CÁLCULO DINÁMICO PARA EL SUBMENÚ ---
+                    float tamCelda = tablero.getTamCeldaPixeles();
+                    float anchoTablero = tablero.getMaxX() * tamCelda;
 
-                    int offsetX = 192;
-                    int offsetY = 0;
+                    // Lo alejamos un poquito más que el menú principal para que no se superpongan del todo
+                    float offsetX = tamCelda + 140.0f;
+                    float offsetY = tamCelda / 2.0f;
 
-                    if (personajeSeleccionado->getPosxPxl() + offsetX + 260 > anchoTablero) {
-                        offsetX = -130;
+                    float subX = personajeSeleccionado->getPosxPxl() + offsetX;
+                    float subY = personajeSeleccionado->getPosyPxl() + offsetY;
+
+                    // Si se sale por la derecha
+                    if (subX + 130.0f > anchoTablero) {
+                        subX = personajeSeleccionado->getPosxPxl() - 140.0f;
                     }
-                    if (personajeSeleccionado->getPosyPxl() - 100 < 0) {
-                        offsetY = 50;
+                    // Si se corta arriba
+                    if (subY < 130.0f) {
+                        subY = 130.0f;
                     }
-
-                    int subX = personajeSeleccionado->getPosxPxl() + offsetX;
-                    int subY = personajeSeleccionado->getPosyPxl() + offsetY;
 
                     if (menuSubOpciones != nullptr) delete menuSubOpciones;
 
@@ -783,24 +788,27 @@ void Juego::generarMenuAccion(personaje* P)
         delete menuAccion;
         menuAccion = nullptr;
     }
-
     claseTrabajo* trabajoActual = P->getTrabajo();
     int idClase = (trabajoActual != nullptr) ? trabajoActual->getIdTrabajo() : 0;
-
-    float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
-    float offsetX = 140.0f;
-    float offsetY = -50.0f;
-
+    float tamCelda = tablero.getTamCeldaPixeles();
+    float anchoTablero = tablero.getMaxX() * tamCelda;
+    float offsetX = tamCelda + 140.0f;
+    float offsetY = tamCelda / 2.0f;
     float menuX = P->getPosxPxl() + offsetX;
     float menuY = P->getPosyPxl() + offsetY;
 
+    // --- CORRECCIÓN DE BORDES ---
+    // Si choca con la pared derecha:
     if (menuX + 130.0f > anchoTablero) {
-        menuX = P->getPosxPxl() - 90.0f;
+        // Lo pasamos a la izquierda (borde izquierdo de la celda - 80px del centro del menú)
+        menuX = P->getPosxPxl() - 140.0f;
     }
 
+    // Si choca con el techo (El límite siempre es ~130px porque el tamaño de la letra no cambia)
     if (menuY < 130.0f) {
         menuY = 130.0f;
     }
+    // ----------------------------------------
 
     switch (idClase)
     {
