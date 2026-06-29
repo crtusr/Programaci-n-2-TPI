@@ -108,15 +108,34 @@ std::pair<int, int> IA::casillaValida(int pj, std::vector<personaje>& aliados, s
     return std::make_pair (casillaValida[0], casillaValida[1]);
 }
 
-std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos)
+std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos, SisMov& movimiento)
 {
-    int pasos = abs(aliados[pj].getPosx() - enemigos[contIA].getPosx()) + abs(aliados[pj].getPosy() - enemigos[contIA].getPosy());
 
-    while (pasos > 0)
+    int pasos;
+    int menosPasos = 999;
+
+    int Xmenor = -1;
+    int Ymenor = -1;
+
+    for(int i = 0; i < tablero->getMaxY(); i++)
     {
-    
+        for(int j = 0; j < tablero->getMaxX(); j++)
+        {
+            if(movimiento.Alcanzable(j, i))
+            {
+                pasos = abs(aliados[pj].getPosx() - j) + abs(aliados[pj].getPosy() - i);
+
+                if (pasos < menosPasos) 
+                {
+                    menosPasos = pasos;
+                    Xmenor = j;
+                    Ymenor = i;
+                }
+            }
+        }
     }
-    return std::make_pair(0, 0);
+    
+    return std::make_pair(Xmenor, Ymenor);
 }
 
 

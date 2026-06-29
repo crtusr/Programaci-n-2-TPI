@@ -156,25 +156,44 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 if (menuAccion != nullptr)
                     delete menuAccion;
 
-                // 1. Obtenemos el trabajo del personaje seleccionado
+              // 1. Obtenemos el trabajo del personaje seleccionado
                 claseTrabajo* trabajoActual = P->getTrabajo();
 
                 // 2. Extraemos su ID.
                 int idClase = (trabajoActual != nullptr) ? trabajoActual->getIdTrabajo() : 0;
 
+                // --- CÁLCULO DINÁMICO DE BORDES PARA EL MENÚ DE ACCIONES ---
+                float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
+
+                float offsetX = 140.0f; // Por defecto a la derecha
+                float offsetY = -50.0f; // Por defecto hacia arriba
+
+                // Si el personaje está muy cerca del borde derecho, movemos el menú a la izquierda
+                if (P->getPosxPxl() + offsetX + 260.0f > anchoTablero) {
+                    offsetX = -90.0f;
+                }
+
+                // Si está muy cerca del techo del mapa, bajamos el menú para que no se corte
+                if (P->getPosyPxl() - 100.0f < 0) {
+                    offsetY = 50.0f;
+                }
+
+                float menuX = P->getPosxPxl() + offsetX;
+                float menuY = P->getPosyPxl() + offsetY;
+
                 // 3. El Switch Dinámico de Menús
                 switch (idClase)
                 {
                 case 1: // Arquero / Tirador
-                    menuAccion = new Menu(P->getPosxPxl() + 140, P->getPosyPxl() - 50, {"Mover", "Disparar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(menuX, menuY, {"Mover", "Disparar", "Esperar", "Cancelar"});
                     break;
 
                 case 2: // Médico
-                    menuAccion = new Menu(P->getPosxPxl() + 140, P->getPosyPxl() - 50, {"Mover", "Curar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(menuX, menuY, {"Mover", "Curar", "Esperar", "Cancelar"});
                     break;
 
                 default: // Guerrero (0) o cualquier otra clase no definida
-                    menuAccion = new Menu(P->getPosxPxl() + 140, P->getPosyPxl() - 50, {"Mover", "Atacar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(menuX, menuY, {"Mover", "Atacar", "Esperar", "Cancelar"});
                     break;
                 }
             }
@@ -250,8 +269,27 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                     Estado = SUBMENU_ATAQUES;
                     claseTrabajo* trabajoAct = personajeSeleccionado->getTrabajo();
                     int idC = (trabajoAct != nullptr) ? trabajoAct->getIdTrabajo() : 0;
-                    int subX = personajeSeleccionado->getPosxPxl() + 192;
-                    int subY = personajeSeleccionado->getPosyPxl();
+
+                    // --- CÁLCULO DINÁMICO DE BORDES PARA EL SUBMENÚ ---
+                    float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
+
+                    int offsetX = 192; // Por defecto a la derecha (como lo tenías)
+                    int offsetY = 0;   // Por defecto a la misma altura (como lo tenías)
+
+                    // Verificamos si al sumarle el offset y el ancho del menú nos pasamos del tablero
+                    if (personajeSeleccionado->getPosxPxl() + offsetX + 260 > anchoTablero) {
+                        offsetX = -130; // Lo espejamos hacia la izquierda del personaje
+                    }
+
+                    // Verificamos el techo por si está muy arriba
+                    if (personajeSeleccionado->getPosyPxl() - 100 < 0) {
+                        offsetY = 50; // Lo bajamos un poco
+                    }
+
+                    // Aplicamos el cálculo
+                    int subX = personajeSeleccionado->getPosxPxl() + offsetX;
+                    int subY = personajeSeleccionado->getPosyPxl() + offsetY;
+                    // --------------------------------------------------
 
                     if (menuSubOpciones != nullptr) delete menuSubOpciones;
 
@@ -370,10 +408,12 @@ void Juego::procesarIA(sf::RenderWindow &window)
 
     if (EstadoIA == DECIDIENDO)
     {
+        manager.setActual(ia.getContIA());
+        
         persMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
         idMasCercano = persMasCercano.first;
         cantPasos = persMasCercano.second;
-
+        
         movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
 
         std::pair<int, int> coordenadasA = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
@@ -384,23 +424,19 @@ void Juego::procesarIA(sf::RenderWindow &window)
         {
             EstadoIA = DALE_MATRACA;
         }
-        else if(movimiento.Alcanzable(coordenadaAX, coordenadaAY))
+        else if(movimiento.Alcanzable(coordenadaAX, coordenadaAY) && !persNJ[ia.getContIA()].getYaMovio())
         {
             EstadoIA = ENEMIGO_EN_RANGO;
         }
-
-        /*else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2)
+        else if(cantPasos <= persNJ[ia.getContIA()].getMovReal() * 2 && !persNJ[ia.getContIA()].getYaMovio())
         {
             EstadoIA = ENEMIGO_CERCA;
         }
-        else
-        {
-            EstadoIA = ENEMIGO_LEJOS;
-        }*/
     }
 
     if(EstadoIA == DALE_MATRACA)
     {
+        manager.setActual(ia.getContIA());
           int direccion = -1;
           if(persNJ[ia.getContIA()].getPosx() - pers[idMasCercano].getPosx() == 1)
             direccion = IZQUIERDA;
@@ -422,19 +458,21 @@ void Juego::procesarIA(sf::RenderWindow &window)
     else if(persNJ[ia.getContIA()].getYaMovio())
       persNJ[ia.getContIA()].setYaActuo(true);
     if(EstadoIA == ENEMIGO_EN_RANGO)
-    {
+    {   
+        manager.setActual(ia.getContIA());
         coordenadas = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
     }
 
-    /*if (EstadoIA == ENEMIGO_CERCA)
+    if (EstadoIA == ENEMIGO_CERCA)
     {
-
-        coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ);
+        manager.setActual(ia.getContIA());
+        coordenadas = ia.acercarceAlEnemigo(idMasCercano, pers, persNJ, movimiento);
         coordenadaX = coordenadas.first;
         coordenadaY = coordenadas.second;
-    }*/
+        persNJ[ia.getContIA()].setYaMovio(true);
+    }
 
     movimiento.setDestino(coordenadaX, coordenadaY);
 
@@ -462,16 +500,34 @@ void Juego::actualizar()
                 claseTrabajo* trabajoAct = personajeSeleccionado->getTrabajo();
                 int idC = (trabajoAct != nullptr) ? trabajoAct->getIdTrabajo() : 0;
 
+                // --- CÁLCULO DINÁMICO DE BORDES ---
+                float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
+                float offsetX = 140.0f;
+                float offsetY = -50.0f;
+
+                // Si se pasa del borde derecho, lo pasamos a la izquierda
+                if (personajeSeleccionado->getPosxPxl() + offsetX + 260.0f > anchoTablero) {
+                    offsetX = -90.0f;
+                }
+                // Si está muy arriba, lo bajamos
+                if (personajeSeleccionado->getPosyPxl() - 100.0f < 0) {
+                    offsetY = 50.0f;
+                }
+
+                float menuX = personajeSeleccionado->getPosxPxl() + offsetX;
+                float menuY = personajeSeleccionado->getPosyPxl() + offsetY;
+                // ----------------------------------
+
                 switch (idC)
                 {
                 case 1: // Arquero
-                    menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Disparar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(menuX, menuY, {"Mover", "Disparar", "Esperar", "Cancelar"});
                     break;
                 case 2: // Médico
-                    menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Curar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(menuX, menuY, {"Mover", "Curar", "Esperar", "Cancelar"});
                     break;
                 default: // Guerrero o Default
-                    menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
+                    menuAccion = new Menu(menuX, menuY, {"Mover", "Atacar", "Esperar", "Cancelar"});
                     break;
                 }
 

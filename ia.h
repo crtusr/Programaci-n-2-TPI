@@ -21,7 +21,7 @@ public:
 
     std::pair<int, int> detectarEnemigoCercano(std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
     std::pair<int, int> casillaValida(int pj, std::vector<personaje>& aliados, std::vector<personaje>& enemigos,SisMov& movimiento);
-    std::pair<int, int> acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos);
+    std::pair<int, int> acercarceAlEnemigo(int pj,std::vector<personaje>& aliados, std::vector<personaje>& enemigos, SisMov& movimiento);
 
     int getContIA();
     void inContIA();
