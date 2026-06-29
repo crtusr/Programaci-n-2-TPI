@@ -1,5 +1,5 @@
 9
-4
+5
 Tiles/defaulttile.bmp
 Tiles/Thicket.bmp
 Tiles/prado.bmp
@@ -13,3 +13,4 @@ imagen/character-guerrero.png
 imagen/character-arquero.png
 imagen/character-medico.png
 imagen/character-guardia_generico.png
+imagen/maxi.png
