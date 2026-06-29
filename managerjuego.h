@@ -2,12 +2,14 @@
 #define MANAGERJUEGO_H
 
 #include <SFML/Graphics.hpp>
-#include "menu.h" //
+#include "menu.h"
+#include "animacion.h"
 
 class ManagerJuego {
 private:
     sf::RenderWindow window;
-    Menu menuInicio; //
+    Menu menuInicio;
+    Animacion animacion;
 
 public:
     ManagerJuego();

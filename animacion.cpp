@@ -263,19 +263,25 @@ trancicion=true;
 
 }
 
+void Animacion::animartrancicion(RenderWindow& window) {
+    if (trancicion == true) {
+        frame_trancicion += VELOCIDAD_TRANSICION; // Antes era 20
+        int x = frame_trancicion;
 
-void Animacion::animartrancicion(RenderWindow& window){
-    if(trancicion==true){
- frame_trancicion+=20;
- int x=frame_trancicion;
- if(frame_trancicion<=2000&&frame_trancicion>1000){x=1000;}
- if(frame_trancicion>2000){x-=1000;}
-  barraoscura.setPosition(Vector2f(0,-1100+x));
-if(frame_trancicion>=4000){
-  frame_trancicion=0;
-  trancicion=false;
-}
-window.draw(barraoscura);
+        if (frame_trancicion <= DURACION_TOTAL / 2 && frame_trancicion > UMBRAL_MEDIA_BARRA) {
+            x = UMBRAL_MEDIA_BARRA;
+        }
+        if (frame_trancicion > DURACION_TOTAL / 2) {
+            x -= UMBRAL_MEDIA_BARRA;
         }
 
+        barraoscura.setPosition(Vector2f(0, POS_INICIAL_BARRA + x));
+
+        if (frame_trancicion >= DURACION_TOTAL) {
+            frame_trancicion = 0;
+            trancicion = false;
+        }
+
+        window.draw(barraoscura);
+    }
 }

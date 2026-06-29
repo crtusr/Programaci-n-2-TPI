@@ -52,6 +52,7 @@ private:
     void procesarEventos(sf::RenderWindow& window);
     void actualizar();
     void renderizar(sf::RenderWindow& window);
+    void generarMenuAccion(personaje* P);
 
     int cargarMapa(const char* nomArch);
     void declararCuracion(vector<personaje>& propio, personaje *actual);

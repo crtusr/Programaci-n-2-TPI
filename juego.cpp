@@ -9,7 +9,6 @@
 #include <iostream>
 
 using namespace std;
-// para un pull
 // CONSTRUCTOR: Inicializa el Cursor, la Partida y carga los archivos dinámicos.
 Juego::Juego(const char *archivoMapa, const char *archivoPersonajes) :
 
@@ -54,17 +53,60 @@ bool Juego::ejecutar(sf::RenderWindow &window)
                           sf::Vector2f(tablero.getMaxX() * tablero.getTamCeldaPixeles(),
                                        tablero.getMaxY() * tablero.getTamCeldaPixeles()));
     window.setView(sf::View(newSize));
-    // El bucle ahora depende de la ventana prestada y de nuestras banderas
-    while (window.isOpen() && !nivelSuperado && !jugadorQuiereSalir)
+    // Nueva bandera para saber cuándo estamos esperando que baje la cortina
+    bool enTransicionSalida = false;
+
+    while (window.isOpen())
     {
-        procesarEventos(window);
-        if(Estado != ANIMACION_BLOQUEANTE && Estado != ANIMACION_DAÑO && partida.getTurno() == 1)
-            procesarIA(window);
-        actualizar();
+        if (!enTransicionSalida) {
+
+            procesarEventos(window);
+
+            if(Estado != ANIMACION_BLOQUEANTE && Estado != ANIMACION_DAÑO && partida.getTurno() == 1) {
+                procesarIA(window);
+            }
+
+            actualizar();
+
+            // Si después de actualizar() el nivel se superó o el jugador quiere salir:
+            if (nivelSuperado || jugadorQuiereSalir) {
+                enTransicionSalida = true;
+                animacion.iniciartrancicion(); // Disparamos la cortina
+            }
+        }
+        else {
+            // LÓGICA DE TRANSICIÓN
+            while (const std::optional<sf::Event> event = window.pollEvent()) {
+                if (event->is<sf::Event::Closed>()) {
+                    window.close();
+                    return false;
+                }
+            }
+        }
+
+        // RENDERIZADO
         renderizar(window);
+
+        // Si estamos saliendo, dibujamos la cortina POR ENCIMA del mapa
+        if (enTransicionSalida) {
+            animacion.animartrancicion(window);
+
+            // Cortamos exactamente cuando la pantalla queda negra
+            if (animacion.getFrameTransicion() >= 1000) {
+
+                // Limpieza
+                window.clear(sf::Color::Black);
+                window.display();
+                window.clear(sf::Color::Black);
+                window.display();
+
+                break; // Rompemos el bucle para volver al ManagerJuego
+            }
+        }
+
+        window.display();
     }
 
-    // Si salió del bucle porque ganó, devuelve true. Si salió por la 'X' o retroceso, false.
     return nivelSuperado;
 }
 
@@ -74,7 +116,6 @@ void Juego::procesarEventos(sf::RenderWindow &window)
     {
         if (event->is<sf::Event::Closed>())
         {
-            // La 'X' de la ventana ahora cierra todo el juego directamente
             window.close();
         }
         else if (const auto *resized = event->getIf<sf::Event::Resized>())
@@ -94,7 +135,6 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 {
                     Estado = PAUSA;
                     std::vector<std::string> opcionesPausa = {"Continuar", "Volver al Menu Principal"};
-                    // --- NUEVO CÁLCULO DINÁMICO ---
                     float mitadAncho = (tablero.getMaxX() * tablero.getTamCeldaPixeles()) / 2.0f;
                     float mitadAlto = (tablero.getMaxY() * tablero.getTamCeldaPixeles()) / 2.0f;
 
@@ -106,12 +146,12 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                     if (menuPausa != nullptr)
                     {
                         delete menuPausa;
-                menuPausa = nullptr;
+                        menuPausa = nullptr;
                     }
                 }
                 return;
             }
-            // 2. SEGUNDO: Si no apretó ESC, procesamos el movimiento y las demás teclas
+
             teclaPresionada = procesar.tecla(key->code);
 
             if (Estado == PERSONAJE_SELECCIONADO)
@@ -139,9 +179,8 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 {
                     Estado = MENU_INGAME;
                     teclaPresionada = NULO;
+                    generarMenuAccion(personajeSeleccionado);
                 }
-            // Menu dinamico.
-                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 140, personajeSeleccionado->getPosyPxl() - 50, {"Mover", "Atacar", "Esperar", "Cancelar"});
             }
         }
         if (Estado == CURSOR_LIBRE && teclaPresionada == ENTER)
@@ -152,50 +191,7 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 personajeSeleccionado = P;
                 Estado = MENU_INGAME;
                 teclaPresionada = NULO;
-
-                if (menuAccion != nullptr)
-                    delete menuAccion;
-
-              // 1. Obtenemos el trabajo del personaje seleccionado
-                claseTrabajo* trabajoActual = P->getTrabajo();
-
-                // 2. Extraemos su ID.
-                int idClase = (trabajoActual != nullptr) ? trabajoActual->getIdTrabajo() : 0;
-
-                // --- CÁLCULO DINÁMICO DE BORDES PARA EL MENÚ DE ACCIONES ---
-                float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
-
-                float offsetX = 140.0f; // Por defecto a la derecha
-                float offsetY = -50.0f; // Por defecto hacia arriba
-
-                // Si el personaje está muy cerca del borde derecho, movemos el menú a la izquierda
-                if (P->getPosxPxl() + offsetX + 260.0f > anchoTablero) {
-                    offsetX = -90.0f;
-                }
-
-                // Si está muy cerca del techo del mapa, bajamos el menú para que no se corte
-                if (P->getPosyPxl() - 100.0f < 0) {
-                    offsetY = 50.0f;
-                }
-
-                float menuX = P->getPosxPxl() + offsetX;
-                float menuY = P->getPosyPxl() + offsetY;
-
-                // 3. El Switch Dinámico de Menús
-                switch (idClase)
-                {
-                case 1: // Arquero / Tirador
-                    menuAccion = new Menu(menuX, menuY, {"Mover", "Disparar", "Esperar", "Cancelar"});
-                    break;
-
-                case 2: // Médico
-                    menuAccion = new Menu(menuX, menuY, {"Mover", "Curar", "Esperar", "Cancelar"});
-                    break;
-
-                default: // Guerrero (0) o cualquier otra clase no definida
-                    menuAccion = new Menu(menuX, menuY, {"Mover", "Atacar", "Esperar", "Cancelar"});
-                    break;
-                }
+                generarMenuAccion(personajeSeleccionado);
             }
         }
 
@@ -228,7 +224,6 @@ void Juego::procesarEventos(sf::RenderWindow &window)
 
             if (teclaPresionada == ENTER)
             {
-                // ACTUALIZADO: Nueva lógica de animación de lucas.
                 if(ataque.getopciondeataque() == CURA || ataque.getopciondeataque() == CURA_GRANDE)
                 {
                     declararCuracion(pers, personajeSeleccionado);
@@ -243,9 +238,8 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             }
             else if ((teclaPresionada == RETROCESO || teclaPresionada == F))
             {
-                Estado = MENU_INGAME;
+                Estado = SUBMENU_ATAQUES;
                 teclaPresionada = NULO;
-                menuAccion = new Menu(personajeSeleccionado->getPosxPxl() + 64, personajeSeleccionado->getPosyPxl(), {"Mover", "Atacar", "Esperar", "Cancelar"});
             }
         }
         if (Estado == MENU_INGAME && menuAccion != nullptr)
@@ -256,40 +250,33 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 menuAccion->moveDown();
             else if (teclaPresionada == ENTER)
             {
-                // AQUÍ declaramos la variable opcion
                 int opcion = menuAccion->getPressedItem();
 
-                if (opcion == 0 && personajeSeleccionado->getYaMovio() == false) // Mover
+                if (opcion == 0 && personajeSeleccionado->getYaMovio() == false)
                 {
                     Estado = PERSONAJE_SELECCIONADO;
                     movimiento.calcularMovimiento(personajeSeleccionado->getPosx(), personajeSeleccionado->getPosy(), personajeSeleccionado->getMovReal());
                 }
-                else if (opcion == 1) // Habilidades / Ataques
+                else if (opcion == 1)
                 {
                     Estado = SUBMENU_ATAQUES;
                     claseTrabajo* trabajoAct = personajeSeleccionado->getTrabajo();
                     int idC = (trabajoAct != nullptr) ? trabajoAct->getIdTrabajo() : 0;
 
-                    // --- CÁLCULO DINÁMICO DE BORDES PARA EL SUBMENÚ ---
                     float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
 
-                    int offsetX = 192; // Por defecto a la derecha (como lo tenías)
-                    int offsetY = 0;   // Por defecto a la misma altura (como lo tenías)
+                    int offsetX = 192;
+                    int offsetY = 0;
 
-                    // Verificamos si al sumarle el offset y el ancho del menú nos pasamos del tablero
                     if (personajeSeleccionado->getPosxPxl() + offsetX + 260 > anchoTablero) {
-                        offsetX = -130; // Lo espejamos hacia la izquierda del personaje
+                        offsetX = -130;
                     }
-
-                    // Verificamos el techo por si está muy arriba
                     if (personajeSeleccionado->getPosyPxl() - 100 < 0) {
-                        offsetY = 50; // Lo bajamos un poco
+                        offsetY = 50;
                     }
 
-                    // Aplicamos el cálculo
                     int subX = personajeSeleccionado->getPosxPxl() + offsetX;
                     int subY = personajeSeleccionado->getPosyPxl() + offsetY;
-                    // --------------------------------------------------
 
                     if (menuSubOpciones != nullptr) delete menuSubOpciones;
 
@@ -306,19 +293,18 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                             break;
                     }
                 }
-                else if (opcion == 2) // Esperar
+                else if (opcion == 2)
                 {
                     personajeSeleccionado->setYaActuo(true);
                     Estado = CURSOR_LIBRE;
                     personajeSeleccionado = nullptr;
                 }
-                else if (opcion == 3) // Cancelar
+                else if (opcion == 3)
                 {
                     Estado = CURSOR_LIBRE;
                     personajeSeleccionado = nullptr;
                 }
 
-                // Borramos solo si no estamos en submenú
                 if (Estado != MENU_INGAME && Estado != SUBMENU_ATAQUES)
                 {
                     delete menuAccion;
@@ -326,7 +312,6 @@ void Juego::procesarEventos(sf::RenderWindow &window)
                 }
             }
         }
-        // --- Control del Submenú ---
         else if (Estado == SUBMENU_ATAQUES && menuSubOpciones != nullptr)
         {
             if (teclaPresionada == ARRIBA)
@@ -337,23 +322,19 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             {
                 int subOpcion = menuSubOpciones->getPressedItem();
 
-                if (subOpcion == 2) // Opción "Volver"
+                if (subOpcion == 2)
                 {
-                    Estado = MENU_INGAME; // Volvemos al principal
+                    Estado = MENU_INGAME;
                     delete menuSubOpciones;
                     menuSubOpciones = nullptr;
                 }
                 else
                 {
                     ataque.setOpcionDeAtaque(personajeSeleccionado->getTrabajo()->getOptAtk(subOpcion));
-                    // Aca hay que definir que qué hace cada ataque
-                    std::cout << "Ataque seleccionado: " << subOpcion << std::endl;
-                    // Por ahora, para probar que funciona:
-                    Estado = PREPARAR_ATAQUE; // Saltamos a la selección de objetivo.
+                    Estado = PREPARAR_ATAQUE;
                 }
             }
         }
-                // --- NUEVO: Control del Menú de Pausa ---
         else if (Estado == PAUSA && menuPausa != nullptr)
         {
             if (teclaPresionada == ARRIBA)
@@ -364,16 +345,15 @@ void Juego::procesarEventos(sf::RenderWindow &window)
             {
                 int seleccion = menuPausa->getPressedItem();
 
-                if (seleccion == 0) // Opción "Continuar"
+                if (seleccion == 0)
                 {
                     Estado = CURSOR_LIBRE;
                     delete menuPausa;
                     menuPausa = nullptr;
                 }
-                else if (seleccion == 1) // Opción "Volver al Menú Principal"
+                else if (seleccion == 1)
                 {
-                    jugadorQuiereSalir = true; // Esto le avisa al juego que debe salir
-
+                    jugadorQuiereSalir = true;
                     delete menuPausa;
                     menuPausa = nullptr;
                 }
@@ -409,11 +389,11 @@ void Juego::procesarIA(sf::RenderWindow &window)
     if (EstadoIA == DECIDIENDO)
     {
         manager.setActual(ia.getContIA());
-        
+
         persMasCercano = ia.detectarEnemigoCercano(pers, persNJ);
         idMasCercano = persMasCercano.first;
         cantPasos = persMasCercano.second;
-        
+
         movimiento.calcularMovimiento(persNJ[ia.getContIA()].getPosx(), persNJ[ia.getContIA()].getPosy(), persNJ[ia.getContIA()].getMovReal());
 
         std::pair<int, int> coordenadasA = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
@@ -458,7 +438,7 @@ void Juego::procesarIA(sf::RenderWindow &window)
     else if(persNJ[ia.getContIA()].getYaMovio())
       persNJ[ia.getContIA()].setYaActuo(true);
     if(EstadoIA == ENEMIGO_EN_RANGO)
-    {   
+    {
         manager.setActual(ia.getContIA());
         coordenadas = ia.casillaValida(idMasCercano, pers, persNJ, movimiento);
         coordenadaX = coordenadas.first;
@@ -495,42 +475,7 @@ void Juego::actualizar()
 
                 if (menuAccion != nullptr)
                     delete menuAccion;
-
-                // --- NUEVO: Menú dinámico al terminar de moverse ---
-                claseTrabajo* trabajoAct = personajeSeleccionado->getTrabajo();
-                int idC = (trabajoAct != nullptr) ? trabajoAct->getIdTrabajo() : 0;
-
-                // --- CÁLCULO DINÁMICO DE BORDES ---
-                float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
-                float offsetX = 140.0f;
-                float offsetY = -50.0f;
-
-                // Si se pasa del borde derecho, lo pasamos a la izquierda
-                if (personajeSeleccionado->getPosxPxl() + offsetX + 260.0f > anchoTablero) {
-                    offsetX = -90.0f;
-                }
-                // Si está muy arriba, lo bajamos
-                if (personajeSeleccionado->getPosyPxl() - 100.0f < 0) {
-                    offsetY = 50.0f;
-                }
-
-                float menuX = personajeSeleccionado->getPosxPxl() + offsetX;
-                float menuY = personajeSeleccionado->getPosyPxl() + offsetY;
-                // ----------------------------------
-
-                switch (idC)
-                {
-                case 1: // Arquero
-                    menuAccion = new Menu(menuX, menuY, {"Mover", "Disparar", "Esperar", "Cancelar"});
-                    break;
-                case 2: // Médico
-                    menuAccion = new Menu(menuX, menuY, {"Mover", "Curar", "Esperar", "Cancelar"});
-                    break;
-                default: // Guerrero o Default
-                    menuAccion = new Menu(menuX, menuY, {"Mover", "Atacar", "Esperar", "Cancelar"});
-                    break;
-                }
-
+                generarMenuAccion(personajeSeleccionado);
                 personajeSeleccionado->setYaMovio(true);
             }
         }
@@ -682,7 +627,7 @@ void Juego::renderizar(sf::RenderWindow &window)
     {
         menuPausa->draw(window);
     }
-    window.display();
+    //window.display();
 }
 
 personaje *Juego::GetPersonajeSeleccionado()
@@ -829,5 +774,44 @@ void Juego::declararAtaque(vector<personaje>& atk,vector<personaje>& def, person
     {
         Combate combate(&tablero, actual, &def[ataque.getimpactos()[i]]);
         combate.pelea();
+    }
+}
+
+void Juego::generarMenuAccion(personaje* P)
+{
+    if (menuAccion != nullptr) {
+        delete menuAccion;
+        menuAccion = nullptr;
+    }
+
+    claseTrabajo* trabajoActual = P->getTrabajo();
+    int idClase = (trabajoActual != nullptr) ? trabajoActual->getIdTrabajo() : 0;
+
+    float anchoTablero = tablero.getMaxX() * tablero.getTamCeldaPixeles();
+    float offsetX = 140.0f;
+    float offsetY = -50.0f;
+
+    float menuX = P->getPosxPxl() + offsetX;
+    float menuY = P->getPosyPxl() + offsetY;
+
+    if (menuX + 130.0f > anchoTablero) {
+        menuX = P->getPosxPxl() - 90.0f;
+    }
+
+    if (menuY < 130.0f) {
+        menuY = 130.0f;
+    }
+
+    switch (idClase)
+    {
+    case 1:
+        menuAccion = new Menu(menuX, menuY, {"Mover", "Disparar", "Esperar", "Cancelar"});
+        break;
+    case 2:
+        menuAccion = new Menu(menuX, menuY, {"Mover", "Curar", "Esperar", "Cancelar"});
+        break;
+    default:
+        menuAccion = new Menu(menuX, menuY, {"Mover", "Atacar", "Esperar", "Cancelar"});
+        break;
     }
 }

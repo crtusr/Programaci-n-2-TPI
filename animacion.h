@@ -83,6 +83,9 @@ void mostrarvida(RenderWindow& window,vector<personaje>& pers,int color);
 bool mostrarataque(personaje& pers,RenderWindow& window,Ataque& ataque);
 void animartrancicion(RenderWindow& window);
 void iniciartrancicion();
+bool estaEnTransicion() const { return trancicion; }
+int getFrameTransicion() const { return frame_trancicion; }
+void setFrameTransicion(int frame) { frame_trancicion = frame; }
 };
 
 #endif // ANIMACION_H_INCLUDED;

@@ -97,5 +97,10 @@ enum ATAQUE
 };
 
 const int profundidadMax = 16;
+static const int VELOCIDAD_TRANSICION = 20;
+static const int POS_INICIAL_BARRA  = -1100;
+static const int UMBRAL_MEDIA_BARRA = 1000;
+static const int DURACION_TOTAL     = 4000;
+
 
 #endif
