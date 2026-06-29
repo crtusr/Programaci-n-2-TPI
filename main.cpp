@@ -13,7 +13,7 @@ int main() {
         int cantidadDeNiveles = 3;
         bool jugadorSigueVivo = true;
 
-        for(int i = 3; i <= cantidadDeNiveles; i++)
+        for(int i = 1; i <= cantidadDeNiveles; i++)
         {
             std::string archivoMapa = "nivel" + std::to_string(i) + ".txt";
             std::string archivoPers = "personajes" + std::to_string(i) + ".txt";

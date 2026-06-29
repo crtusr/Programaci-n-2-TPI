@@ -11,7 +11,7 @@ CPP_FILES = main.cpp grilla.cpp celda.cpp defaultcelda.cpp celdaterrestre.cpp si
 DEBUG_FILE = game_debug.exe
 RELEASE_FILE = game_release.exe
 
-DEBUG_FLAGS = -g -O3 -DDEBUG
+DEBUG_FLAGS = -g -O0 -DDEBUG
 RELEASE_FLAGS = -O3 -DNDEBUG -static
 
 all: $(DEBUG_FILE) $(RELEASE_FILE)

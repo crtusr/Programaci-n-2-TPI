@@ -125,10 +125,7 @@ std::pair<int, int> IA::acercarceAlEnemigo(int pj,std::vector<personaje>& aliado
             {
                 pasos = abs(aliados[pj].getPosx() - j) + abs(aliados[pj].getPosy() - i);
 
-                if (manager->comprobarlugar(j / tablero->getTamCeldaPixeles(), 
-                                            i / tablero->getTamCeldaPixeles(), 
-                                            enemigos) != -1 
-                                            && pasos < menosPasos) 
+                if (manager->comprobarLugarTablero(j, i, enemigos) == -1 && pasos < menosPasos) 
                 {
                     menosPasos = pasos;
                     Xmenor = j;
